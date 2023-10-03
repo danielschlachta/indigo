@@ -1,5 +1,5 @@
 <map id="idg_view_html_part_grid_bottomnav" name="idg_view_html_part_grid_bottomnav">
-<area shape="rect" id="node1" title="This layout takes one container that is then placed in a grid, decorated with a navigation bar at the..." alt="" coords="27,155,177,196"/>
-<area shape="rect" id="node2" href="$classidg__view__html__param__obj.html" title=" " alt="" coords="5,80,199,107"/>
-<area shape="rect" id="node3" href="$classidg__view__node__obj.html" title=" " alt="" coords="29,5,175,32"/>
+<area shape="rect" id="node1" title="This layout takes one container that is then placed in a grid, decorated with a navigation bar at the..." alt="" coords="27,155,178,196"/>
+<area shape="rect" id="node2" href="$classidg__view__node__param__obj.html" title=" " alt="" coords="5,80,200,107"/>
+<area shape="rect" id="node3" href="$classidg__view__node__obj.html" title=" " alt="" coords="29,5,176,32"/>
 </map>

@@ -457,33 +457,4 @@ class idg_view_html_slot extends idg_tree_node
 	}
 }
 
-class idg_view_html_param_obj extends idg_view_node_obj
-{
-	var $parameters = array();
-	
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-		$this->get_parameters();
-	}
-	
-	function get_parameters()
-	{
-		if (!($text = $this->parent->get_text()))
-			return;
-		
-		$lines = explode(";", $text);
-		foreach ($lines as $line) {
-			if ($line) {
-				if (!preg_match('/([a-zA-Z][a-zA-Z0-9-]+):[\  ]+(.*)/', 
-					$line, $match))
-					diag($this, get_class($parent) 
-					. ': Invalid parameter format (view_html): ' . $line);
-				$this->parameters[$match[1]] = $match[2];
-			}
-		}
-	}
-}
-
-
 ?>

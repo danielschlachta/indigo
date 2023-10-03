@@ -18,7 +18,7 @@
  * 
  */
 
-class idg_view_html_part_grid_bottomnav extends idg_view_html_param_obj
+class idg_view_html_part_grid_bottomnav extends idg_view_node_param_obj
 {
 	
 	function __construct(&$parent)

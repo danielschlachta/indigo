@@ -8,7 +8,7 @@
  * (c) 2020 Daniel Schlachta
  * ======================================================================== */
 
-class idg_view_html_item_image extends idg_view_html_param_obj
+class idg_view_html_item_image extends idg_view_node_param_obj
 {
 	
 	function __construct(&$parent)
