@@ -359,7 +359,7 @@ class idg_folder extends idg_site_element
 	}
 }
 
-class idg_site_type extends idg_folder_type
+class idg_site_type extends idg_site_element_type
 {	
 	function __construct()
 	{

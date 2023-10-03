@@ -1,7 +1,6 @@
 <map id="idg_folder_type" name="idg_folder_type">
-<area shape="rect" id="node1" title=" " alt="" coords="19,229,142,256"/>
-<area shape="rect" id="node5" href="$classidg__site__type.html" title=" " alt="" coords="26,304,135,331"/>
-<area shape="rect" id="node2" href="$classidg__site__node__type.html" title=" " alt="" coords="7,155,155,181"/>
-<area shape="rect" id="node3" href="$classidg__tree__node__type.html" title=" " alt="" coords="5,80,156,107"/>
-<area shape="rect" id="node4" href="$classidg__object__type.html" title=" " alt="" coords="18,5,143,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="29,229,152,256"/>
+<area shape="rect" id="node2" href="$classidg__site__element__type.html" title=" " alt="" coords="5,155,176,181"/>
+<area shape="rect" id="node3" href="$classidg__tree__node__type.html" title=" " alt="" coords="15,80,166,107"/>
+<area shape="rect" id="node4" href="$classidg__object__type.html" title="The foundation class for all idg types." alt="" coords="28,5,153,32"/>
 </map>
