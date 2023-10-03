@@ -1,0 +1,37 @@
+<h2>How can I include php code in my html files?</h2>
+
+<p>
+If you have been experimenting a bit you will have noticed
+that trying to start a php code section with <code>&lt;?php</code> in the 
+HTML files has no effect. This is because those 
+files are not read and interpreted by the web server - and thusly 
+never seen by the Zend engine - but rather fed through indigo's 
+various pipelines.
+</p>
+
+<p>
+But, of course, the idea is not to create a rather convoluted method of
+serving what is in the end static content. On the contrary, it is pretty
+simple to create code that inserts content into the document, plus you
+have access to the context in which your class exists. 
+Remember that everything that produces lines in the final document in indigo 
+is a renderer. Therefore, it comes with a class 
+<code>idg_datasource_phpscript</code> that allows you to plug in a renderer 
+of your own creation that produces HTML and CSS (as well as potentially other
+stuff like JavaScript) and sends them down the line. 
+</p>
+
+<p>
+Now how does all of this look like? Let's just replace that dire error 
+message that you get when you request <code>/?display=poppycock</code> 
+with something more elegant.
+</p>
+
+<p>
+Start by replacing <code>die(...);</code> in <code>index.php</code> with 
+<code>include('error.php');</code>.
+</p>
+
+<p>
+Without further ado, here is that file:
+</p>

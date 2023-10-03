@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<site name="dynamic demo"
+	content-language="en"
+	title-separator=" - "
+	index-document="home">
+	
+<!--	<folder id="main" name="Main pages" show-name="no"> -->
+
+		<document id="home"
+			name="Home"
+			show-name="no">
+			<datasource name="text1_src"
+				class="idg_datasource_textfile">
+				filename: home.html
+			</datasource>
+			<renderer slot="main-text"
+				class="idg_view_html_renderer_textfile"
+				source="text1_src" />
+		</document>
+		
+		<document id="pictures"
+			name="Pictures"
+			show-name="yes">
+			<datasource name="text1_src"
+				class="idg_datasource_textfile">
+				filename: pictures.html
+			</datasource>
+			<renderer slot="main-text"
+				class="idg_view_html_renderer_textfile"
+				source="text1_src" />
+		</document>
+		
+<!-- </folder> -->
+</site>

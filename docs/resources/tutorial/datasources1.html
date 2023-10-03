@@ -1,0 +1,12 @@
+<p>
+As you can see, the data source is already assigned to the object.
+We retrieve tokens until the stream goes stale. The tokens themselves 
+have properties and a data member, just like an XML object would.
+</p>
+
+<p>
+In the case of <code>_site</code> there is also a property called <code>type</code>
+that can be either <code>document</code> or <code>folder</code>. If you are working
+with folders, you are responsible for de-serializing the nodes to form a 
+tree again should this be necessary. 
+</p>

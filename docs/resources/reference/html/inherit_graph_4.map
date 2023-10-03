@@ -1,0 +1,24 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classidg__view__node__obj.html" title=" " alt="" coords="5,509,152,535"/>
+<area shape="rect" id="node2" href="$classidg__view__html__item__searchbox.html" title=" " alt="" coords="230,5,385,47"/>
+<area shape="rect" id="node3" href="$classidg__view__html__item__text.html" title=" " alt="" coords="214,71,401,98"/>
+<area shape="rect" id="node4" href="$classidg__view__html__item__toolbox.html" title=" " alt="" coords="230,123,385,164"/>
+<area shape="rect" id="node5" href="$classidg__view__html__param__obj.html" title=" " alt="" coords="211,189,404,215"/>
+<area shape="rect" id="node10" href="$classidg__view__html__renderer__footer.html" title=" " alt="" coords="218,240,397,281"/>
+<area shape="rect" id="node11" href="$classidg__view__html__renderer__framedimg.html" title=" " alt="" coords="218,305,397,347"/>
+<area shape="rect" id="node12" href="$classidg__view__html__renderer__gradient__navigation.html" title=" " alt="" coords="218,371,397,412"/>
+<area shape="rect" id="node13" href="$classidg__view__html__renderer__infobox.html" title=" " alt="" coords="218,436,397,477"/>
+<area shape="rect" id="node14" href="$classidg__view__html__renderer__markdown.html" title=" " alt="" coords="218,501,397,543"/>
+<area shape="rect" id="node15" href="$classidg__view__html__renderer__minimal__navigation.html" title=" " alt="" coords="218,567,397,608"/>
+<area shape="rect" id="node16" href="$classidg__view__html__renderer__mobile__navigation.html" title=" " alt="" coords="218,632,397,673"/>
+<area shape="rect" id="node17" href="$classidg__view__html__renderer__navigation.html" title=" " alt="" coords="218,697,397,739"/>
+<area shape="rect" id="node18" href="$classidg__view__html__renderer__null.html" title=" " alt="" coords="202,763,413,790"/>
+<area shape="rect" id="node19" href="$classidg__view__html__renderer__phpscript.html" title=" " alt="" coords="218,815,397,856"/>
+<area shape="rect" id="node20" href="$classidg__view__html__renderer__sourcefile.html" title=" " alt="" coords="218,880,397,921"/>
+<area shape="rect" id="node21" href="$classidg__view__html__renderer__tabs.html" title=" " alt="" coords="200,946,415,973"/>
+<area shape="rect" id="node22" href="$classidg__view__html__renderer__textfile.html" title=" " alt="" coords="218,997,397,1039"/>
+<area shape="rect" id="node6" href="$classidg__view__html__item__image.html" title=" " alt="" coords="463,83,617,124"/>
+<area shape="rect" id="node7" href="$classidg__view__html__part__fixedbar.html" title="A fixed div to the left or right." alt="" coords="465,148,615,189"/>
+<area shape="rect" id="node8" href="$classidg__view__html__part__fixedcontent.html" title="A simple one with the scroll bar always visible." alt="" coords="465,213,615,255"/>
+<area shape="rect" id="node9" href="$classidg__view__html__part__grid__bottomnav.html" title="This layout takes one container that is then placed in a grid, decorated with a navigation bar at the..." alt="" coords="465,279,615,320"/>
+</map>

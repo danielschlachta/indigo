@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generated on Tue, 03 Oct 2023 15:26:17 +0300 by indigo/web version 1.2  -->
+<view name="blocks"
+  icon="favicon.png"
+  style="font-family: georgia,serif; font-size: 120%; line-height: 1.2; background: #53538a url(elements/blocks/images/bg_grad.png) fixed repeat-x;">
+  <part class="fixedcontent">
+    <container name="center"
+      style="position: relative; top: 0; left: 0; margin-left: 130px; margin-right: 330px; z-index: 201;"
+      style-print="margin: 0;">
+      <renderer class="tabs"
+        source="_site" />
+      <container name="center_body"
+        style="height: 100%; border: solid #1e3723; border-width: 0px 1px 1px 1px; padding: 0 30px 30px 23px; background: #b4d2b0 url(elements/blocks/images/line_red.png) repeat-y; text-align: justify;"
+        style-head="padding: 0.35em 0.5em 0.35em 0; border: solid #729e8d; border-width: 2px 0 2px 0; background: url(elements/blocks/images/randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: normal; font-style: italic; font-size: 150%;"
+        style-subhead="padding: 0.1em 1em 0.3em 0; border: solid #729e8d; border-width: 1px 0 1px 0; background: url(elements/blocks/images/randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: bold; font-size: 100%;"
+        style-image="border: 0;"
+        style-print="border: 0; padding: 1em; margin: 100px 0 0 0;"
+        filter="blocks_filter_linkimg">
+        <slot name="main-text"
+          style="padding: 0 0 0 17px; background: url(elements/blocks/images/line_blue.png);"
+          style-link="text-decoration: none; color: black; background: url(elements/blocks/images/underline.png) bottom left repeat-x; padding-bottom: 1px; padding-right: 1px; margin-right: -1px; white-space: nowrap;"
+          style-link-hover="background: #729e8d url(elements/blocks/images/underline.png) bottom left repeat-x;"
+          list-icon="elements/blocks/images/bullet.png"
+          filter="blocks_filter_blockquote" />
+      </container>
+      <renderer class="footer"
+        source="_site"
+        style-link="text-decoration: none; color: black; background: url(elements/blocks/images/underline.png) bottom left repeat-x; padding-bottom: 1px; padding-right: 1px; margin-right: -1px; white-space: nowrap; height: 1.2em;"
+        style-image="margin-bottom: -1px; border: 0;"
+        style-link-hover="background: #729e8d url(elements/blocks/images/underline.png) bottom left repeat-x;" />
+    </container>
+    <container name="logo"
+      style="position: fixed; text-align: right; top: 20px; right: 20px; z-index: 120;"
+      style-print="position: absolute; top: 0; right: 0;">
+      <item class="text"
+        style="padding-right: 8px; font-family: verdana, sans-serif; color: #394a71; font-style: italic;">
+        &lt;b&gt;indigo&lt;/b&gt; / web
+      </item>
+      <item class="image">
+        source: elements/blocks/images/indigo.png; width: 90; height: 70;
+      </item>
+    </container>
+    <renderer class="framedimg"
+      source="framedimg" />
+    <renderer class="infobox"
+      source="infobox" />
+    <renderer class="navigation"
+      source="_site"
+      tag="resources" />
+    <item class="searchbox" />
+    <item class="toolbox" />
+    <container name="image-bg">
+      <container name="image-sky"
+        style="position: fixed; top: 49px; right: 212px; width: 629px; height: 80px; background: url(elements/blocks/images/bg_sky.png) no-repeat; z-index: 101;" />
+      <container name="image-graph-l"
+        style="position: fixed; top: 352px; left: 0px; width: 130px; height: 75px; background: url(elements/blocks/images/bg_graph_l.png) no-repeat; z-index: 101;" />
+      <container name="image-graph-r"
+        style="position: fixed; top: 352px; right: 0px; width: 330px; height: 130px; background: url(elements/blocks/images/bg_graph_r.png) no-repeat; z-index: 101;" />
+    </container>
+  </part>
+</view>

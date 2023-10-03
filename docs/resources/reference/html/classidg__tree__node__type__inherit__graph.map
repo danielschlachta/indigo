@@ -1,0 +1,16 @@
+<map id="idg_tree_node_type" name="idg_tree_node_type">
+<area shape="rect" id="node1" title=" " alt="" coords="179,183,329,209"/>
+<area shape="rect" id="node3" href="$classidg__site__node__type.html" title=" " alt="" coords="399,56,547,83"/>
+<area shape="rect" id="node7" href="$classidg__view__html__node__type.html" title=" " alt="" coords="377,157,569,184"/>
+<area shape="rect" id="node11" href="$classidg__view__html__slot__type.html" title=" " alt="" coords="381,208,565,235"/>
+<area shape="rect" id="node12" href="$classidg__view__type.html" title=" " alt="" coords="415,259,531,285"/>
+<area shape="rect" id="node2" href="$classidg__object__type.html" title=" " alt="" coords="5,183,131,209"/>
+<area shape="rect" id="node4" href="$classidg__document__type.html" title=" " alt="" coords="649,5,800,32"/>
+<area shape="rect" id="node5" href="$classidg__folder__type.html" title=" " alt="" coords="663,56,786,83"/>
+<area shape="rect" id="node6" href="$classidg__site__type.html" title=" " alt="" coords="936,56,1045,83"/>
+<area shape="rect" id="node8" href="$classidg__view__html__item__type.html" title=" " alt="" coords="629,107,820,133"/>
+<area shape="rect" id="node9" href="$classidg__view__html__part__type.html" title=" " alt="" coords="631,157,818,184"/>
+<area shape="rect" id="node10" href="$classidg__view__html__renderer__type.html" title=" " alt="" coords="617,208,832,235"/>
+<area shape="rect" id="node13" href="$classidg__view__html__type.html" title="Parent class of all views." alt="" coords="648,259,801,285"/>
+<area shape="rect" id="node14" href="$classidg__view__html__container__type.html" title=" " alt="" coords="880,259,1101,285"/>
+</map>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generated on Tue, 03 Oct 2023 19:01:59 +0300 by indigo/web version 1.2  -->
+<view name="fancy"
+  icon="favicon.png">
+  <part class="grid_bottomnav">
+    <renderer class="null"
+      source="_site" />
+  </part>
+</view>

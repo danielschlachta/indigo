@@ -1,0 +1,18 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classidg__object.html" title=" " alt="" coords="5,132,95,159"/>
+<area shape="rect" id="node2" href="$classidg__tree__node.html" title=" " alt="" coords="143,132,257,159"/>
+<area shape="rect" id="node3" href="$classidg__datasource__declaration.html" title=" " alt="" coords="305,5,507,32"/>
+<area shape="rect" id="node4" href="$classidg__renderer__declaration.html" title=" " alt="" coords="314,56,498,83"/>
+<area shape="rect" id="node5" href="$classidg__site__element.html" title=" " alt="" coords="339,107,473,133"/>
+<area shape="rect" id="node9" href="$classidg__view.html" title=" " alt="" coords="366,157,446,184"/>
+<area shape="rect" id="node11" href="$classidg__view__html__element.html" title=" " alt="" coords="317,233,495,260"/>
+<area shape="rect" id="node16" href="$classidg__view__html__slot.html" title=" " alt="" coords="332,284,480,311"/>
+<area shape="rect" id="node6" href="$classidg__document.html" title=" " alt="" coords="590,5,705,32"/>
+<area shape="rect" id="node7" href="$classidg__folder.html" title=" " alt="" coords="604,56,691,83"/>
+<area shape="rect" id="node8" href="$classidg__site.html" title=" " alt="" coords="611,107,684,133"/>
+<area shape="rect" id="node10" href="$classidg__view__html.html" title=" " alt="" coords="589,157,706,184"/>
+<area shape="rect" id="node12" href="$classidg__view__html__container.html" title=" " alt="" coords="555,208,740,235"/>
+<area shape="rect" id="node13" href="$classidg__view__html__item.html" title=" " alt="" coords="570,259,725,285"/>
+<area shape="rect" id="node14" href="$classidg__view__html__part.html" title=" " alt="" coords="572,309,723,336"/>
+<area shape="rect" id="node15" href="$classidg__view__html__renderer.html" title="The parent class of all renderers." alt="" coords="558,360,737,387"/>
+</map>

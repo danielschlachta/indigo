@@ -1,0 +1,35 @@
+<h2>How can I access the data from a data source?</h2>
+
+<p>
+You can request a datasource from an <code>idg_document</code> via the
+<code>get_datasource($name)</code> method. That's right: you are not limited
+to use only the data source that you provide for the renderer. This is just
+usually the case because the renderer obviously has to understand the format
+of the data it is receiving.
+</p>
+
+<p>
+Additionally, indigo has a built-in data source named <code>_site</code> that
+contains ... you guessed it. We will now use this to construct a simple 
+renderer that provides our pages with proper navigation.
+</p>
+
+<p>
+For this example, I have cleaned things up a little bit and switched to
+<code>fixedbar</code> as the basic layout. However, I will from now on only present
+the relevant parts that contain new material.
+</p>
+
+<p>
+We place the renderer directly inside the <code>page</code> - a container 
+can contain other containers but a renderer need not be stuck in a container 
+first. The <code>fixedbar</code> class displays its first child in a vertical
+strip on the left or right side and lets the second child occupy the rest 
+of the screen. If a third child is present it will be emitted before 
+anything else which is necessary for instance if you use fixed positioning 
+in the CSS.
+</p>
+
+<p>
+And here is how you get the data from the data source:
+</p>

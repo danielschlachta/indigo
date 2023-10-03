@@ -1,0 +1,129 @@
+<h1>What is indigo?</h1>
+
+<p>
+Indigo provides the basic structure of a site and a collection of modules 
+which retrieve and format content, respectively.
+</p>
+
+<p>
+It can sit on top of basically whatever you want, be it
+plain text files, <a href="https://www.sqlite.org/">sqlite</a> database 
+files, or for example, it would not be hard to program it to display blog 
+postings that you manage using <a href="https://wordpress.org">WordPress</a>.
+</p>
+<p>
+To date, indigo can only generate HTML/CSS but it could be extended to
+support other markup languages as well.
+</p>
+
+<h2>Indigo is not a <abbr title="Content Management System">CMS</abbr></h2>
+
+<p>
+Indigo does not provide a mechanism for organizing, editing or
+storing your work product. You can have an arbitrary number of different 
+site maps and modules side-by-side; you can also give your site as many 
+designs to choose from as you wish. On the other hand, while it makes it 
+easy to structure your content, e.g. in accordance with a 
+specific file system layout, it provides no mechanism for that.
+</p>
+
+<p>Then again, if you want an editor for the site's outline, template
+pages, or similar things, it should provide a good starting point for
+you to get your programmer's hands dirty.</p>
+
+<h2>Indigo works well with standards</h2>
+
+<p>
+The pages indigo generates are comprised of HTML and CSS, 
+combined into a single document.
+You can still style your content as usual - without running into namespace 
+problems - while the code snippets you have clamped in happily churn out 
+dynamically generated markup as well as layout information. 
+This also helps to avoid issues with
+aggressively caching browsers; or those that don't like style sheets
+the name of which ends in .php - regardless of the MIME type provided.
+</p>
+
+<p>
+With a few exceptions - mainly the mobile version - the 
+layouts in the documentation do not use JavaScript. Instead, expecially
+for the navigation, they rely heavily on the creative use of CSS 
+as described for instance on
+<a href="https://alistapart.com/blog/topic/css/">a list apart</a>.
+</p>
+
+<blockquote>
+    <p>
+        For more magic have a look at the <a href="http://csszengarden.com">CSS Zen Garden</a>:
+    </p>
+    <p style="margin-top: -0.5em;">
+        &ldquo;A demonstration of what can be accomplished through CSS-based design.&rdquo;
+    </p>
+</blockquote>
+
+<p>
+In fact, the above paragraph is a simple
+<code>&lt;blockquote&gt;</code>. Some designs need it enclosed
+in a <code>&lt;div&gt;</code> which they will simply add themselves.
+</p>
+
+<h2>Indigo is flexible</h2>
+
+<p>
+	While it is fair to say that indigo mainly serves to style
+	web sites that follow conventional patterns as well as provide
+	methods to use common sources of dynamic content, this is far from
+	the end of what you can do with it.
+</p>
+
+<p>
+	Since the xml files that it reads only serve to populate
+	a tree of objects (or rather, a forest) with instances, that
+	then do their respective jobs when the tree is finally walked,
+	every aspect of	it is accessible programmatically. For an example, 
+	look at the <code>index.php</code> file and how it conjures up
+	an error page when the requested document does not exist.
+</p>
+
+<p>
+	But even the folder structure is created in the same way, so
+	finally one could go as far as create a whole site that
+	is completely virtual, rule driven, and potentially interfacing
+	with several pre-existing content providers.
+</p>
+
+<p>
+	Even if this seems a little far-fetched, please bear in mind
+	that things that appear in the same places on a page still do not
+	necessarily need to come from the same source, therefore making it 
+	easy to experiment with intelligent caching mechanisms, failover,
+	etc.
+</p>
+
+<h2>Indigo is easy to extend</h2>
+
+<p>
+	In fact, it grows all the time - instead of writing 
+	task-specific code, these days I mostly create the needed features 
+	directly in the upstream version.
+	More often than not, however, I end up throwing out redundancies 
+	instead	of adding something really new to the core library.
+</p>
+
+<blockquote>
+    <p>
+        For an in-depth discussion of the concepts used by indigo have a look at 
+        <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-19.html">The Wizard Book</a>, especially the section on streams.
+    </p>
+</blockquote>
+
+<p>
+	Once you get the hang of the three-dimensional structure 
+	(polymorphism is present both in the php class hierarchy 
+	and the trees that indigo itself implements) you
+	will find that there is almost always an obvious place
+	where to add new functionality. And don't worry about breaking
+	existing code: it only operates on streams after all.
+</p>
+
+

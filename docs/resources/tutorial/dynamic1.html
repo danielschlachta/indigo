@@ -1,0 +1,93 @@
+<p>
+As you can see, this creates the exact same view (except, of course, for the
+font, so that you can see a difference) as the <code>site.xml</code> file.
+I have modified <code>index.php</code> so that this file (<code>strip.php</code>) is
+included instead of loading <code>site.xml</code> if the variable <code>view</code> 
+is set to <code>strip</code> in the URL. I will not describe this here, but you can
+<a href="demo/hello-dynamic/index.php?display=pictures">try it out</a>.
+</p>
+
+<p>
+Furthermore, the <code>idg_site</code> object supports the methods 
+<code>write_xml($filename)</code> which writes an XML file that it can 
+read as input to re-create the same structure, which is useful for error
+checking, pretty printing and also could be used to implement a caching
+mechanism, and <code>print_debug()</code> which writes an ASCII-based representation
+of its internal state to the standard output. In this case, it looks like this:
+
+<div style="background: #e8e8e8; padding: 3px 0 5px 3px;">
+<pre style="padding-left: 15px;">
++---------------------------------+
+| ID       idg_site-1             |
+| XML_TYPE site                   |
++---------------------------------+
+| name             'dynamic demo' |
+| content-language 'en'           |
+| title-separator  ' - '          |
+| index-document   'home'         |
++---------------------------------+
+  +-------------------------+
+  | ID       idg_document-1 |
+  | XML_TYPE document       |
+  +-------------------------+
+  | id        'home'        |
+  | name      'Home'        |
+  | show-name 'no'          |
+  +-------------------------+
+    +---------------------------------------+
+    | ID       idg_datasource_declaration-1 |
+    | XML_TYPE datasource                   |
+    +---------------------------------------+
+    | name  'text1_src'                     |
+    | class 'idg_datasource_textfile'       |
+    +---------------------------------------+
+    | filename: home.html                   |
+    +---------------------------------------+
+    +------------------------------------------+
+    | ID       idg_renderer_declaration-1      |
+    | XML_TYPE renderer                        |
+    +------------------------------------------+
+    | slot   'main-text'                       |
+    | class  'idg_view_html_renderer_textfile' |
+    | source 'text1_src'                       |
+    +------------------------------------------+
+  +-------------------------+
+  | ID       idg_document-2 |
+  | XML_TYPE document       |
+  +-------------------------+
+  | id        'pictures'    |
+  | name      'Pictures'    |
+  | show-name 'yes'         |
+  +-------------------------+
+    +---------------------------------------+
+    | ID       idg_datasource_declaration-2 |
+    | XML_TYPE datasource                   |
+    +---------------------------------------+
+    | name  'text1_src'                     |
+    | class 'idg_datasource_textfile'       |
+    +---------------------------------------+
+    | filename: pictures.html               |
+    +---------------------------------------+
+    +------------------------------------------+
+    | ID       idg_renderer_declaration-2      |
+    | XML_TYPE renderer                        |
+    +------------------------------------------+
+    | slot   'main-text'                       |
+    | class  'idg_view_html_renderer_textfile' |
+    | source 'text1_src'                       |
+    +------------------------------------------+
+</pre>
+</div>
+</p>
+
+<p>
+The <code>idg_view</code> object has those methods, too. 
+</p>
+
+<p>
+Additionally, <code>idg_site</code> implements <code>get_sitemap()</code> which returns 
+a string with an XML representation in the format described on
+<a href="https://www.sitemaps.org/protocol.html">sitemaps.org</a>.
+The google search console understands this.
+</p>
+

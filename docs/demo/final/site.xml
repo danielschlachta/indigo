@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<site name="demo"
+	content-language="en"
+	title-separator=" - "
+	index-document="home">
+	
+<!--	<folder id="main" name="Main pages" show-name="no"> -->
+
+		<document id="home"
+			name="Home"
+			navigation-comment="Back to the home page"
+			show-name="no">
+			<datasource name="text1_src"
+				class="idg_datasource_textfile">
+				filename: home.html
+			</datasource>
+			<renderer slot="main-text"
+				class="idg_view_html_renderer_textfile"
+				source="text1_src" />
+				
+			<renderer slot="images-scatter"
+				class="idg_view_html_renderer_null" 
+				source="_site" />
+			<renderer slot="images-strip"
+				class="idg_view_html_renderer_null"
+				source="_site" />
+		</document>
+		
+		<document id="pictures"
+			name="Pictures"
+			navigation-comment="Show me the pics"
+			show-name="yes">
+			<datasource name="text1_src"
+				class="idg_datasource_textfile">
+				filename: pictures.html
+			</datasource>
+			<renderer slot="main-text"
+				class="idg_view_html_renderer_textfile"
+				source="text1_src" />
+				
+			<datasource name="pictures"
+				class="idg_datasource_imagelist">
+                path: pictures
+			</datasource>
+			<renderer slot="images-scatter"
+				class="idg_view_html_renderer_img_scatter"
+				source="pictures" />
+			<renderer slot="images-strip"
+				class="idg_view_html_renderer_img_strip"
+				source="pictures" />
+		</document>
+		
+<!-- </folder> -->
+</site>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<view name="scatter"
+  icon="favicon.png"
+  style="background: #53538a;">
+  <part class="fixedbar"
+    style="font-family: georgia,serif; font-size: 180%; line-height: 1.2;">
+     fixed-width: 200px; fixed-position: left;
+    <renderer class="navigation"
+      source="_site" />
+    <container name="content" style="background: #b4d2b0;">
+        <slot name="main-text" style="font-size: 80%; margin-left: 15px;" />
+    </container>
+  </part>
+</view>
