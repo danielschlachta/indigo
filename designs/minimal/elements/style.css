@@ -4,6 +4,8 @@ body {
     color:  #B09423;
 	font-size: 120%;
 	overflow-y: scroll;
+	overflow-x: hidden;
+	width: 100%;
 }
 
 .icon {

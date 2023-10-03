@@ -17,7 +17,6 @@
  * * style
  * * style-print
  * * name 
- * * css-static
  * 
  */
 
@@ -32,7 +31,6 @@ class idg_view_html_type extends idg_view_type
 		$this->set_known('style');
 		$this->set_known('style-print');
 		$this->set_known('name');
-		$this->set_known('css-static');
 	}
 }
 
@@ -62,7 +60,7 @@ class idg_view_html extends idg_view
 		parent::__construct();
 	}
 
-	function _milliseconds() {
+	private function _milliseconds() {
 		$mt = explode(' ', microtime());
 		return intval($mt[1] * 1E3) + intval(round($mt[0] * 1E3));
 	}
@@ -87,7 +85,6 @@ class idg_view_html extends idg_view
 		
 		$style = $this->get_property('style');
 		$icon = $this->get_property('icon');
-		$css_static = $this->get_property('css-static');
 		
 		$child_count = count($this->children);
 
@@ -119,26 +116,24 @@ class idg_view_html extends idg_view
 			$output .= " <link rel=\"shortcut icon\" href=\"$icon\" " 
 				. "type=\"image/x-icon\">\n";
 		
-		if ($css_static)
-			$output .= " <link rel=\"stylesheet\" type=\"text/css\" href=\"$css_static\">";
-		
 		if ($this->streams['html-head'] != '')
 			$output .= $this->streams['html-head'] . "\n";
 			
-		$output .= " <style>\n";
+		$css = '';	
 		
 		if ($style)
-			$output .= "  	body { $style }\n";
+			$css .= "  	body { $style }\n";
 		
-		$output .= $this->streams['css'];
+		$css .= $this->streams['css'];
 		
 		if ($this->streams['css-print'] != '') {
-			$output .= "	@media print {\n";
-			$output .= $this->streams['css-print'];
-			$output .= "	}\n";
+			$css .= "	@media print {\n";
+			$css .= $this->streams['css-print'];
+			$css .= "	}\n";
 		}
 		
-		$output .= " </style>\n";
+		if ($css != '')
+			$output .= " <style>\n$css </style>\n";
 
 		if ($this->streams['js'] != '') {
 			$output .= " <script>\n";
@@ -456,5 +451,6 @@ class idg_view_html_slot extends idg_tree_node
 		$view->stream_append('css', $css);
 	}
 }
+
 
 ?>

@@ -33,7 +33,7 @@ class idg_view_html_part_grid_bottomnav extends idg_view_node_param_obj
 	
 		if ($this->parent->children == null 
 			|| ($childcount = count($this->parent->children)) < 1)
-			die(get_class($this) . ' must have at least two children');
+			diag($this, get_class($this) . ' must have at least two children');
 			
 		
 		

@@ -9,13 +9,12 @@ $view = new idg_view_html;
 $view->set_properties(array(
 	'name' => 'minimal',
 	'icon' => 'favicon.png',
-	'tag' => 'indigo',
-	'css-static' => "$elements_minimal/style.css"
+	'tag' => 'indigo'
 ));
 
 $part = new idg_view_html_part;
 $part->set_properties(array(
-	'class' => 'fixedcontent'
+	'class' => 'minimal'
 ));
 $view->add_child($part);
 
