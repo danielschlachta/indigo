@@ -39,8 +39,8 @@ class idg_view_html_type extends idg_view_type
 class idg_view_html extends idg_view
 {
 	
-	var $xml_type = 'view';
-	var $xml_translation = array(
+	var $idg_type = 'view';
+	var $idg_translation = array(
 		'view' => 'idg_view_html', 
 		'part' => 'idg_view_html_part', 
 		'container' => 'idg_view_html_container', 
@@ -202,7 +202,7 @@ class idg_view_html_part_type extends idg_view_html_element_type
 class idg_view_html_part extends idg_view_html_element
 {
 	
-	var $xml_type = 'part';
+	var $idg_type = 'part';
 	
 	function __construct()
 	{
@@ -235,7 +235,7 @@ class idg_view_html_container_type extends idg_view_html_element_type
 class idg_view_html_container extends idg_view_html_element
 {
 	
-	var $xml_type = 'container';
+	var $idg_type = 'container';
 	
 	function __construct()
 	{
@@ -328,7 +328,7 @@ class idg_view_html_renderer_type extends idg_view_html_element_type
 
 class idg_view_html_renderer extends idg_view_html_element
 {	
-	var $xml_type = 'renderer';
+	var $idg_type = 'renderer';
 	var $datasource;
 	
 	function __construct()
@@ -366,7 +366,7 @@ class idg_view_html_item_type extends idg_view_html_element_type
 
 class idg_view_html_item extends idg_view_html_element
 {
-	var $xml_type = 'item';
+	var $idg_type = 'item';
 	
 	function __construct()
 	{
@@ -393,7 +393,7 @@ class idg_view_html_slot_type extends idg_tree_node_type
 
 class idg_view_html_slot extends idg_tree_node
 {
-	var $xml_type = 'slot';
+	var $idg_type = 'slot';
 	
 	function __construct()
 	{

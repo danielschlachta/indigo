@@ -25,7 +25,7 @@ class idg_datasource_declaration_type extends idg_object_type
 
 class idg_datasource_declaration extends idg_tree_node
 {	
-	var $xml_type = 'datasource';
+	var $idg_type = 'datasource';
 	
 	function __construct()
 	{
@@ -85,7 +85,7 @@ class idg_renderer_declaration_type extends idg_object_type
 class idg_renderer_declaration extends idg_tree_node
 {
 	
-	var $xml_type = 'renderer';
+	var $idg_type = 'renderer';
 	
 	function __construct()
 	{
@@ -187,7 +187,7 @@ class idg_document_type extends idg_site_element_type
 
 class idg_document extends idg_site_element
 {
-	var $xml_type = 'document';
+	var $idg_type = 'document';
 	
 	var $last_change = false;
 	var $params = array();
@@ -340,7 +340,7 @@ class idg_folder_type extends idg_site_element_type
 
 class idg_folder extends idg_site_element
 {
-	var $xml_type = 'folder';
+	var $idg_type = 'folder';
 	
 	function __construct()
 	{
@@ -371,8 +371,8 @@ class idg_site_type extends idg_folder_type
 
 class idg_site extends idg_site_element
 {
-	var $xml_type = 'site';
-	var $xml_translation = array(
+	var $idg_type = 'site';
+	var $idg_translation = array(
 		'site' => 'idg_site', 
 		'folder' => 'idg_folder', 
 		'document' => 'idg_document', 
@@ -466,17 +466,17 @@ class idg_site extends idg_site_element
 	
 	function _scan_object(&$object, $prefix = '') 
 	{
-        if ($object->xml_type == 'site')
+        if ($object->idg_type == 'site')
             foreach ($object->children as $child)
                 $this->_scan_object($child, '');
 
 
-        if ($object->xml_type == 'folder')
+        if ($object->idg_type == 'folder')
             foreach ($object->children as $child)
                 $this->_scan_object($child, 
                     $prefix . '/' . $object->properties['id']);
             
-        if ($object->xml_type == 'document') {
+        if ($object->idg_type == 'document') {
             $prefix[0] = '=';
             $lastchg = $object->get_property('last-change');
             $lastmod = substr($lastchg, 6, 4) . '-' . substr($lastchg, 3, 2)

@@ -23,7 +23,7 @@ class idg_view_type extends idg_tree_node_type
 
 class idg_view extends idg_tree_node
 {
-	var $xml_type = 'view';
+	var $idg_type = 'view';
 	
 	var $streams;
 	var $filters = array();

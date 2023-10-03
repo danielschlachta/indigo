@@ -37,7 +37,7 @@ class idg_tree_node extends idg_object
 	var $child_count;
 	var $child_counts = array();
 	
-	var $xml_translation; // array (xml_type => php type) for instance creation
+	var $idg_translation; // array (idg_type => php type) for instance creation
 	
 	var $_xml_stack;
 	
@@ -276,8 +276,8 @@ class idg_tree_node extends idg_object
 	{
 		$class_name = $name;
 		
-		if ($this->xml_translation 
-			&& @($trans = $this->xml_translation[$class_name]))
+		if ($this->idg_translation 
+			&& @($trans = $this->idg_translation[$class_name]))
 			$class_name = $trans;
 		
 		if (!$this->_xml_stack) {

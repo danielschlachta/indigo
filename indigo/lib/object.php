@@ -49,7 +49,7 @@ class idg_object_type
 class idg_object
 {
 	var $idg_id;
-	var $xml_type; // defaults to class type
+	var $idg_type; // defaults to class type
 	
 	var $properties = array();
 	var $text;
@@ -88,10 +88,10 @@ class idg_object
 		return $this->text;
 	}
 	
-	function get_xml_type()
+	function get_idg_type()
 	{
-		if ($this->xml_type)
-			return $this->xml_type;
+		if ($this->idg_type)
+			return $this->idg_type;
 		else
 			return get_class($this);
 	}
@@ -135,7 +135,7 @@ class idg_object
 	function get_xml_tag($tag_type, $tag_id = '')
 	{
 		if ($tag_id == '')
-			$use_id = $this->get_xml_type();
+			$use_id = $this->get_idg_type();
 		else
 			$use_id = $tag_id;
 		
@@ -276,7 +276,7 @@ class idg_object
 		$lines = array(
 			"ID       $this->idg_id"
 		);
-		$lines[] = 'XML_TYPE ' . $this->get_xml_type();
+		$lines[] = 'XML_TYPE ' . $this->get_idg_type();
 		$lines[] = '(break)';
 		
 		$max_header = 0;
