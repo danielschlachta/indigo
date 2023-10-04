@@ -5,6 +5,18 @@ $elements_minimal = '../designs/minimal/elements';
 require_once('minimal/navigation.php');
 require_once('minimal/footer.php');
 
+/*!
+ * Layout for the minimal design.
+ * 
+ * Expected structure:
+ * 
+ * + container
+ * 		+ renderer, type minimal_navigation
+ * 		+ container
+ * 		+ renderer, type minimal_footer
+ */
+ 
+
 class idg_view_html_part_minimal extends idg_view_node_param_obj
 {	
 	function __construct(&$parent)
@@ -22,7 +34,12 @@ class idg_view_html_part_minimal extends idg_view_node_param_obj
 	    if ($this->parent->children == null 
 			|| ($childcount = count($this->parent->children)) != 1)
 			diag($this, get_class($this) 
-				. " must have exactly one child (found $childcount).");
+				. " needs exactly one container (found $childcount).");
+	
+		if (count($this->parent->children[0]->children, 
+			COUNT_RECURSIVE) != 3)
+			diag($this->get_class($this) . " needs exactly three " 
+				. "elements in its container (see doc).");
 		
 		$idg_id = $this->parent->idg_id;
 		$fixed = $this->parent->children[0];

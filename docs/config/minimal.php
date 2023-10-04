@@ -41,7 +41,7 @@ $centercol->add_child($centercol_body);
 
 $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
-	'class' => 'footer',
+	'class' => 'minimal_footer',
 	'source' => '_site'
 ));
 $centercol->add_child($footer);
