@@ -12,6 +12,12 @@ require_once($idg_path . '/lib/object.php');
 
 $idg_max_filesize = 32 * 1024;
 
+/*!
+ * The source of all data.
+ * 
+ * This is basically an iterator. 
+ */
+
 class idg_datasource
 {
 	var $parameters;
@@ -26,10 +32,20 @@ class idg_datasource
 		$this->parameters = $parameters;
 	}
 	
+	/*!
+	 * Resets the datasource to the first token
+	 * 
+	 */
+	
 	function rewind()
 	{
 		$this->act_token = 0;
 	}
+	
+	/*!
+	 * Returns the next token or false if there isn't one
+	 * 
+	 */
 	
 	function get_token()
 	{
@@ -42,14 +58,6 @@ class idg_datasource
 		}
 		
 		return $this->tokens[$this->act_token++];
-	}
-	
-	function get_token_data()
-	{
-		if (($token = $this->get_token()))
-			return $token->data;
-		else
-			return false;
 	}
 	
 	function get_parameters($name)

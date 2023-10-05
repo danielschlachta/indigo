@@ -95,7 +95,7 @@ class idg_view_html_renderer_sourcefile extends idg_view_node_obj
 		if (!$height)
     	    $height = '100%';
                 
-        $text = $this->datasource->get_token_data();
+        $text = $this->datasource->get_token()->data;
 
 		$geshi = new GeSHi($text, $language);
 		$geshi->enable_keyword_links(false);

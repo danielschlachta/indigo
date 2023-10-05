@@ -31,9 +31,9 @@ class idg_view_html_renderer_textfile extends idg_view_node_obj
 	function render(&$document, &$view)
 	{
 		$this->datasource->rewind();
-		$content = $this->datasource->get_token_data();
+		$content = $this->datasource->get_token()->data;
 		$view->stream_append('html-body', $content);
-		$last_change = $this->datasource->get_token_data();
+		$last_change = $this->datasource->get_token()->data;
 		$document->set_last_change($last_change);
 	}
 }

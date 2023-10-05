@@ -66,7 +66,7 @@ class idg_view_html_renderer_img_strip extends idg_view_node_obj
         
         $body = "<div id=\"$idg_id\">\n";
         
-        $this->datasource->rewind();
+        $this->datasource->rewind(); // not necessary here, do it on principle
         
         while ($node = $this->datasource->get_token()) {
             $img = $node->data;

@@ -227,6 +227,10 @@ class idg_object
 	function get_instance()
 	{
 		$object_name = get_class($this) . '_' . $this->get_property('class');
+		
+		if (!class_exists($object_name))
+			diag($this, "object: class does not exist: $object_name");
+		
 		$this->object = new $object_name($this);
 		
 		return $this->object;
