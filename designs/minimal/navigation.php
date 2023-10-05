@@ -1,5 +1,12 @@
 <?php
 
+/*!
+ * The navigation at the top of the minimal design.
+ * 
+ * Note that the path for the logo is hard coded at the moment.
+ * 
+ */
+
 class idg_view_html_renderer_minimal_navigation extends idg_view_node_obj
 {
 	

@@ -18,40 +18,39 @@ $part->set_properties(array(
 ));
 $view->add_child($part);
 
-$centercol = new idg_view_html_container;
-$centercol->set_properties(array(
-	'name' => 'center'
+$body = new idg_view_html_container;
+$body->set_properties(array(
+	'name' => 'body'
 ));
 
-$part->add_child($centercol);
+$part->add_child($body);
 
 $navi = new idg_view_html_renderer;
 $navi->set_properties(array(
 	'class' => 'minimal_navigation',
 	'source' => '_site'
 ));
-$centercol->add_child($navi);
+$body->add_child($navi);
 
-$centercol_body = new idg_view_html_container;
-$centercol_body->set_properties(array(
-	'name' => 'center_body'
+$text = new idg_view_html_container;
+$text->set_properties(array(
+	'name' => 'text'
 ));
 
-$centercol->add_child($centercol_body);
+$body->add_child($text);
 
 $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
 	'class' => 'minimal_footer',
 	'source' => '_site'
 ));
-$centercol->add_child($footer);
+$body->add_child($footer);
 
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
 ));
-$centercol_body->add_child($main_text);
-
+$text->add_child($main_text);
 
 // --------------------------------------------------
 
@@ -59,7 +58,7 @@ if ($view_xml !== null) {
     $file = $view_xml;
     $view->write_xml($view_xml);
 } else {
-    $file = 'blocks.xml';
+    $file = 'minimal.xml';
     $view->check_all();
     $view->print_debug();
     $view->write_xml($file);

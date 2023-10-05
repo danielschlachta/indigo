@@ -58,7 +58,7 @@ $main_text->set_properties(array(
 	'style' => 'padding: 0 0 0 17px; background: url(elements/blocks/images/line_blue.png);',
 	'style-link' => $style_link,
 	'style-link-hover' => $style_link_hover,
-	'list-icon' => 'elements/blocks/images/bullet.png',
+	'list-style-image' => 'elements/blocks/images/bullet.png',
 	'filter' => 'blocks_filter_blockquote'
 ));
 $centercol_body->add_child($main_text);

@@ -15,7 +15,8 @@
 		    </datasource>
 		    <datasource name="infobox"
 			    class="idg_datasource_infobox">
-			    caption: Top stories from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 4
+			    caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
+			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
 		    </datasource>
 
 		    <datasource name="text1_src"

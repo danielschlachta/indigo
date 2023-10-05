@@ -237,8 +237,15 @@ class idg_view_html_renderer_infobox extends idg_view_node_obj
 			{
 				$date = $this->chardata['pubDate'];
 				$title = $this->chardata['title'];
-				$link = $this->chardata['link'];
-				$this->text .= "<li>$date<br><a href=\"$link\">$title</a></li>\n";
+				$link = @$this->chardata['link'];
+				$description = @$this->chardata['description'];
+			
+				if ($link)
+					$this->text .= "<li>$date<br><a href=\"$link\">$title</a></li>\n";
+				else if ($this->max_items > 1) 
+					$this->text .= "<li>$title<br><strong>$description</strong></li>\n";
+				else
+					$this->text .= "<li style=\"font-size: 150%;\">&ldquo;$description&rdquo;</li>\n";
 			}
 		}
 	}

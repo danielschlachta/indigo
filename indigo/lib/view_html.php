@@ -380,7 +380,8 @@ class idg_view_html_slot_type extends idg_tree_node_type
 		$this->set_known('style');
 		$this->set_known('style-link');
 		$this->set_known('style-link-hover');
-		$this->set_known('list-icon');
+		$this->set_known('list-style-image');
+		$this->set_known('list-style-position');
 		$this->set_known('filter');
 		$this->set_mandatory('name');
 	}
@@ -426,24 +427,35 @@ class idg_view_html_slot extends idg_tree_node
 		$style = $this->get_property('style');
 		$style_link = $this->get_property('style-link');
 		$style_link_hover = $this->get_property('style-link-hover');
-		$list_icon = $this->get_property('list-icon');
+		
+		$list_style_image = $this->get_property('list-style-image');
+		$list_style_position = $this->get_property('list-style-position');	
 		
 		$css = '';
 
 		if ($style)
-			$css .= "div.$idg_id { $style }\n";
+			$css .= "	div.$idg_id { $style }\n";
 			
 		if ($style_link)
-			$css .= "div.$idg_id a { $style_link }\n";
+			$css .= "	div.$idg_id a { $style_link }\n";
 			
 		if ($style_link_hover)
-			$css .= "div.$idg_id a:hover { $style_link_hover }\n";
+			$css .= "	div.$idg_id a:hover { $style_link_hover }\n";
+		
+		if ($list_style_image || $list_style_position) {
+			$css .= "	div.$idg_id ul {\n";
 			
-		if ($list_icon) {
-			$css .= "div.$idg_id ul { list-style-image: url($list_icon);  }\n";
-			$css_print = "div.$idg_id ul { list-style: disc outside; }\n";
-			$view->stream_append('css-print', $css_print);
+			if ($list_style_image)
+			$css .= "		list-style-image: url($list_style_image);\n";
+	
+			if ($list_style_position)
+				$css .= "	list-style-position: $list_style_position;";
+				
+			$css .= "	}\n";
 		}
+		
+		// TODO: add css-print?
+			
 		
 		if ($anchor_count > 0)
 			$css .= "div.$idg_id-anchor { width: 0px; height: 0px; }\n";

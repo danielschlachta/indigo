@@ -11,51 +11,46 @@ $view->set_properties(array(
 	'icon' => 'favicon.png'
 ));
 
+// #DACCB0
+// #BDD5C4
+
 // Create the layout and add it to the view
 
 $part = new idg_view_html_part;
 $part->set_properties(array(
-	'class' => 'grid_bottomnav'
+	'class' => 'fancy'
 ));
 $view->add_child($part);
 
-// Add the navigation container to the part
+// Add the navigation
 
 $navigation = new idg_view_html_renderer;
 $navigation->set_properties(array(
-	'class' => 'null',
+	'class' => 'fancy_navigation',
 	'source' => '_site'
 ));
 
 $part->add_child($navigation);
 
+// Create a canvas for the body
 
-
-
-/*
-
-
-$centercol_body = new idg_view_html_container;
-$centercol_body->set_properties(array(
-	'name' => 'center_body'
+$body = new idg_view_html_container;
+$body->set_properties(array(
+	'name' => 'body',
+	'filter' => 'fancy_filter_typo',
 ));
 
-$centercol->add_child($centercol_body);
+$part->add_child($body);
 
-$footer = new idg_view_html_renderer;
-$footer->set_properties(array(
-	'class' => 'footer',
-	'source' => '_site'
-));
-$centercol->add_child($footer);
-*/
+// Insert the page text
 
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
+	'list-style-image' => 'elements/fancy/images/list-image.png'
+	// -- ugly, do not use: 'list-style-position' => 'inside'
 ));
-//$centercol_body->add_child($main_text);
-
+$body->add_child($main_text);
 
 // --------------------------------------------------
 

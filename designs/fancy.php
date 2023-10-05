@@ -18,7 +18,24 @@
  * 
  */
 
-class idg_view_html_part_grid_bottomnav extends idg_view_node_param_obj
+$body_font = @is_null($body_font) ? 'Enriqueta' : $body_font;
+$body_bg_color = @is_null($body_bg_color) ? 'fff6e8' : $body_bg_color;
+
+$nav_font = @is_null($nav_font) ? 'Merriweather' : $nav_font;
+$nav_bg_color = @is_null($nav_bg_color) ? 'ffe7d6' : $nav_bg_color;
+ 
+require_once('fancy/navigation.php');
+
+function fancy_filter_typo(&$text)
+{
+	$output = str_replace(' - ', '&mdash;', $text);
+	$output = str_replace('&ldquo;', '&laquo;', $output);
+	$output = str_replace('&rdquo;', '&raquo;', $output);
+	
+	return $output;
+}
+
+class idg_view_html_part_fancy extends idg_view_node_param_obj
 {
 	
 	function __construct(&$parent)
@@ -28,6 +45,10 @@ class idg_view_html_part_grid_bottomnav extends idg_view_node_param_obj
 	
 	function render(&$document, &$view)
 	{
+		global $nav_font;
+		global $body_font;
+		global $body_bg_color;
+		
 	    $style = $this->parent->get_property('style');
    	    $style_print = $this->parent->get_property('style-print');
 	
@@ -36,49 +57,50 @@ class idg_view_html_part_grid_bottomnav extends idg_view_node_param_obj
 			diag($this, get_class($this) . ' must have at least two children');
 			
 		
+		$head = ' <link rel="preconnect" href="https://fonts.gstatic.com">';
 		
-		$idg_id = $this->parent->idg_id;
+		$nav_font_url = str_replace(' ', '+', $nav_font);
+		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$nav_font_url&display=swap\" " 
+			. "rel=\"stylesheet\">\n";
+		
+		$body_font_url = str_replace(' ', '+', $body_font);
+		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$body_font_url&display=swap\" " 
+			. "rel=\"stylesheet\">\n";
+		
+		$view->stream_append('html-head', $head);
+			
 		$fixed = $this->parent->children[0];
 		
+		$css_body_font = "'$body_font)'";
+		
+		$idg_id = $this->parent->idg_id;
+		
 		$css =  "	body {\n"
-			  . "  		display: grid;\n"
-			  . "  		grid-template-rows: 1fr min-content;\n"
-			  . "  		grid-template-columns: 1fr 120px;\n"
+			  . "		font-family: '$body_font', serif;\n" 
+			  . "		font-size: 110%;\n"
+			  . "		background: #$body_bg_color;\n"
 			  . "	}\n\n"
-			  . "	#main-left {\n"
-			  . "		grid-row: 1;\n"
-			  . "		grid-column: 1;\n"
-			  . "	}\n\n"
-			  . "	#main-right {\n"
-			  . "		grid-row: 1;\n"
-			  . "		grid-column: 1;\n"
-			  . "	}\n\n"
-			  . "	#navigation {\n"
-			  . "		grid-row: 2;\n"
-			  . "		grid-column: 1 / span 2;\n"
-			  . "	}\n\n";
-	
+			  . " .$idg_id { position: absolute; top: 3em; left: 2em; width: 66%; }\n\n"
+			  . " .header { color: #E2CDA5; font-size: 150%; height: 3.5em; margin-left: -0.1em; padding-top: 0.1em; padding-left: 0.8em; background: url(elements/fancy/images/banner-left.png) top left no-repeat; }\n\n"
+			  . " .main { padding: 0.1em 1em 0 1em; background-color: #BDD5C4; }\n\n";
+			  
 		$view->stream_append('css', $css);
 	
 		$css_print = "    	#navigation { display: none; }\n";
 		$view->stream_append('css-print', $css_print);
 		
-		$fixed->_render($document, $view);
-		
-		$body = "	<nav id=\"navigation\">\n";
-		$view->stream_append('html-body', $body);
-		
-		$part = $this->parent->children[0];
-			$part->_render($document, $view);
-		
-		$body = "	</nav>\n";
-		$view->stream_append('html-body', $body);
-		
-		
-/*		for ($i = 1; $i < $childcount; $i++) {
+		$view->stream_append('html-body', "  <div class=\"$idg_id\">\n");
+	
+		$view->stream_append('html-body', '  <h1 class="header">Indigo&mdash;the tutorial</h1><div class="main">');
+	
+	
+		for ($i = 1; $i < $childcount; $i++) {
 			$part = $this->parent->children[$i];
 			$part->_render($document, $view);
-		}*/
+		}
+		
+		$view->stream_append('html-body', "  </div></div>\n");
+		$fixed->_render($document, $view);
 	}
 }
 
