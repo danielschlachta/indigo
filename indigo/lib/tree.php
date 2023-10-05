@@ -9,7 +9,6 @@
  * ======================================================================== */
 
 require_once($idg_path . '/lib/object.php');
-require_once($idg_path . '/lib/data.php');
 
 $idg_xml_indent = '  ';
 
@@ -120,8 +119,8 @@ class idg_tree_node extends idg_object
 	{
 		if (!in_array(get_class($child), $this->type_obj->child_types))
 			diag($this, $this->idg_id 
-				. ': add child: incompatible child type (' . get_class($child) 
-				. ')');
+				. ': add child: incompatible child type \'' 
+				. get_class($child) . '\'');
 		$child->parent =& $this;
 		$this->children[] =& $child;
 		
@@ -279,6 +278,8 @@ class idg_tree_node extends idg_object
 		if ($this->idg_translation 
 			&& @($trans = $this->idg_translation[$class_name]))
 			$class_name = $trans;
+		else
+			diag($this, "xml: unknown tag '$class_name'");
 		
 		if (!$this->_xml_stack) {
 			if ($class_name != get_class($this))
@@ -288,7 +289,12 @@ class idg_tree_node extends idg_object
 			$this->_xml_stack = array();
 			$obj =& $this;
 		} else {
+			if (!class_exists($class_name))
+				diag($this, "xml: while trying to instantiate " 
+					. "'$class_name'" . ": class does not exist");
+			
 			$obj = new $class_name;
+			
 			$obj->set_properties($properties);
 			$this->_xml_stack[count($this->_xml_stack) - 1]->add_child($obj);
 		}
@@ -329,36 +335,6 @@ class idg_tree_node extends idg_object
 		echo $this->_obj_print_debug($indent);
 		
 		return true;
-	}
-}
-
-class idg_token_tree_node extends idg_token
-{
-	// public functions
-	
-	function __construct($depth, $is_leaf)
-	{
-		parent::__construct($depth);
-		$this->is_leaf = $is_leaf;
-	}	
-}
-
-class idg_datasource_tree extends idg_datasource
-{
-	
-	var $node_count = 0, $leaf_count = 0;
-	
-	function add_node($depth, &$properties, $is_leaf = true)
-	{
-		$tok = new idg_token_tree_node($depth, $is_leaf);
-		$tok->properties = $properties;
-		
-		if ($is_leaf)
-			$this->leaf_count++;
-		else
-			$this->node_count++;
-		
-		$this->tokens[] = $tok;
 	}
 }
 

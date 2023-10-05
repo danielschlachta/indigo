@@ -147,14 +147,9 @@ li>p {
 }
 
 blockquote {
-	position: relative;
-	width: 90%;
-	height: 100%;
-	padding: 0px 20px 0px 20px;
-	border: 2px solid #B09423;
-//	background-color: #0C2549;
-	left: 0px;
-	text-align: justify;
+	padding: 0.5em 1em 1em 1em;
+	border-left: 3px solid #B09423;
+	background-color: #0C2549;
 }
 
 pre {

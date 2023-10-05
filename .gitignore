@@ -1,4 +1,7 @@
+/docs/config/cache/*
+/docs/resources/reference/designs
+/docs/resources/reference/indigo
+/doxygen
 /indigo/contrib/geshi-1.0
 /indigo/contrib/parsedown
-/docs/config/cache/*
-/docs/resources/reference/html
+

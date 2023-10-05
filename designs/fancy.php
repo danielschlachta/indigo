@@ -80,7 +80,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			  . "		font-size: 110%;\n"
 			  . "		background: #$body_bg_color;\n"
 			  . "	}\n\n"
-			  . " .$idg_id { position: absolute; top: 3em; left: 2em; width: 66%; }\n\n"
+			  . " .$idg_id { position: absolute; top: 3em; left: 3em; width: 66%; }\n\n"
 			  . " .header { color: #E2CDA5; font-size: 150%; height: 3.5em; margin-left: -0.1em; padding-top: 0.1em; padding-left: 0.8em; background: url(elements/fancy/images/banner-left.png) top left no-repeat; }\n\n"
 			  . " .main { padding: 0.1em 1em 0 1em; background-color: #BDD5C4; }\n\n";
 			  
@@ -91,7 +91,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		
 		$view->stream_append('html-body', "  <div class=\"$idg_id\">\n");
 	
-		$view->stream_append('html-body', '  <h1 class="header">Indigo&mdash;the tutorial</h1><div class="main">');
+		//$view->stream_append('html-body', '  <h1 class="header">Indigo&mdash;the tutorial</h1><div class="main">');
 	
 	
 		for ($i = 1; $i < $childcount; $i++) {

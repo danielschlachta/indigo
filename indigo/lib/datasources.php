@@ -5,9 +5,38 @@
  *
  * File: datasources.php - basic builtin data sources
  *
- * (c) 2020 Daniel Schlachta
+ * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
+class idg_token_tree_node extends idg_token
+{
+	// public functions
+	
+	function __construct($depth, $is_leaf)
+	{
+		parent::__construct($depth);
+		$this->is_leaf = $is_leaf;
+	}	
+}
+
+class idg_datasource_tree extends idg_datasource
+{
+	
+	var $node_count = 0, $leaf_count = 0;
+	
+	function add_node($depth, &$properties, $is_leaf = true)
+	{
+		$tok = new idg_token_tree_node($depth, $is_leaf);
+		$tok->properties = $properties;
+		
+		if ($is_leaf)
+			$this->leaf_count++;
+		else
+			$this->node_count++;
+		
+		$this->tokens[] = $tok;
+	}
+}
 
 class idg_datasource_textfile extends idg_datasource
 {	

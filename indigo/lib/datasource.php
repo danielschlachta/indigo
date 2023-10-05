@@ -3,9 +3,9 @@
 /* ========================================================================
  * Indigo/Web
  *
- * File: data.php - contains base classes for data sources and tokens
+ * File: datasource.php - contains base classes for data sources and tokens
  *
- * (c) 2020 Daniel Schlachta
+ * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
 require_once($idg_path . '/lib/object.php');

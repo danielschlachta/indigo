@@ -18,6 +18,9 @@
 			    caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
 			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
 		    </datasource>
+		    <filter name="caption"
+				class="idg_filter_fancy_caption">
+			</filter>
 
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
@@ -62,6 +65,7 @@
 			    class="idg_view_html_renderer_textfile"
 			    source="text1_src" />		
 	    </document>
+	    
 	    <document id="designs" 
 			name="Designs" 
 			description="The old switcheroo">
@@ -290,7 +294,46 @@
 			    class="idg_view_html_renderer_textfile"
 			    source="text16_src" />
 	    </document>
-	   	    <document id="license" name="License" description="Legalese">
+
+   	    <document id="reference" name="Reference" description="Further Reading">
+		    <datasource name="framedimg"
+			    class="idg_datasource_blocks_framedimg">
+			    file: fractal.jpg; width: 90; height: 90;
+		    </datasource>
+		    <datasource name="infobox"
+			    class="idg_datasource_blocks_infobox">
+			    caption: Quick Links; links: resources/license/license.html
+		    </datasource>
+		    
+		    <datasource name="text1_src"
+			    class="idg_datasource_textfile">
+			    filename: resources/reference/reference.html
+		    </datasource>
+		    <renderer slot="main-text"
+			    class="idg_view_html_renderer_textfile"
+			    source="text1_src" />		
+        </document>
+        
+        <document id="examples" name="Examples" description="Stuff you can use">
+		    <datasource name="framedimg"
+			    class="idg_datasource_blocks_framedimg">
+			    file: fractal.jpg; width: 90; height: 90;
+		    </datasource>
+		    <datasource name="infobox"
+			    class="idg_datasource_blocks_infobox">
+			    caption: Quick Links; links: resources/license/license.html
+		    </datasource>
+		    
+		    <datasource name="text1_src"
+			    class="idg_datasource_textfile">
+			    filename: resources/examples/examples.html
+		    </datasource>
+		    <renderer slot="main-text"
+			    class="idg_view_html_renderer_textfile"
+			    source="text1_src" />		
+        </document>
+        
+   	    <document id="license" name="License" description="Legalese">
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
 			    file: fractal.jpg; width: 90; height: 90;
