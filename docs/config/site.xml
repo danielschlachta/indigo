@@ -10,11 +10,11 @@
 			description="Welcome to indigo" 
 			navigation-comment="The page of pages">
 		    <datasource name="framedimg"
-			    class="idg_datasource_framedimg">
+			    class="idg_datasource_blocks_framedimg">
 			    file: randomsymbols.jpg; width: 90; height: 90;
 		    </datasource>
 		    <datasource name="infobox"
-			    class="idg_datasource_infobox">
+			    class="idg_datasource_blocks_infobox">
 			    caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
 			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
 		    </datasource>
@@ -41,15 +41,16 @@
 			    class="idg_view_html_renderer_textfile"
 			    source="text2_src" />		
 	    </document>
+	    
 	    <document id="about" 
 			name="About" 
 			description="What it's about">
 		    <datasource name="framedimg"
-			    class="idg_datasource_framedimg">
+			    class="idg_datasource_blocks_framedimg">
 			    file: fractal.jpg; width: 90; height: 90;
 		    </datasource>
 		    <datasource name="infobox"
-			    class="idg_datasource_infobox">
+			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: main/about/about.html
 		    </datasource>
 		    
@@ -65,11 +66,11 @@
 			name="Designs" 
 			description="The old switcheroo">
 		    <datasource name="framedimg"
-			    class="idg_datasource_framedimg">
+			    class="idg_datasource_blocks_framedimg">
 			    file: me.jpg; width: 90; height: 90;
 		    </datasource>
 		    <datasource name="infobox"
-			    class="idg_datasource_infobox">
+			    class="idg_datasource_blocks_infobox">
 			    caption: Choose your poison; file: infobox.html
 		    </datasource>
 		    
@@ -87,11 +88,11 @@
 	    <document id="tutorial" name="Tutorial" 
 			description="How it works">
 		    <datasource name="framedimg"
-			    class="idg_datasource_framedimg">
+			    class="idg_datasource_blocks_framedimg">
 			    file: machine.png; width: 90; height: 57;
 		    </datasource>
 		    <datasource name="infobox"
-			    class="idg_datasource_infobox">
+			    class="idg_datasource_blocks_infobox">
 			    caption: Nothing here to see; file: infobox.html
 		    </datasource>
 		    
@@ -291,11 +292,11 @@
 	    </document>
 	   	    <document id="license" name="License" description="Legalese">
 		    <datasource name="framedimg"
-			    class="idg_datasource_framedimg">
+			    class="idg_datasource_blocks_framedimg">
 			    file: fractal.jpg; width: 90; height: 90;
 		    </datasource>
 		    <datasource name="infobox"
-			    class="idg_datasource_infobox">
+			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 		    

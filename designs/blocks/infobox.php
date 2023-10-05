@@ -24,7 +24,7 @@ function blocks_filter_infobox(&$text)
 }
 
 
-class idg_datasource_infobox extends idg_datasource
+class idg_datasource_blocks_infobox extends idg_datasource
 {
 	
 	function __construct(&$parameters)
@@ -35,7 +35,7 @@ class idg_datasource_infobox extends idg_datasource
 	}
 }
 
-class idg_view_html_renderer_infobox extends idg_view_node_obj
+class idg_view_html_renderer_blocks_infobox extends idg_view_node_obj
 {
 	var $text;
 	

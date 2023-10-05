@@ -101,7 +101,7 @@ $part->add_child($logo);
 
 $framedimg = new idg_view_html_renderer;
 $framedimg->set_properties(array(
-	'class' => 'framedimg',
+	'class' => 'blocks_framedimg',
 	'source' => 'framedimg'
 ));
 
@@ -109,7 +109,7 @@ $part->add_child($framedimg);
 
 $infobox = new idg_view_html_renderer;
 $infobox->set_properties(array(
-	'class' => 'infobox',
+	'class' => 'blocks_infobox',
 	'source' => 'infobox'
 ));
 $part->add_child($infobox);
