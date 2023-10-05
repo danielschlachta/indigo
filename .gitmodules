@@ -1,0 +1,6 @@
+[submodule "indigo/modules/geshi-1.0"]
+	path = indigo/modules/geshi-1.0
+	url = https://github.com/GeSHi/geshi-1.0.git
+[submodule "indigo/modules/parsedown"]
+	path = indigo/modules/parsedown
+	url = https://github.com/erusev/parsedown.git

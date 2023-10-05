@@ -38,6 +38,19 @@ class idg_datasource_tree extends idg_datasource
 	}
 }
 
+/*!
+ * Returns the content of a (normally text) file.
+ * 
+ * Accepts parameters:
+ *   + \c filename obviously mandatory
+ *   + \c max_size defaults to 32k
+ * 
+ * Returns two tokens:
+ * [0] The file content
+ * [1] The time/date of last modification as returned by filemtime
+ * 
+ */
+
 class idg_datasource_textfile extends idg_datasource
 {	
 	function __construct(&$parameters)
