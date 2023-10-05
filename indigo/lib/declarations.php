@@ -66,56 +66,6 @@ class idg_datasource_declaration extends idg_tree_node
 	}
 }
 
-class idg_filter_declaration_type extends idg_object_type
-{	
-	function __construct()
-	{
-		parent::__construct();
-		$this->set_known('name');
-		$this->set_known('class');
-		$this->set_mandatory('name');
-		$this->set_mandatory('class');
-	}
-}
-
-class idg_filter_declaration extends idg_tree_node
-{	
-	var $idg_type = 'filter';
-	
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	function get_instance(&$datasource = null)
-	{
-		if (!$class_name = $this->get_property('class'))
-			return false;
-			
-		$parameters = array();
-		if (($text = $this->get_text())) {
-			$lines = explode(";", $text);
-			foreach ($lines as $line) {
-				if ($line) {
-					if (!preg_match('/([a-zA-Z][a-zA-Z0-9-]+):[\ ]+(.*)/', 
-						$line, $match))
-						diag($this, get_class($this->parent) 
-							. ': Invalid parameter format (site): ' . $line);
-					$parameters[$match[1]] = $match[2];
-				}
-			}
-		}
-		$object = new $class_name($parameters);
-		$object->parent = $this;
-		
-		return $object;
-	}
-	
-	function _token(&$tree, &$depth, &$path)
-	{
-		return true;
-	}
-}
 
 class idg_renderer_declaration_type extends idg_object_type
 {

@@ -40,9 +40,12 @@ class idg_view extends idg_tree_node
 		if (array_key_exists($stream_name, $this->streams)) {
 			if (($stream_name == 'html-body')) {
 				foreach ($this->filters as $filter => $is_set) {
-					if ($is_set)
+					if ($is_set) {
+						if (!function_exists($filter))
+							diag($this, "Unknown filter: $filter");
+						
 						$tmp = $filter($content);
-					else
+					} else
 						$tmp = false;
 					if ($tmp)
 						$content = $tmp;

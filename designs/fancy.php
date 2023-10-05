@@ -35,6 +35,23 @@ function fancy_filter_typo(&$text)
 	return $output;
 }
 
+$caption_eaten = false;
+
+function fancy_filter_eat_caption(&$text)
+{
+	global $caption_eaten;
+
+	$preg = '|^<h1>.*</h1>[ \n\r]*|';
+	
+	if (!$caption_eaten && preg_match($preg, $text)) {
+		$output = preg_replace($preg, '', $text);
+		$caption_eaten = true;
+		return $output;
+	}
+	
+	// return false so that original is kept
+}
+
 class idg_view_html_part_fancy extends idg_view_node_param_obj
 {
 	
@@ -89,7 +106,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		$css_print = "    	#navigation { display: none; }\n";
 		$view->stream_append('css-print', $css_print);
 		
-		$view->stream_append('html-body', "  <div class=\"$idg_id\">\n");
+		$view->stream_append('html-body', "<div class=\"$idg_id\">\n");
 	
 		//$view->stream_append('html-body', '  <h1 class="header">Indigo&mdash;the tutorial</h1><div class="main">');
 	
@@ -99,7 +116,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			$part->_render($document, $view);
 		}
 		
-		$view->stream_append('html-body', "  </div></div>\n");
+		$view->stream_append('html-body', "</div></div>\n");
 		$fixed->_render($document, $view);
 	}
 }

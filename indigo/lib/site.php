@@ -4,10 +4,6 @@
  * Indigo/Web
  *
  * File: site.php - contains the site structure and configuration
- * 
- *  Note that the [class name]_declaration_type 
- *  and [class name]_declaration classes have to be included here to 
- *  avoid circularity in tree.php.
  *
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
@@ -24,7 +20,6 @@ class idg_site extends idg_site_element
 		'folder' => 'idg_folder', 
 		'document' => 'idg_document', 
 		'datasource' => 'idg_datasource_declaration', 
-		'filter' => 'idg_filter_declaration', 
 		'renderer' => 'idg_renderer_declaration'
 	);
 	

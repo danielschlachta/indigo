@@ -18,9 +18,6 @@
 			    caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
 			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
 		    </datasource>
-		    <filter name="caption"
-				class="idg_filter_fancy_caption">
-			</filter>
 
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">

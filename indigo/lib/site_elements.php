@@ -113,7 +113,6 @@ class idg_document_type extends idg_site_element_type
 		$this->add_hook('title', '$this->_get_default_title');
 		$this->add_hook('last-change', '$this->_get_last_change');
 		$this->child_types[] = 'idg_datasource_declaration';
-		$this->child_types[] = 'idg_filter_declaration';
 		$this->child_types[] = 'idg_renderer_declaration';
 	}
 }

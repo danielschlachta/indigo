@@ -37,7 +37,7 @@ $part->add_child($navigation);
 $body = new idg_view_html_container;
 $body->set_properties(array(
 	'name' => 'body',
-	'filter' => 'fancy_filter_typo',
+	'filter' => 'fancy_filter_eat_caption',
 ));
 
 $part->add_child($body);
@@ -47,7 +47,8 @@ $part->add_child($body);
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
-	'list-style-image' => 'elements/fancy/images/list-image.png'
+	'list-style-image' => 'elements/fancy/images/list-image.png',
+	'filter' => 'fancy_filter_typo'
 	// -- ugly, do not use: 'list-style-position' => 'inside'
 ));
 $body->add_child($main_text);

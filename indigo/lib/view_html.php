@@ -20,6 +20,8 @@
  * 
  */
 
+require_once($idg_path . '/lib/uuid.php');
+
 class idg_view_html_type extends idg_view_type
 {
 	var $child_types = array('idg_view_html_part');
@@ -86,8 +88,8 @@ class idg_view_html extends idg_view
 		$style = $this->get_property('style');
 		$icon = $this->get_property('icon');
 		
-		$child_count = count($this->children);
-
+		$document->uuid = UUID::v4();
+		
 		$start = $this->_milliseconds();
 
 		foreach ($this->children as $child) {
@@ -102,7 +104,8 @@ class idg_view_html extends idg_view
 		
 		$milli_time = $this->_milliseconds() - $start;
 		
-		$output = '<!-- generated on ' . date('r', time()) 
+		$output = '<!-- document UUID=' .$document->uuid 
+			. ' generated on ' . date('r', time()) 
 			. " by $idg_program_name, time: $milli_time ms  -->\n"
 			. "<!DOCTYPE html>\n";
 		
@@ -141,6 +144,7 @@ class idg_view_html extends idg_view
 			$output .= " </script>\n";
 		}
 		$output .= "</head>\n<body>\n";
+		
 		$output .= $this->streams['html-body-start'];
 		$output .= $this->streams['html-body'];
 		$output .= "</body>\n</html>";

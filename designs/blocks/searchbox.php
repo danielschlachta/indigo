@@ -36,8 +36,9 @@ class idg_view_html_item_searchbox extends idg_view_node_obj
 		
 		$css_print = "div#$idg_id { display: none }\n";
 		
-		$js = "function append() {\n var myvar = document.getElementById(\"querytext\");\n"
-            . " myvar.value += \" site:github.com\";\n}\n";
+		$js = "function append() { " 
+			. "document.getElementById(\"querytext\").value += " 
+			. "\" site:danielschlachta.github.io\"; }\n";
 		
 		$view->stream_append('css', $css);
 		$view->stream_append('css-print', $css_print);

@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background:#143264;
+    background: #0C2549;
     color:  #B09423;
 	font-size: 120%;
 	overflow-y: scroll;
@@ -86,7 +86,7 @@ body {
 #LogoBtn a, #footer a { 
     padding: 3px; 
 	margin: 3px;
-	border: 2px solid #143264;
+	border: 2px solid #0C2549;
 	font: 1.1em/1.2 verdana,helvetica,arial,sans-serif;
 	text-decoration: none;
 	color: #B09423;
@@ -147,9 +147,9 @@ li>p {
 }
 
 blockquote {
-	padding: 0.5em 1em 1em 1em;
+	padding: 1em;
 	border-left: 3px solid #B09423;
-	background-color: #0C2549;
+	background: #143264;
 }
 
 pre {
