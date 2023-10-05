@@ -35,21 +35,44 @@ function fancy_filter_typo(&$text)
 	return $output;
 }
 
+$caption_preg = '|^<h1>.*</h1>[ \n\r]*|';
 $caption_eaten = false;
 
 function fancy_filter_eat_caption(&$text)
 {
+	global $caption_preg;
 	global $caption_eaten;
-
-	$preg = '|^<h1>.*</h1>[ \n\r]*|';
 	
-	if (!$caption_eaten && preg_match($preg, $text)) {
-		$output = preg_replace($preg, '', $text);
+	
+	if (!$caption_eaten && preg_match($caption_preg, $text)) {
+		$output = preg_replace($caption_preg, '', $text);
 		$caption_eaten = true;
 		return $output;
 	}
 	
 	// return false so that original is kept
+}
+
+class idg_renderer_fancy_caption extends idg_view_node_obj
+{
+	function __construct(&$parent)
+	{
+		parent::__construct($parent);
+	}
+	
+	function render(&$document, &$view)
+	{
+		global $caption_preg;
+		
+		$this->datasource->rewind();
+		
+		while ($token = $this->datasource->get_token()) {
+			if (preg_match($caption_preg, $token->data, $match)) {
+				$caption = preg_replace('/[ \r\n]$/', '', $match[0]);
+				$view->stream_append('html-body', "<div id=\"caption\">$caption</div>");
+			}
+		}
+	}
 }
 
 class idg_view_html_part_fancy extends idg_view_node_param_obj
@@ -97,8 +120,9 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			  . "		font-size: 110%;\n"
 			  . "		background: #$body_bg_color;\n"
 			  . "	}\n\n"
-			  . " .$idg_id { position: absolute; top: 3em; left: 3em; width: 66%; }\n\n"
+			  . " .$idg_id { position: absolute; top: 3em; left: 3em; w idth: 66%; }\n\n"
 			  . " .header { color: #E2CDA5; font-size: 150%; height: 3.5em; margin-left: -0.1em; padding-top: 0.1em; padding-left: 0.8em; background: url(elements/fancy/images/banner-left.png) top left no-repeat; }\n\n"
+			  . "  #caption { color: red; font-size: 200%; font-weight: bold; }\n\n"
 			  . " .main { padding: 0.1em 1em 0 1em; background-color: #BDD5C4; }\n\n";
 			  
 		$view->stream_append('css', $css);
@@ -107,10 +131,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		$view->stream_append('css-print', $css_print);
 		
 		$view->stream_append('html-body', "<div class=\"$idg_id\">\n");
-	
-		//$view->stream_append('html-body', '  <h1 class="header">Indigo&mdash;the tutorial</h1><div class="main">');
-	
-	
+		
 		for ($i = 1; $i < $childcount; $i++) {
 			$part = $this->parent->children[$i];
 			$part->_render($document, $view);

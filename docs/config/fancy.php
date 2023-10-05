@@ -29,7 +29,6 @@ $navigation->set_properties(array(
 	'class' => 'fancy_navigation',
 	'source' => '_site'
 ));
-
 $part->add_child($navigation);
 
 // Create a canvas for the body
@@ -39,7 +38,6 @@ $body->set_properties(array(
 	'name' => 'body',
 	'filter' => 'fancy_filter_eat_caption',
 ));
-
 $part->add_child($body);
 
 // Insert the page text
