@@ -21,6 +21,7 @@
 
 		    <renderer slot="main-text"
 			    class="idg_renderer_fancy_caption"
+			    nullable="yes"
 			    source="text1_src" />			    
 
 		    <datasource name="text1_src"
@@ -60,6 +61,7 @@
 			
 			<renderer slot="main-text"
 			    class="idg_renderer_fancy_caption"
+			    nullable="yes"
 			    source="text1_src" />			    
 		    
 		    <datasource name="text1_src"
@@ -85,6 +87,7 @@
 		    
 		    <renderer slot="main-text"
 			    class="idg_renderer_fancy_caption"
+			    nullable="yes"
 			    source="text1_src" />			    
 
 		    <datasource name="text1_src"
@@ -111,6 +114,7 @@
 
 			<renderer slot="main-text"
 			    class="idg_renderer_fancy_caption"
+			    nullable="yes"
 			    source="text1_src" />			    
 		    
 		    <datasource name="text1_src"
@@ -320,6 +324,7 @@
 		    
 		    <renderer slot="main-text"
 			    class="idg_renderer_fancy_caption"
+			    nullable="yes"
 			    source="text1_src" />			    
 		    
 		    <datasource name="text1_src"
@@ -343,6 +348,7 @@
 		    
 		    <renderer slot="main-text"
 			    class="idg_renderer_fancy_caption"
+			    nullable="yes"
 			    source="text1_src" />			    
 		    
 		    <datasource name="text1_src"
@@ -366,6 +372,7 @@
 
 			<renderer slot="main-text"
 			    class="idg_renderer_fancy_caption"
+			    nullable="yes"
 			    source="text1_src" />			    
 		    
 		    <datasource name="text1_src"

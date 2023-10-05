@@ -6,6 +6,14 @@ indigo, but we will see later that it is very easy to roll your own.
 <p>
 As for the HTML files, we can just put some text into them for the
 moment to see that they are being properly displayed.
+<blockquote>
+While datasources don't get instantiated unless they are actually
+referenced, renderers form a part of the document and are therefore
+created immediately. If you want to use them in some views but not in others, 
+you can add <b><code>nullable="yes"</code></b>
+to the declaration. In this case, the renderer will simply be ignored
+if there is no corresponding php class.
+</blockquote>
 </p>
 
 <p>

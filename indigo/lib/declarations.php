@@ -76,6 +76,7 @@ class idg_renderer_declaration_type extends idg_object_type
 		$this->set_known('slot');
 		$this->set_known('class');
 		$this->set_known('source');
+		$this->set_known('nullable');
 		
 		$this->set_known('anchor');
 		$this->set_known('name');
@@ -99,14 +100,21 @@ class idg_renderer_declaration extends idg_tree_node
 	
 	function get_instance(&$datasource = null)
 	{
-		if (!$class_name = $this->get_property('class'))
-			return false;
+		if (!$class_name = $this->get_property('class')) 
+			diag($this, "xml: internal error: class property not set");
 		
-		$object = new $class_name($this);
-		$object->datasource = $datasource;
-		$object->anchor = $this->get_property('anchor');
+		$nullable = $this->get_property('nullable') == "yes";
 		
-		return $object;
+		if (class_exists($class_name)) {
+			$object = new $class_name($this);
+			$object->datasource = $datasource;
+			$object->anchor = $this->get_property('anchor');
+		
+			return $object;
+		}
+		
+		if (!$nullable)
+			diag($this, "xml: unknown class '$class_name'");
 	}
 	
 	function _token(&$tree, &$depth, &$path)

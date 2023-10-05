@@ -412,6 +412,9 @@ class idg_view_html_slot extends idg_tree_node
 		$anchor_count = 0;
 		
 		foreach ($renderers as $renderer) {
+			if (!$renderer)
+				continue;
+				
 			if (($anchor = $renderer->anchor)) {
 				$anchor_count++;
 				$body = "<div id=\"$anchor\"></div>";
