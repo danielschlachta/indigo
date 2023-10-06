@@ -1,10 +1,5 @@
 <?php
 
-if ($view_xml == null) 
-	$idg_path = '../indigo';
-
-require_once("$idg_path/startup.php");
-
 $view = new idg_view_html;
 $view->set_properties(array(
 	'name' => 'minimal',
@@ -51,18 +46,5 @@ $main_text->set_properties(array(
 	'name' => 'main-text',
 ));
 $text->add_child($main_text);
-
-// --------------------------------------------------
-
-if ($view_xml !== null) {
-    $file = $view_xml;
-    $view->write_xml($view_xml);
-} else {
-    $file = 'minimal.xml';
-    $view->check_all();
-    $view->print_debug();
-    $view->write_xml($file);
-    echo "View configuration written to $file\n";
-}
 
 ?>

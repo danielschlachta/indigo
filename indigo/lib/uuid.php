@@ -1,4 +1,8 @@
 <?php
+
+/*! This is user contributed content from the PHP documentation.
+ */
+
 class UUID {
   public static function v3($namespace, $name) {
     if(!self::is_valid($namespace)) return false;

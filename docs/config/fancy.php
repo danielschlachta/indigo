@@ -1,10 +1,5 @@
 <?php
 
-if ($view_xml == null) 
-	$idg_path = '../indigo';
-
-require_once("$idg_path/startup.php");
-
 $view = new idg_view_html;
 $view->set_properties(array(
 	'name' => 'fancy',
@@ -31,6 +26,20 @@ $navigation->set_properties(array(
 ));
 $part->add_child($navigation);
 
+// Insert the caption
+
+$caption = new idg_view_html_container;
+$caption->set_properties(array(
+	'name' => 'caption',
+));
+$part->add_child($caption);
+
+$caption_text = new idg_view_html_slot;
+$caption_text->set_properties(array(
+	'name' => 'caption'
+));
+$caption->add_child($caption_text);
+
 // Create a canvas for the body
 
 $body = new idg_view_html_container;
@@ -45,23 +54,10 @@ $part->add_child($body);
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
-	'list-style-image' => 'elements/fancy/images/list-image.png',
+	'list-style-image' => 'elements/fancy/list-image.png',
 	'filter' => 'fancy_filter_typo'
 	// -- ugly, do not use: 'list-style-position' => 'inside'
 ));
 $body->add_child($main_text);
-
-// --------------------------------------------------
-
-if ($view_xml !== null) {
-    $file = $view_xml;
-    $view->write_xml($view_xml);
-} else {
-    $file = 'blocks.xml';
-    $view->check_all();
-    $view->print_debug();
-    $view->write_xml($file);
-    echo "View configuration written to $file\n";
-}
 
 ?>

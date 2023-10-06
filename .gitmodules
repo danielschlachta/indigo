@@ -4,3 +4,6 @@
 [submodule "indigo/modules/parsedown"]
 	path = indigo/modules/parsedown
 	url = https://github.com/erusev/parsedown.git
+[submodule "indigo/modules/pagemap"]
+	path = indigo/modules/pagemap
+	url = https://github.com/lrsjng/pagemap.git

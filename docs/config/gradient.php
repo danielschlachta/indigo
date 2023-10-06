@@ -1,10 +1,5 @@
 <?php
 
-if ($view_xml == null) 
-	$idg_path = '../indigo';
-
-require_once("$idg_path/startup.php");
-
 $font = 'font-family: georgia,serif; font-size: 100%; line-height: 1.2;';
 
 $view = new idg_view_html;
@@ -23,7 +18,7 @@ $view->add_child($part);
 $fixed = new idg_view_html_container;
 
 $fixed->set_properties(array('name' => 'lighthouse', 
-    'style' => 'background: #53538a url(elements/gradient/images/lighthouse.jpg)'
+    'style' => 'background: #53538a url(elements/gradient//lighthouse.jpg)'
 	    ." bottom $fixed_pos fixed no-repeat;"));
 
 $navig = new idg_view_html_renderer;
@@ -52,7 +47,7 @@ $logo_image = new idg_view_html_item;
 $logo_image->set_properties(array(
 	'class' => 'image'
 ));
-$logo_image->set_text('source: elements/blocks/images/indigo.png; width: 90; height: 70;');
+$logo_image->set_text('source: elements/blocks//indigo.png; width: 90; height: 70;');
 
 $logo->add_child($logo_image);
 
@@ -60,7 +55,7 @@ $main = new idg_view_html_container;
 $main->set_properties(array('name' => 'content',
 	'style' =>  'width: 100%; height: 100%; margin-left: auto; ' 
 	    . 'margin-right: auto;' 
-	    . ' background: #53538a url(elements/gradient/images/bg_grad.png)' 
+	    . ' background: #53538a url(elements/gradient//bg_grad.png)' 
 	    . ' top left fixed repeat-x;'));
 
 
@@ -83,7 +78,7 @@ $fill_box->set_properties(array('name' => 'fillbox',
         . 'margin-top: 40px; text-align: justify; font-size: 118%; '
         . 'border-top: 1px solid #25253d; border-left: 1px solid #25253d; '
 	    . 'border-right: 1px solid #25253d; background: #ffffff '
-        . 'url(elements/gradient/images/bg_grad_2.png) bottom left ' 
+        . 'url(elements/gradient//bg_grad_2.png) bottom left ' 
         . 'fixed repeat-x;',
      'style-head' => 'font-size: 130%;',
      'style-subhead' => 'font-size: 100%;'));
@@ -118,18 +113,5 @@ $main->add_child($text_box);
 $part->add_child($fixed);
 $part->add_child($main);
 $part->add_child($logo);
-
-// --------------------------------------------------
-
-if ($view_xml !== null) {
-    $file = $view_xml;
-    $view->write_xml($view_xml);
-} else {
-    $file = 'gradient.xml';
-    $view->check_all();
-    $view->print_debug();
-    $view->write_xml($file);
-    echo "View configuration written to $file\n";
-}
 
 ?>

@@ -19,7 +19,7 @@
 			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
 		    </datasource>
 
-		    <renderer slot="main-text"
+		    <renderer slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -59,7 +59,7 @@
 			    caption: Quick Links; links: main/about/about.html
 		    </datasource>
 			
-			<renderer slot="main-text"
+			<renderer slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -85,7 +85,7 @@
 			    caption: Choose your poison; file: infobox.html
 		    </datasource>
 		    
-		    <renderer slot="main-text"
+		    <renderer slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -112,7 +112,7 @@
 			    caption: Nothing here to see; file: infobox.html
 		    </datasource>
 
-			<renderer slot="main-text"
+			<renderer slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -322,7 +322,7 @@
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 		    
-		    <renderer slot="main-text"
+		    <renderer slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -346,7 +346,7 @@
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 		    
-		    <renderer slot="main-text"
+		    <renderer slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -370,7 +370,7 @@
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 
-			<renderer slot="main-text"
+			<renderer slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    

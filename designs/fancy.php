@@ -18,13 +18,18 @@
  * 
  */
 
-$body_font = @is_null($body_font) ? 'Enriqueta' : $body_font;
-$body_bg_color = @is_null($body_bg_color) ? 'fff6e8' : $body_bg_color;
+$body_font = @is_null($body_font) ? 'GentiumAlt' : $body_font;
+$body_bg_color = @is_null($body_bg_color) ? '#e0e0e0' : $body_bg_color;
 
-$nav_font = @is_null($nav_font) ? 'Merriweather' : $nav_font;
-$nav_bg_color = @is_null($nav_bg_color) ? 'ffe7d6' : $nav_bg_color;
+$caption_font = @is_null($caption_font) ? 'Noto Serif' : $caption_font;
+
+$nav_font = @is_null($nav_font) ? 'Noto Sans' : $nav_font;
+$nav_bg_color = @is_null($nav_bg_color) ? 'c0c0c0' : $nav_bg_color;
+ 
+require_once($idg_path . '/modules/mod_pagemap.php');
  
 require_once('fancy/navigation.php');
+require_once('fancy/caption.php');
 
 function fancy_filter_typo(&$text)
 {
@@ -33,46 +38,6 @@ function fancy_filter_typo(&$text)
 	$output = str_replace('&rdquo;', '&raquo;', $output);
 	
 	return $output;
-}
-
-$caption_preg = '|^<h1>.*</h1>[ \n\r]*|';
-$caption_eaten = false;
-
-function fancy_filter_eat_caption(&$text)
-{
-	global $caption_preg;
-	global $caption_eaten;
-	
-	
-	if (!$caption_eaten && preg_match($caption_preg, $text)) {
-		$output = preg_replace($caption_preg, '', $text);
-		$caption_eaten = true;
-		return $output;
-	}
-	
-	// return false so that original is kept
-}
-
-class idg_renderer_fancy_caption extends idg_view_node_obj
-{
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-	}
-	
-	function render(&$document, &$view)
-	{
-		global $caption_preg;
-		
-		$this->datasource->rewind();
-		
-		while ($token = $this->datasource->get_token()) {
-			if (preg_match($caption_preg, $token->data, $match)) {
-				$caption = preg_replace('/[ \r\n]$/', '', $match[0]);
-				$view->stream_append('html-body', "<div id=\"caption\">$caption</div>");
-			}
-		}
-	}
 }
 
 class idg_view_html_part_fancy extends idg_view_node_param_obj
@@ -86,16 +51,16 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 	function render(&$document, &$view)
 	{
 		global $nav_font;
+		global $caption_font;
 		global $body_font;
-		global $body_bg_color;
+		global $body_bg_color;	
 		
 	    $style = $this->parent->get_property('style');
    	    $style_print = $this->parent->get_property('style-print');
 	
 		if ($this->parent->children == null 
-			|| ($childcount = count($this->parent->children)) < 1)
-			diag($this, get_class($this) . ' must have at least two children');
-			
+			|| count($this->parent->children) != 3)
+			diag($this, get_class($this) . ' must have exactly three children');
 		
 		$head = ' <link rel="preconnect" href="https://fonts.gstatic.com">';
 		
@@ -103,42 +68,102 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$nav_font_url&display=swap\" " 
 			. "rel=\"stylesheet\">\n";
 		
+		$caption_font_url = str_replace(' ', '+', $caption_font);
+		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$caption_font_url&display=swap\" " 
+			. "rel=\"stylesheet\">\n";
+				
 		$body_font_url = str_replace(' ', '+', $body_font);
 		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$body_font_url&display=swap\" " 
 			. "rel=\"stylesheet\">\n";
 		
 		$view->stream_append('html-head', $head);
 			
-		$fixed = $this->parent->children[0];
-		
-		$css_body_font = "'$body_font)'";
-		
-		$idg_id = $this->parent->idg_id;
+		//$idg_id = $this->parent->idg_id;
 		
 		$css =  "	body {\n"
-			  . "		font-family: '$body_font', serif;\n" 
-			  . "		font-size: 110%;\n"
-			  . "		background: #$body_bg_color;\n"
-			  . "	}\n\n"
-			  . " .$idg_id { position: absolute; top: 3em; left: 3em; w idth: 66%; }\n\n"
-			  . " .header { color: #E2CDA5; font-size: 150%; height: 3.5em; margin-left: -0.1em; padding-top: 0.1em; padding-left: 0.8em; background: url(elements/fancy/images/banner-left.png) top left no-repeat; }\n\n"
-			  . "  #caption { color: red; font-size: 200%; font-weight: bold; }\n\n"
-			  . " .main { padding: 0.1em 1em 0 1em; background-color: #BDD5C4; }\n\n";
+			. "		font-family: '$body_font', 'Liberation Serif', sans-serif;\n" 
+			. "		font-size: 110%;\n"
+			. "		margin: 0;\n"
+			. "		background: #$body_bg_color;\n"
+			. "	}\n\n"
+			. "	*, *:before, *:after {\n"
+			. "		box-sizing: border-box;\b"
+			. "	}\n\n"
+			. "	.wrapper {\n"
+			. "		max-width: 940px;\n"
+			. "		width: 66%;\n"
+			. "		margin: 2em;\n"
+			. "		padding-top: 1em;\n"
+			. "		float: left;\n"
+			. "		display: grid;\n"
+			. "		grid-template-columns: min-content 1fr;\n"
+			. "		grid-gap: 10px;\n"
+			. "	}\n\n"
+			. "	.wrapper > * {\n"
+			. "		padding: 20px;\n"
+			. "		margin-bottom: 10px;\n"
+			. "		border-radius: 5px;\n"
+			. "	}\n\n"
+			. "	.sidebar {\n"
+			. "		float: left;\n"
+			. "		width: 19.1489%;\n"
+			. "		background: #B1B390;\n"
+			. "	}\n\n"
+			. "	.content {\n"
+			. "		float: right;\n"
+			. "		width: 79.7872%;\n"
+			. "		background: #DACCB0;\n"
+			. "	}\n\n"
+			. "	.footer {\n"
+			. "		float: right;\n"
+			. "		width: 79.7872%;\n"
+			. "		background: #8CA6CD;\n"
+			. "	}\n\n"
+			. "	.header, .footer {\n"
+			. "		grid-column: 1 / -1;\n"
+			. "		clear: both;\n"
+			. "	}\n\n"
+			. "	@supports (display: grid) {\n"
+			. "		.wrapper > * {\n"
+			. "			width: auto;\n"
+			. "			margin: 0;\n"
+			. "		}\n"
+			. "	}\n\n"
+			. "	#map {\n"
+			. "		position: fixed;\n"
+			. "		bottom: 0;\n"
+			. "		right: 0;\n"
+			. "		width: 25%;\n"
+			. "		height: 90%;\n"
+			. "		z-index: 200;\n"
+			.	"	}\n\n";
 			  
 		$view->stream_append('css', $css);
 	
-		$css_print = "    	#navigation { display: none; }\n";
+		$css_print = "    	#navigation { display: none; }\n\n";
 		$view->stream_append('css-print', $css_print);
 		
-		$view->stream_append('html-body', "<div class=\"$idg_id\">\n");
+		$view->stream_append('html-body', "<div class=\"wrapper\">\n");
 		
-		for ($i = 1; $i < $childcount; $i++) {
-			$part = $this->parent->children[$i];
-			$part->_render($document, $view);
-		}
+		// caption
+		$view->stream_append('html-body', "<header class=\"header\">\n");
+		$part = $this->parent->children[1]->_render($document, $view);
+		$view->stream_append('html-body', "</header>\n");
+
+		$view->stream_append('html-body', "<aside class=\"sidebar\"><h2>&middot; hello &middot;</h2></aside>\n");
+
+		// body
+		$view->stream_append('html-body', "<article class=\"content\">\n");
+		$part = $this->parent->children[2]->_render($document, $view);
+		$view->stream_append('html-body', "</article>\n");
 		
-		$view->stream_append('html-body', "</div></div>\n");
-		$fixed->_render($document, $view);
+		$view->stream_append('html-body', "<footer class=\"footer\">Da foooter</footer>\n");
+		$view->stream_append('html-body', "</div>\n");
+		
+		// nav
+		$part = $this->parent->children[0]->_render($document, $view);	
+		
+		$view->stream_append('html-body', idg_pagemap::map());
 	}
 }
 

@@ -13,6 +13,8 @@ $cache_dir = getcwd() . '/cache';
 
 // ---------------------------------------------------------------------
 
+require_once($idg_path . '/modules/mod_markdown.php');
+require_once($idg_path . '/modules/mod_src.php');
 
 function isMobile() {
     return preg_match('/\b(?:a(?:ndroid|vantgo)|b(?:lackberry|olt|o?ost)' 
@@ -40,6 +42,7 @@ function complain_cache($dir, $file) {
 		. "</body></html>");
 }
 
+// ---------------------------------------------------------------------
 
 $site = new idg_site;
 $site->read_xml('config/site.xml');
@@ -64,27 +67,31 @@ else {
     
 if (!$design || !file_exists("../designs/$design.php"))
 	$design = 'blocks';
+	
+$view_preload = "config/$design.settings.php";	
+
+if (file_exists($view_preload))
+	require_once($view_preload);
 
 require_once("../designs/$design.php");
-require_once($idg_path . '/modules/format_source.php');
-require_once($idg_path . '/modules/format_markdown.php');
 
 if (@!$page = $site->get_document()) {
 	require_once('error/error.php');
 	$page = get_error_page();
 }
 
+$view_php = "config/$design.php";
 $view_xml = "$cache_dir/$design.xml";
-$generator = "config/$design.php";
 
-if (!file_exists($view_xml) || filemtime($generator) > filemtime($view_xml)) {
+if (!file_exists($view_xml) || filemtime($view_php) > filemtime($view_xml)) {
 	if (!$fc = @fopen($view_xml, "w")) {
 			complain_cache($cache_dir, $view_xml);
 	} else {
 		fclose($fc);
 	}
 			
-	require_once($generator);
+	require_once($view_php);
+	$view->write_xml($view_xml);
 }
 
 $view = new idg_view_html;

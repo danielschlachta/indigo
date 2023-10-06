@@ -1,11 +1,5 @@
 <?php
 
-if ($view_xml == null) 
-	$idg_path = '../indigo';
-
-
-require_once("$idg_path/startup.php");
-
 $font = 'font-family: verdana,sans-serif; font-size: 48px; line-height: 1.2;';
 
 $view = new idg_view_html;
@@ -42,18 +36,5 @@ $main_text->set_properties(array('name' => 'main-text',
 $text_box->add_child($main_text);
 
 $part->add_child($text_box);
-
-// --------------------------------------------------
-
-if ($view_xml !== null) {
-    $file = $view_xml;
-    $view->write_xml($view_xml);
-} else {
-    $file = 'mobile.xml';
-    $view->check_all();
-    $view->print_debug();
-    $view->write_xml($file);
-    echo "View configuration written to $file\n";
-}
 
 ?>

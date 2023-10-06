@@ -458,7 +458,7 @@ class idg_view_html_slot extends idg_tree_node
 			if ($list_style_position)
 				$css .= "	list-style-position: $list_style_position;";
 				
-			$css .= "	}\n";
+			$css .= "	}\n\n";
 		}
 		
 		// TODO: add css-print?

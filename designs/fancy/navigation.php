@@ -26,18 +26,18 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
 			
 		if ($top) {
 			$css .=   "		top: 0; left: 0;\n"
-					. "		height: 2.2em; width: 90%;\n"			  		
+					. "		height: 4em; width: 90%;\n"			  		
 					. "		margin: -1.1em 0 0 2%;\n"
-					. "		padding: 1.9em 1em 0 1em;\n";
+					. "		padding: 1.9em 4% 0 1em;\n";
 		} else {
 			$css .=   "		bottom: 0; left: 0;\n"
 					. "		height: 2.8em; width: 90%;\n"			  		
 					. "		margin: 0 0 -0.8em 2%;\n"
-					. "		padding: 0.9em 1em 0 1em;\n";
+					. "		padding: 0.8em 4% 0 1em;\n";
 		}
 		
 		$css .= 
-			  "  	background: #$nav_bg_color;\n"
+			  " 		background: $nav_bg_color;\n"
 			. "	}\n\n"
 			. "	.navlink, .navlink-selected {\n"
 			. "		color: black;\n"
@@ -50,8 +50,7 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
         	. "	}\n\n"
 			. "	.navlink-selected {\n"
 			. "		font-weight: bold;\n"
-        	. "	}\n\n";
-        	
+        	. "	}\n\n";        	
         
         $view->stream_append('css', $css);
         
