@@ -5,6 +5,15 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
+
+$idg_path = '../indigo';
+require_once("$idg_path/startup.php");
+
+$cache_dir = getcwd() . '/cache';
+
+// ---------------------------------------------------------------------
+
+
 function isMobile() {
     return preg_match('/\b(?:a(?:ndroid|vantgo)|b(?:lackberry|olt|o?ost)' 
         . '|cricket|docomo|hiptop|i(?:emobile|p[ao]d)|kitkat|m(?:ini|obi)' 
@@ -13,8 +22,24 @@ function isMobile() {
         $_SERVER["HTTP_USER_AGENT"]);
 }
 
-$idg_path = '../indigo';
-require_once("$idg_path/startup.php");
+function complain_cache($dir, $file) {
+	global $idg_path;
+	
+	echo "<html><body><h1>Cache directory is not writable</h1>"
+		. "The directory <blockquote><code>$dir"
+		. "</blockquote></code> seems not to be writable by the web server. ";
+		
+	exec("ls -ld $dir 2>&1", $output); 
+	
+	$perm = $output[0];
+	die("Current owner and permissions:<blockquote><code>$perm</code></blockquote>"
+		. "You should probably do:"
+		. "<blockquote><b><code>sudo chown www-data $dir"
+		. "</b></blockquote></code> from any directory." 
+		. "<ul><li>Trying to create file: <code>$file</code></li></ul>"
+		. "</body></html>");
+}
+
 
 $site = new idg_site;
 $site->read_xml('config/site.xml');
@@ -49,13 +74,12 @@ if (@!$page = $site->get_document()) {
 	$page = get_error_page();
 }
 
-$view_xml = "config/cache/$design.xml";
+$view_xml = "$cache_dir/$design.xml";
 $generator = "config/$design.php";
 
 if (!file_exists($view_xml) || filemtime($generator) > filemtime($view_xml)) {
 	if (!$fc = @fopen($view_xml, "w")) {
-			die("Unable to create file '$view_xml' " 
-				. "- please check if the containing directory exists and has the correct permissions.");
+			complain_cache($cache_dir, $view_xml);
 	} else {
 		fclose($fc);
 	}

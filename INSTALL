@@ -1,16 +1,18 @@
 Indigo needs php (version 8 required), php-xml, and, for the gallery 
 example, php-gd. 
 
-The documentation needs geshi-1.0 and parsedown to work. Instructions
-on how to install them are contained in the 'contrib' directory
-and will also appear in your browser.
+The documentation needs the submodules in the indigo/modules directory
+to be checked out. Use
 
-Some directories need to be writable by the web server so that php
-can create files in them. On most systems it should be sufficient 
-to change ownership to 'www-data'. They are:
+	git clone --recurse-submodules
 
-docs/cache
-resources/gallery/thumbnails
+or follow the instructions in your browser.
+
+The directory docs/cache is used for, well, caching and needs to be 
+writable by the user the web server runs as.
+On most systems it should be sufficient to change the ownership like:
+
+	sudo chown www-data docs/cache
 
 You will be alerted to wrong permissions in your browser window as well.
 

@@ -5,9 +5,11 @@ $parsedown_main = $idg_path . '/modules/parsedown/Parsedown.php';
 if (file_exists($parsedown_main)) {
 	require_once($parsedown_main);
 } else {
-	include($idg_path . '/modules/parsedown-install.html');
+   	complain_module('parsedown', $parsedown_main, 
+		'https://github.com/erusev/parsedown.git');
 	exit;
 }
+
 
 /*!
  * Support for .md files via parsedown

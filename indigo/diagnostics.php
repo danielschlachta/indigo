@@ -23,4 +23,18 @@ function diag($obj, $msg) {
 	echo '</pre>';
 	die();
 }
+
+function complain_module($name, $file, $repo) {
+	$file = getcwd() . '/' . $file;
+	
+	die("<html><body><h1>Submodule $name is missing</h1>"
+		. "Please execute <blockquote><code>" 
+		. "git submodule init<br>git submodule update</code></blockquote>"
+		. " in the main directory or use the <code>--recurse-submodules</code>"
+		. " switch with <code>git clone</code>."
+		. "<ul><li>Checking for file: <code>$file</code></li>"
+		. "<li>Repository: <a href=\"$repo\"><code>$repo</code></a></li></ul>"
+		. "</body></html>");
+}
+
 ?>

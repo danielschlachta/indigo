@@ -1,11 +1,12 @@
 <?php
 
-$geshi_main = $idg_path . '/contrib/geshi-1.0/src/geshi.php';
+$geshi_main = $idg_path . '/modules/geshi-1.0/src/geshi.php';
 
 if (file_exists($geshi_main)) {
 	require_once($geshi_main);
 } else {
-	include($idg_path . '/contrib/geshi-1.0-install.html');
+	complain_module('geshi-1.0', $geshi_main, 
+		'https://github.com/GeSHi/geshi-1.0.git');
 	exit;
 }
 
