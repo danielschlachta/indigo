@@ -22,7 +22,7 @@ require_once($idg_path . '/lib/site.php');
 require_once($idg_path . '/lib/view.php');
 require_once($idg_path . '/lib/view_html.php');
 require_once($idg_path . '/lib/parts.php');
-require_once($idg_path . '/lib/views.php');
+require_once($idg_path . '/lib/html_items.php');
 require_once($idg_path . '/lib/renderers.php');
 require_once($idg_path . '/lib/datasources.php');
 

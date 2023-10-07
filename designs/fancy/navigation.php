@@ -44,6 +44,7 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
 			. "		font-family: '$nav_font';\n" 
 			. "		padding: 0 1em 0 1em;\n"
 			. "		text-decoration: none;\n"
+			// . "		font-weight: normal;\n"
         	. "	}\n\n"
         	. "	.navlink:hover {\n"
         	. " 		text-decoration: underline;\n"

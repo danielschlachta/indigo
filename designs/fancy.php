@@ -58,9 +58,8 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 	    $style = $this->parent->get_property('style');
    	    $style_print = $this->parent->get_property('style-print');
 	
-		if ($this->parent->children == null 
-			|| count($this->parent->children) != 3)
-			diag($this, get_class($this) . ' must have exactly three children');
+		if ($this->parent->children == null)
+			diag($this, get_class($this) . ' has no children');
 		
 		$head = ' <link rel="preconnect" href="https://fonts.gstatic.com">';
 		
@@ -84,10 +83,10 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "		font-family: '$body_font', 'Liberation Serif', sans-serif;\n" 
 			. "		font-size: 110%;\n"
 			. "		margin: 0;\n"
-			. "		background: #$body_bg_color;\n"
+			. "		background: $body_bg_color;\n"
 			. "	}\n\n"
 			. "	*, *:before, *:after {\n"
-			. "		box-sizing: border-box;\b"
+			. "		box-sizing: border-box;\n"
 			. "	}\n\n"
 			. "	.wrapper {\n"
 			. "		max-width: 940px;\n"
@@ -107,17 +106,19 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "	.sidebar {\n"
 			. "		float: left;\n"
 			. "		width: 19.1489%;\n"
-			. "		background: #B1B390;\n"
+			// . "		background: #B1B390;\n" // khaki !!!
+			. "		background: #bdd5c4;\n"
 			. "	}\n\n"
 			. "	.content {\n"
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
-			. "		background: #DACCB0;\n"
+			. "		background: #ebd8b9;\n"
 			. "	}\n\n"
 			. "	.footer {\n"
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
-			. "		background: #8CA6CD;\n"
+			//. "		background: #8ca6cd;\n" // darker tint
+			. "		background: #a2acbd;\n"
 			. "	}\n\n"
 			. "	.header, .footer {\n"
 			. "		grid-column: 1 / -1;\n"
@@ -145,24 +146,43 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		
 		$view->stream_append('html-body', "<div class=\"wrapper\">\n");
 		
-		// caption
-		$view->stream_append('html-body', "<header class=\"header\">\n");
-		$part = $this->parent->children[1]->_render($document, $view);
-		$view->stream_append('html-body', "</header>\n");
+//		var_dump($this->parent->children[1]);
+//		die('');
+		
+		$parent =& $this->parent;
+		
+		// header
+		if ($header = $parent->get_child_by_key('name', 'header'))  {
+			$view->stream_append('html-body', "<header class=\"header\">\n");
+			$header->_render($document, $view);	
+			$view->stream_append('html-body', "</header>\n");
+		}
 
+		// sidebar
 		$view->stream_append('html-body', "<aside class=\"sidebar\"><h2>&middot; hello &middot;</h2></aside>\n");
 
-		// body
+		// content
 		$view->stream_append('html-body', "<article class=\"content\">\n");
-		$part = $this->parent->children[2]->_render($document, $view);
+		
+		if ($content = $parent->get_child_by_key('name', 'content'))  
+			$content->_render($document, $view);
+		else
+			$view->stream_append('html-body', "<code>This page intentionally left blank.</code>\n");
+		
 		$view->stream_append('html-body', "</article>\n");
 		
-		$view->stream_append('html-body', "<footer class=\"footer\">Da foooter</footer>\n");
-		$view->stream_append('html-body', "</div>\n");
+		// footer
+		if ($footer = $parent->get_child_by_key('name', 'footer')) {
+			$view->stream_append('html-body', "<footer class=\"footer\">\n");
+			$footer->_render($document, $view);
+			$view->stream_append('html-body', "\n</footer>\n");	
+		}
 		
-		// nav
-		$part = $this->parent->children[0]->_render($document, $view);	
-		
+		// navigation
+		if ($navigation = $parent->get_child_by_key('name', 'navigation')) 
+			$navigation->_render($document, $view);	
+			
+			
 		$view->stream_append('html-body', idg_pagemap::map());
 	}
 }

@@ -6,9 +6,6 @@ $view->set_properties(array(
 	'icon' => 'favicon.png'
 ));
 
-// #DACCB0
-// #BDD5C4
-
 // Create the layout and add it to the view
 
 $part = new idg_view_html_part;
@@ -17,47 +14,77 @@ $part->set_properties(array(
 ));
 $view->add_child($part);
 
-// Add the navigation
+// Add the navigation first as it normally appears like that on
+// the screen. The order does not really matter here, 
+// the html part will take care of that.
 
 $navigation = new idg_view_html_renderer;
 $navigation->set_properties(array(
+	'name' => 'navigation',
 	'class' => 'fancy_navigation',
 	'source' => '_site'
 ));
 $part->add_child($navigation);
 
-// Insert the caption
+// Add the header, connect it to the caption slot from the site
 
-$caption = new idg_view_html_container;
-$caption->set_properties(array(
-	'name' => 'caption',
+$header = new idg_view_html_container;
+$header->set_properties(array(
+	'name' => 'header',
 ));
-$part->add_child($caption);
 
-$caption_text = new idg_view_html_slot;
-$caption_text->set_properties(array(
+// Use the first <h1> as headline
+
+$caption = new idg_view_html_slot;
+$caption->set_properties(array(
 	'name' => 'caption'
 ));
-$caption->add_child($caption_text);
+$header->add_child($caption);
 
-// Create a canvas for the body
+$part->add_child($header);
 
-$body = new idg_view_html_container;
-$body->set_properties(array(
-	'name' => 'body',
-	'filter' => 'fancy_filter_eat_caption',
+// Add a container for the content
+
+$content = new idg_view_html_container;
+$content->set_properties(array(
+	'name' => 'content',
+	'filter' => 'fancy_filter_eat_caption', // we don't want it twice
 ));
-$part->add_child($body);
 
-// Insert the page text
+// Substitute the page's description for the first heading
+
+$heading = new idg_view_html_item;
+$heading->set_properties(array(
+    'class' => 'text',
+    'style' => 'margin-top: -1.2em;'
+));
+ 
+$heading->set_text('&lt;h1&gt;{description}&lt;/h1&gt;');
+$content->add_child($heading);
+
+// Insert the actual page text into the container give it some style
 
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
 	'list-style-image' => 'elements/fancy/list-image.png',
 	'filter' => 'fancy_filter_typo'
-	// -- ugly, do not use: 'list-style-position' => 'inside'
 ));
-$body->add_child($main_text);
+$content->add_child($main_text);
+
+$part->add_child($content);
+
+// Create a footer programmatically
+
+$footer = new idg_view_html_item;
+$footer->set_properties(array(
+	'name' => 'footer',
+    'class' => 'text',
+    'style' => 'font-size: 130%; font-style: italic;'
+));
+ 
+$footer->set_text('gremp');
+ 
+$part->add_child($footer);
 
 ?>

@@ -13,7 +13,7 @@ class idg_pagemap
 	static function map() {
 		global $pagemap_main;
 		
-		return "<canvas id=\"map\"></canvas>"
+		return "<canvas id=\"map\"></canvas>\n"
 			. "<script src=\"$pagemap_main\"></script>\n"
 			. "<script>pagemap(document.querySelector('#map'));</script>\n";
 	}

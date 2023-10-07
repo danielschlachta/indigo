@@ -104,7 +104,7 @@ class idg_view_html extends idg_view
 		
 		$milli_time = $this->_milliseconds() - $start;
 		
-		$output = '<!-- document UUID=' .$document->uuid 
+		$output = '<!-- document UUID=' . $document->uuid 
 			. ' generated on ' . date('r', time()) 
 			. " by $idg_program_name, time: $milli_time ms  -->\n"
 			. "<!DOCTYPE html>\n";
@@ -258,21 +258,21 @@ class idg_view_html_container extends idg_view_html_element
 			$body = "<div id=\"$idg_id\">\n";
 			$view->stream_append('html-body', $body);
 			
-			if ($style)
-				$css = "div#$idg_id { $style }\n";
+			if ($style) 
+				$css = "	div#$idg_id {\n		$style\n	}\n\n";
 			else
 				$css = '';
 			
 			if ($style_head)
-				$css .= "div#$idg_id h1 { $style_head }\n";
+				$css .= "	div#$idg_id h1 { $style_head }\n";
 			if ($style_subhead)
-				$css .= "div#$idg_id h2 { $style_subhead }\n";
+				$css .= "	div#$idg_id h2 { $style_subhead }\n";
 			if ($style_link)
-				$css .= "div#$idg_id a { $style_link }\n";
+				$css .= "	div#$idg_id a { $style_link }\n";
 			if ($style_link_hover)
-				$css .= "div#$idg_id a:hover { $style_link_hover }\n";
+				$css .= "	div#$idg_id a:hover { $style_link_hover }\n";
 			if ($style_image)
-				$css .= "div#$idg_id img { $style_image }\n";
+				$css .= "	div#$idg_id img { $style_image }\n";
 			
 			$view->stream_append('css', $css);
 								
