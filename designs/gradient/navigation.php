@@ -10,6 +10,7 @@ class idg_view_html_renderer_gradient_navigation extends idg_view_node_obj
     
     function render(&$document, &$view)
     {
+        global $elements;
         
         $style = $this->parent->get_property('style');
         $idg_id = $this->parent->idg_id;
@@ -20,7 +21,7 @@ class idg_view_html_renderer_gradient_navigation extends idg_view_node_obj
             . " padding: 10px 5px; margin: 0 0 2px; border-width: 0;" 
             . " text-decoration: none; color: #c2c2c2; width: 98%; font-weight: bold; }\n" 
             . " div#$idg_id a span { display: none; }\n" 
-            . " div#$idg_id a:hover { background: url(elements/gradient/images/bg_grad.png) top left" 
+            . " div#$idg_id a:hover { background: url(../designs/gradient/elements/bg_grad.png) top left" 
             . " fixed repeat-x; color: #53538a; }\n" 
             . " div#$idg_id a:hover span { display: block; position: relative;" 
             . " width: 100px; top: 0px; left: 0px; padding-top: 5px;" 

@@ -33,7 +33,7 @@ $header->set_properties(array(
 	'name' => 'header',
 ));
 
-// Use the first <h1> as headline
+// Use the first heading for the caption
 
 $caption = new idg_view_html_slot;
 $caption->set_properties(array(
@@ -58,11 +58,10 @@ $heading->set_properties(array(
     'class' => 'text',
     'style' => 'margin-top: -1.2em;'
 ));
- 
 $heading->set_text('&lt;h1&gt;{description}&lt;/h1&gt;');
 $content->add_child($heading);
 
-// Insert the actual page text into the container give it some style
+// Insert the actual page text into the container and give it some style
 
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(

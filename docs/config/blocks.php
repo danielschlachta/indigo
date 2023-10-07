@@ -6,7 +6,7 @@ $view = new idg_view_html;
 $view->set_properties(array(
 	'name' => 'blocks',
 	'icon' => 'favicon.png',
-	'style' => $font . ' background: #53538a ' . 'url(elements/blocks//bg_grad.png) ' . 'fixed repeat-x;'
+	'style' => $font . ' background: #53538a ' . 'url(elements/blocks/bg_grad.png) ' . 'fixed repeat-x;'
 ));
 
 $part = new idg_view_html_part;
@@ -31,15 +31,15 @@ $tabs->set_properties(array(
 ));
 $centercol->add_child($tabs);
 
-$style_link = 'text-decoration: none; color: black; background: url(elements/blocks//underline.png) bottom left repeat-x; padding-bottom: 1px; padding-right: 1px; margin-right: -1px; white-space: nowrap;';
-$style_link_hover = 'background: #729e8d url(elements/blocks//underline.png) bottom left repeat-x;';
+$style_link = 'text-decoration: none; color: black; background: url(elements/blocks/underline.png) bottom left repeat-x; padding-bottom: 1px; padding-right: 1px; margin-right: -1px; white-space: nowrap;';
+$style_link_hover = 'background: #729e8d url(elements/blocks/underline.png) bottom left repeat-x;';
 
 $centercol_body = new idg_view_html_container;
 $centercol_body->set_properties(array(
 	'name' => 'center_body',
 	'style' => 'height: 100%; border: solid #1e3723; border-width: 0px 1px 1px 1px; padding: 0 30px 30px 23px; background: #b4d2b0 url(elements/blocks//line_red.png) repeat-y; text-align: justify;',
-	'style-head' => 'padding: 0.35em 0.5em 0.35em 0; border: solid #729e8d; border-width: 2px 0 2px 0; background: url(elements/blocks//randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: normal; font-style: italic; font-size: 150%;',
-	'style-subhead' => 'padding: 0.1em 1em 0.3em 0; border: solid #729e8d; border-width: 1px 0 1px 0; background: url(elements/blocks//randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: bold; font-size: 100%;',
+	'style-head' => 'padding: 0.35em 0.5em 0.35em 0; border: solid #729e8d; border-width: 2px 0 2px 0; background: url(elements/blocks/randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: normal; font-style: italic; font-size: 150%;',
+	'style-subhead' => 'padding: 0.1em 1em 0.3em 0; border: solid #729e8d; border-width: 1px 0 1px 0; background: url(elements/blocks/randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: bold; font-size: 100%;',
 	'style-image' => 'border: 0;',
 	'style-print' => 'border: 0; padding: 1em; margin: 100px 0 0 0;',
 	'filter' => 'blocks_filter_linkimg'
@@ -50,10 +50,10 @@ $centercol->add_child($centercol_body);
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
-	'style' => 'padding: 0 0 0 17px; background: url(elements/blocks//line_blue.png);',
+	'style' => 'padding: 0 0 0 17px; background: url(elements/blocks/line_blue.png);',
 	'style-link' => $style_link,
 	'style-link-hover' => $style_link_hover,
-	'list-style-image' => 'elements/blocks//bullet.png',
+	'list-style-image' => 'elements/blocks/bullet.png',
 	'filter' => 'blocks_filter_blockquote'
 ));
 $centercol_body->add_child($main_text);
@@ -88,7 +88,7 @@ $logo_image = new idg_view_html_item;
 $logo_image->set_properties(array(
 	'class' => 'image'
 ));
-$logo_image->set_text('source: elements/blocks//indigo.png; width: 90; height: 70;');
+$logo_image->set_text('source: elements/blocks/indigo.png; width: 90; height: 70;');
 
 $logo->add_child($logo_image);
 
@@ -140,7 +140,7 @@ $part->add_child($background_img);
 $bg_sky_container = new idg_view_html_container;
 $bg_sky_container->set_properties(array(
 	'name' => 'image-sky',
-	'style' => 'position: fixed; top: 49px; right: 212px; width: 629px; height: 80px; background: url(elements/blocks//bg_sky.png) no-repeat; z-index: 101;'
+	'style' => 'position: fixed; top: 49px; right: 212px; width: 629px; height: 80px; background: url(elements/blocks/bg_sky.png) no-repeat; z-index: 101;'
 ));
 
 $background_img->add_child($bg_sky_container);
@@ -148,7 +148,7 @@ $background_img->add_child($bg_sky_container);
 $bg_left = new idg_view_html_container;
 $bg_left->set_properties(array(
 	'name' => 'image-graph-l',
-	'style' => 'position: fixed; top: 352px; left: 0px; ' . 'width: 130px; height: 75px; ' . 'background: url(elements/blocks//bg_graph_l.png) no-repeat; z-index: 101;'
+	'style' => 'position: fixed; top: 352px; left: 0px; ' . 'width: 130px; height: 75px; ' . 'background: url(elements/blocks/bg_graph_l.png) no-repeat; z-index: 101;'
 ));
 
 $background_img->add_child($bg_left);
@@ -156,7 +156,7 @@ $background_img->add_child($bg_left);
 $bg_right = new idg_view_html_container;
 $bg_right->set_properties(array(
 	'name' => 'image-graph-r',
-	'style' => 'position: fixed; top: 352px; right: 0px; ' . 'width: 330px; height: 130px; ' . 'background: url(elements/blocks//bg_graph_r.png) no-repeat; z-index: 101;'
+	'style' => 'position: fixed; top: 352px; right: 0px; ' . 'width: 330px; height: 130px; ' . 'background: url(elements/blocks/bg_graph_r.png) no-repeat; z-index: 101;'
 ));
 
 $background_img->add_child($bg_right);

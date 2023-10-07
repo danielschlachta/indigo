@@ -1,4 +1,5 @@
 <?php
+
 class idg_view_html_renderer_footer extends idg_view_node_obj
 {	
 	function __construct(&$parent)
@@ -19,7 +20,7 @@ class idg_view_html_renderer_footer extends idg_view_node_obj
 			. "div#$idg_id span { display: none; }\n";
 		
 		$body = "<p id=\"$idg_id\"><span><a href=\"#top\">"
-            . '<img src="elements/gradient/images/hand.png"' 
+            . '<img src="elements/gradient/hand.png"' 
             . ' width="37" height="18" style="float: left; margin-top: 2px; padding-right: 10px;" alt="">' 
             . "back to top</a></span></p>\n";
 		

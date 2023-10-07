@@ -129,15 +129,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "			width: auto;\n"
 			. "			margin: 0;\n"
 			. "		}\n"
-			. "	}\n\n"
-			. "	#map {\n"
-			. "		position: fixed;\n"
-			. "		bottom: 0;\n"
-			. "		right: 0;\n"
-			. "		width: 25%;\n"
-			. "		height: 90%;\n"
-			. "		z-index: 200;\n"
-			.	"	}\n\n";
+			. "	}\n\n";
 			  
 		$view->stream_append('css', $css);
 	
@@ -182,8 +174,8 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		if ($navigation = $parent->get_child_by_key('name', 'navigation')) 
 			$navigation->_render($document, $view);	
 			
-			
-		$view->stream_append('html-body', idg_pagemap::map());
+		// page map
+		idg_pagemap::add_to_view($view, 'bottom');
 	}
 }
 

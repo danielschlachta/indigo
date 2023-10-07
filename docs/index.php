@@ -68,7 +68,7 @@ else {
 if (!$design || !file_exists("../designs/$design.php"))
 	$design = 'blocks';
 	
-$view_preload = "config/$design.settings.php";	
+$view_preload = "config/$design.preload.php";	
 
 if (file_exists($view_preload))
 	require_once($view_preload);

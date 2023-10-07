@@ -61,13 +61,13 @@ class idg_view_html_item_text extends idg_view_node_obj
     	
     	$style = $this->parent->get_property('style');		
 		
-		$css .= "	div#$idg_id {\n		$style\n	}\n\n";
+		$css .= "	span#$idg_id {\n		$style\n	}\n\n";
 		
 	    if ($style_link = $this->parent->get_property('style-link'))
-			$css .= "	div#$idg_id a {\n		$style_link\n	}\n\n";
+			$css .= "	span#$idg_id a {\n		$style_link\n	}\n\n";
 		
 		if ($style_link_hover = $this->parent->get_property('style-link-hover'))
-			$css .= "	div#$idg_id a:hover {\n		$style_link_hover\n	}\n\n";
+			$css .= "	span#$idg_id a:hover {\n		$style_link_hover\n	}\n\n";
 				
 		if ($css != '')
     		$view->stream_append('css', $css);
@@ -82,8 +82,8 @@ class idg_view_html_item_text extends idg_view_node_obj
 		$document->get_properties($vars);
 		
 		if ($css != '') {
-			$text = "<div id=\"$idg_id\">" . $this->parent->get_text() 
-				. "</div>";			
+			$text = "<span id=\"$idg_id\">" 
+				. $this->parent->get_text() . "</span>";			
 		} else
 			$text = $this->parent->get_text();
 		
@@ -92,7 +92,7 @@ class idg_view_html_item_text extends idg_view_node_obj
 		}
 				
     	$text = preg_replace("/[\n]*<\n/i", "<", $text);
-    	$text = preg_replace("/\n>[\n]*/i", ">", $text);
+    	$text = preg_replace("/\n>[^\ \n]*/i", ">", $text);
 				
 		$view->stream_append('html-body', $text);
 	}

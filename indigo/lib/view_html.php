@@ -344,7 +344,7 @@ class idg_view_html_renderer extends idg_view_html_element
 	{
 		$source_name = $this->get_property('source');
 		if (!($this->datasource = $document->get_datasource($source_name)))
-			diag($this, "Document has no datasource named $source_name");
+			diag($this, "document: datasource not found: $source_name");
 		$instance = $this->get_instance();
 		$instance->datasource = $this->datasource;
 		$instance->tag = $this->get_property('tag');
@@ -465,7 +465,7 @@ class idg_view_html_slot extends idg_tree_node
 			
 		
 		if ($anchor_count > 0)
-			$css .= "div.$idg_id-anchor { width: 0px; height: 0px; }\n";
+			$css .= "	div.$idg_id-anchor {\n		display: none;\n	}\n\n";
 		
 		$view->stream_append('css', $css);
 	}
