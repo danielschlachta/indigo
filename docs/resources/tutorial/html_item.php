@@ -24,7 +24,9 @@ $text->set_properties(array(
  *
  * <br> becomes &lt;br&gt;
  *
- * Indigo then converts them back.
+ * Indigo then converts them back. This also works with html entities
+ * e.g. &amp;nbsp; - if your'e missing a space after your tags because
+ * the conversion has gobbled it up, use this.
  */
 
 $text->set_text('You can use document properties: {description}');

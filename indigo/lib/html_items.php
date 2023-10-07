@@ -91,8 +91,13 @@ class idg_view_html_item_text extends idg_view_node_obj
 			$text = preg_replace("/\{$name\}/", $value, $text);
 		}
 				
-    	$text = preg_replace("/[\n]*<\n/i", "<", $text);
-    	$text = preg_replace("/\n>[^\ \n]*/i", ">", $text);
+    	$text = preg_replace("/<\n/", '<', $text);
+    	$text = preg_replace("/\n</", '<', $text);
+    	$text = preg_replace("/\n>/", '>', $text);
+    	$text = preg_replace("/>\n/", '>', $text); 
+
+        $text = preg_replace("/&\n/", '&', $text);     	
+    	
 				
 		$view->stream_append('html-body', $text);
 	}

@@ -39,7 +39,7 @@ $logo_text->set_properties(array(
 	'style' => 'padding-right: 8px; ' 
 	  . 'font-size: 120%; font-family: verdana, sans-serif; color: #394a71; font-style: italic;'
 ));
-$logo_text->set_text('&lt;b&gt;indigo&lt;/b&gt; / web');
+$logo_text->set_text('&lt;b&gt;indigo&lt;/b&gt;&amp;nbsp;/ web');
 
 $logo->add_child($logo_text);
 

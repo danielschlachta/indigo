@@ -108,11 +108,13 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "		width: 19.1489%;\n"
 			// . "		background: #B1B390;\n" // khaki !!!
 			. "		background: #bdd5c4;\n"
+			. "		padding-top: 0;\n"
 			. "	}\n\n"
 			. "	.content {\n"
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
 			. "		background: #ebd8b9;\n"
+			. "		padding-top: 0;\n"
 			. "	}\n\n"
 			. "	.footer {\n"
 			. "		float: right;\n"

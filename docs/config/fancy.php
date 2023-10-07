@@ -56,7 +56,7 @@ $content->set_properties(array(
 $heading = new idg_view_html_item;
 $heading->set_properties(array(
     'class' => 'text',
-    'style' => 'margin-top: -1.2em;'
+//    'style' => 'font-weight: bold;'
 ));
 $heading->set_text('&lt;h1&gt;{description}&lt;/h1&gt;');
 $content->add_child($heading);
