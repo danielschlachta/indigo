@@ -1,3 +1,9 @@
+a > img {
+    height: 0.6em;
+    padding: 0 0.3em 0 0.3em;
+    margin-top: -0.1em;
+}
+
 h1 {
 	font-size: 210%;
 	margin: 0;
@@ -12,12 +18,45 @@ p {
 	margin-top: 0.8em;
 }
 
+li {
+	margin-bottom: 1em;
+}
+
 li > p {
 	margin: 0.3em 0 0.5em 0;
 }
 
-li {
-	margin-bottom: 1em;
+blockquote {
+    margin: 0;
+    margin-bottom: -5px;
+}
+
+blockquote > img {
+    float: left;
+    height: 4em;
+    padding-right: 0.8em; 
+    padding-bottom: 5px;
+    margin-top: 5px;
+}
+
+pre {
+    margin: 0;
+    padding: 0;
+}
+
+code {
+    font-family: 'Lekton';
+    font-weight: bold;
+}
+
+.content a {
+	text-decoration: underline;
+	color: inherit;
+	transition:.2s;
+}
+
+.content a:hover {
+    background: #e1c0bc;
 }
 
 #footer-text {
@@ -28,8 +67,12 @@ li {
 }
 
 #footer-text a {
-	font-family: 'Special Elite';
+	font-family: inherit;
 	color: #101010;
 	text-decoration: none;
 	border-bottom: 1px dotted black;
+}
+
+#footer-text a:hover {
+	border-bottom: 1px solid black;
 }

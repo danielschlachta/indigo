@@ -54,7 +54,7 @@ $header->set_properties(array(
 ));
 
 $header_opts = array(
-	'background-color' => '#B1B390'
+	'background-color' => '#b1b390'
 );
 
 $header->set_options($header_opts);
@@ -85,6 +85,8 @@ $content->set_properties(array(
 	'name' => 'content',
 	'filter' => 'fancy_filter_eat_caption', // we don't want it twice
 ));
+
+$content->set_option('font-family', 'Lekton'); // As mentioned in style.css ... UGLY HACK
 
 // Substitute the page's description for the first heading, but
 // construct a container first because it allows filtering

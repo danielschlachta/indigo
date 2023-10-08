@@ -55,7 +55,7 @@ class idg_view_html_renderer_fancy_footer extends idg_view_node_obj
 			$padding = $size[0] + 20 . "px"; // much overhead
 			
 			$css .= "		background: $bg_color url($image) no-repeat" 
-				. "	left center;\n"
+				. " left center;\n"
 				. "		padding-left: $padding;\n";
 		} else
 			$css .= "		background-color: $bg_color;\n";

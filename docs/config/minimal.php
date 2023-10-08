@@ -4,7 +4,9 @@ $view = new idg_view_html;
 $view->set_properties(array(
 	'name' => 'minimal',
 	'icon' => 'favicon.png',
-	'tag' => 'indigo'
+	'tag' => 'elements/minimal/logo.png\indigo\&amp;copy; 2023 '
+		. ' &lt;a href=\'mailto:daniel@schlachta.info\'&gt;' 
+		. ' Daniel Schlachta&lt;/a&gt;'
 ));
 
 $part = new idg_view_html_part;

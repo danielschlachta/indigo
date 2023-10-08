@@ -26,12 +26,18 @@ class idg_view_html_renderer_minimal_navigation extends idg_view_node_obj
 		
 		$this->datasource->rewind();
 		
-		$tag =$view->properties['tag'];
-		$title = $document->properties['name'];
+		$params = explode('\\', $view->properties['tag']);
 		
-		$body = '<div id="LogoImg"><img src="elements/minimal/images/logo.png" alt=""></div>' . "\n"
+		$img = $params[0];
+		$title = $params[1];
+		$copy = $params[2];
+		
+		$doctitle = $document->properties['name'];
+		
+		$body = "<div id=\"LogoImg\"><img src=\"$img\" alt=\"\"></div>\n"
 		    . "<div id=\"Logo\">\n" 
-		    . '<div id="LogoBar"><div id="LogoText">' . "<i>$tag &ndash; <b>$title</b></i>" . "</div></div>\n"
+		    . "<div id=\"LogoBar\"><div id=\"LogoText\"><i>$title" .
+		     " &ndash; <b>$doctitle</b></i>" . "</div></div>\n"
 		    . "<div id=\"LogoNav\">\n<div id=\"LogoBtn\">\n";
 		
 		while ($node = $this->datasource->get_token()) {
@@ -47,7 +53,7 @@ class idg_view_html_renderer_minimal_navigation extends idg_view_node_obj
 		}
 		
 		$body .= "</div>\n" 
-		    . "<div id=\"LogoNavTxt\">&copy; 2023 <a href=\"mailto:daniel@schlachta.info\">Daniel Schlachta</a></div>\n</div>\n</div>\n<div id=\"TextBody\">\n";
+		    . "<div id=\"LogoNavTxt\">$copy</div>\n</div>\n</div>\n<div id=\"TextBody\">\n";
 				
 		$view->stream_append('html-body', $body);
 	}

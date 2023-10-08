@@ -38,13 +38,6 @@
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_markdown"
 			    source="readme_src" />		
-		    <datasource name="text2_src"
-			    class="idg_datasource_textfile">
-			    filename: main/home/flourish.html
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_textfile"
-			    source="text2_src" />		
 	    </document>
 	    
 	    <document id="about" 
@@ -315,7 +308,7 @@
    	    <document id="reference" name="Reference" description="Further Reading">
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
-			    file: fractal.jpg; width: 90; height: 90;
+			    file: telescope.jpg; width: 90; height: 90;
 		    </datasource>
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">

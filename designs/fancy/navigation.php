@@ -25,7 +25,7 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
 			
 		if ($top) {
 			$css .=   "		top: 0; left: 0;\n"
-					. "		height: 4em; width: 90%;\n"			  		
+					. "		height: 4em; width: 95%;\n"			  		
 					. "		margin: -1.1em 0 0 2%;\n"
 					. "		padding: 1.9em 4% 0 1em;\n";
 		} else {
