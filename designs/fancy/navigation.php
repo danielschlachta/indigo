@@ -1,9 +1,4 @@
  <?php
-
-/*!
- * The navigation for the fancy design.
- * 
- */
  
 class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
 {
@@ -15,12 +10,16 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
     
     function render(&$document, &$view)
     {
-		global $nav_font;
-		global $nav_bg_color;
+		$font = fancy_options::get_font($this->parent);	
+		$bg_color = fancy_options::get_background_color($this->parent);
 		
-        $top = true;
+		$top = true;
         
-        $css =  "	#navigation {\n" 
+        $css = "	body {\n" 
+			. "		margin-top: 2em;\n" 
+			. "		font-size: 110%;\n" 
+			. "	}\n\n"  
+			. "	#navigation {\n" 
 			. "		position: fixed;\n"
 			. "		border-radius: 1em;\n";
 			
@@ -37,11 +36,11 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
 		}
 		
 		$css .= 
-			  " 		background: $nav_bg_color;\n"
+			  " 		background: $bg_color;\n"
 			. "	}\n\n"
 			. "	.navlink, .navlink-selected {\n"
 			. "		color: black;\n"
-			. "		font-family: '$nav_font';\n" 
+			. "		font-family: '$font';\n" 
 			. "		padding: 0 1em 0 1em;\n"
 			. "		text-decoration: none;\n"
 			// . "		font-weight: normal;\n"
@@ -51,7 +50,7 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
         	. "	}\n\n"
 			. "	.navlink-selected {\n"
 			. "		font-weight: bold;\n"
-        	. "	}\n\n";        	
+        	. "	}\n\n";
         
         $view->stream_append('css', $css);
         

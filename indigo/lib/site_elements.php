@@ -1,12 +1,12 @@
 <?php
 
-/* ========================================================================
+/* ===================================================================
  * Indigo/Web
  *
  * File: document.php - contains base classes for documents
  *
  * (c) 2023 Daniel Schlachta
- * ======================================================================== */
+ * =========================_======================================== */
 
 require_once($idg_path . '/lib/object.php');
 
@@ -165,9 +165,15 @@ class idg_document extends idg_site_element
 			return $site->get_datasource(null);
 		} 
 		
+		/* FIXME: Tell where */
+		
+		if (!$source_name)
+			diag($this,  "idg_renderer_declaration: no datasource");
+		
 		if (!($datasource_declaration = $this->get_child_by_key('name',
 			$source_name, 'idg_datasource_declaration')))
-			diag($this, 'Document has no datasource named ' . $source_name);
+			diag($this, 'idg_renderer_declaration: get_datasource: ' 
+				. ' no datasource named ' . $source_name);
 		
 		return $datasource_declaration->get_instance();
 	}
@@ -223,8 +229,8 @@ class idg_document extends idg_site_element
 		while ($tmp) {
 			if (($tmp->get_property('show-name') != 'no') 
 				&& (($p_title = $tmp->get_property('name')) != '')) {
-				$title = $p_title . ($title != '' ? 
-					$tmp->get_property('title-separator') : '') . $title;
+				$title = $title . ($title != '' ? 
+					$tmp->get_property('title-separator') : '') . $p_title;
 			}
 			
 			$tmp =& $tmp->parent;

@@ -1,0 +1,35 @@
+h1 {
+	font-size: 210%;
+	margin: 0;
+}
+
+h2 {
+	font-size: 140%;
+	margin: 0;
+}
+
+p {
+	margin-top: 0.8em;
+}
+
+li > p {
+	margin: 0.3em 0 0.5em 0;
+}
+
+li {
+	margin-bottom: 1em;
+}
+
+#footer-text {
+	padding-top: 5px;
+	width: 100%;
+	text-align: right;
+	font-size: 80%;
+}
+
+#footer-text a {
+	font-family: 'Special Elite';
+	color: #101010;
+	text-decoration: none;
+	border-bottom: 1px dotted black;
+}

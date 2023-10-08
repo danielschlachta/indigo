@@ -95,7 +95,7 @@ $fill_box->add_child($main_text);
 
 $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
-	'class' => 'footer',
+	'class' => 'gradient_footer',
 	'source' => '_site'));
 
 $fill_box->add_child($footer);

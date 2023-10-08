@@ -24,6 +24,14 @@ function diag($obj, $msg) {
 	die();
 }
 
+function complain_version() {
+	global $idg_min_php_version;
+	
+	die("<html><body><h1>Indigo requires at least PHP $idg_min_php_version to run.</h1>"
+		. "<h2>You are running version " . phpversion() . ". Sorry.</h2>"
+		. "</body></html>");
+}
+
 function complain_module($name, $file, $repo) {
 	$file = getcwd() . '/' . $file;
 	

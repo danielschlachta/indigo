@@ -60,7 +60,7 @@ $centercol_body->add_child($main_text);
 
 $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
-	'class' => 'footer',
+	'class' => 'blocks_footer',
 	'source' => '_site',
 	'style-link' => $style_link . ' height: 1.2em;',
 	'style-image' => 'margin-bottom: -1px; border: 0;',
@@ -111,7 +111,7 @@ $part->add_child($infobox);
 
 $navig = new idg_view_html_renderer;
 $navig->set_properties(array(
-	'class' => 'navigation',
+	'class' => 'blocks_navigation',
 	'source' => '_site',
 	'tag' => 'resources'
 ));

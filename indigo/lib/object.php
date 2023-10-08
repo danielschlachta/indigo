@@ -24,7 +24,7 @@ class idg_object_type
 	
 	function __construct()
 	{
-		// constructor is empty
+		$this->set_known('options');
 	}
 	
 	function set_known($name)
@@ -45,6 +45,12 @@ class idg_object_type
 		$this->prop_hooks[$name] = $function_name;
 	}
 }
+
+
+/*! 
+ * The foundation class for all idg objects
+ * 
+ */
 
 class idg_object
 {
@@ -132,6 +138,55 @@ class idg_object
 		return $prop_array;
 	}
 	
+	/*! This allows passing key => value pairs to an actual instance
+	 * of the element. 
+	 * 
+	 * This is useful mostly for html_parts. Note that
+	 * there are no getter functions because the values
+	 * are mostly accessed from idg_tree_node.
+	 * 
+	 * */
+	
+	function set_options($options)
+	{
+		if (!is_array($options)) 
+			diag($this, 'set_options: argument must be an array.');
+		
+		$this->set_property('options', 
+			urlencode(serialize($options)));
+	}
+	
+	/*! Updates an individual key => value pair.
+	 * 
+	 * This causes the whole of the parameter array to be
+	 * re-constructed.
+	 * 
+	 */ 
+	
+	function set_option($key, $value) {
+		$options = $this->get_options();
+		
+		if (!$options)
+			$options = array();
+			
+		$options[$key] = $value;
+		
+		$this->set_options($options);
+	}
+	
+	function get_options() {
+		$options = $this->get_property('options');
+		
+		if ($options)
+			return unserialize(urldecode($options));
+	}
+	
+	function get_option($key) {
+		if (($options = $this->get_options()) 
+		&& array_key_exists($key, $options))
+			return $options[$key];
+	}
+	
 	function get_xml_tag($tag_type, $tag_id = '')
 	{
 		if ($tag_id == '')
@@ -215,6 +270,13 @@ class idg_object
 	{
 		return count($this->properties);
 	}
+
+	/*!
+	 * Performs some (at this moment very rudimentary) consistency
+	 * checks.
+	 * 
+	 * This is called from check_all() in idg_tree_node.
+	 */
 	
 	function check()
 	{
@@ -263,18 +325,24 @@ class idg_object
 			}
 		}
 	}
+
+	/*!
+	 * Execute a function based on its name.
+	 * 
+	 * Recognizes the prefix \c $this-> and acts accordingly.
+	 */
 	
 	function _execute($function_name)
 	{
-		if (strpos($function_name, '$this->') == 0) {
+		if (strpos($function_name, '$this->') === 0) {
 			$do_func = substr($function_name, strlen('$this->'));
 			$retval = $this->$do_func();
 		} else
-			$retval = $do_function();
+			$retval = $function_name();
 		
 		return $retval;
 	}
-	
+
 	function _obj_print_debug($indent = '')
 	{
 		$lines = array(

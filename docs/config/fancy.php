@@ -9,14 +9,26 @@ $view->set_properties(array(
 // Create the layout and add it to the view
 
 $part = new idg_view_html_part;
+
 $part->set_properties(array(
 	'class' => 'fancy'
 ));
+
+$part_opts = array(
+	'stylesheet' => 'elements/fancy/style.css',
+	'font-family' => 'Enriqueta',
+	'background-color' => '#fff6e8',
+);
+
+$part->set_options($part_opts);
+
 $view->add_child($part);
 
-// Add the navigation first as it normally appears like that on
-// the screen. The order does not really matter here, 
-// the html part will take care of that.
+/*
+ *  Add the navigation first as it normally appears like that on
+ *  the screen. The order does not really matter here, 
+ *  the html part will take care of that.
+ */
 
 $navigation = new idg_view_html_renderer;
 $navigation->set_properties(array(
@@ -24,24 +36,47 @@ $navigation->set_properties(array(
 	'class' => 'fancy_navigation',
 	'source' => '_site'
 ));
+
+$navigation_opts = array(
+	'font-family' => 'Merriweather',
+	'background-color' => '#ffe7d6'
+);
+$navigation->set_options($navigation_opts);	
+
 $part->add_child($navigation);
 
-// Add the header, connect it to the caption slot from the site
+// Add a container for the header
 
 $header = new idg_view_html_container;
+
 $header->set_properties(array(
-	'name' => 'header',
+	'name' => 'header'
 ));
 
-// Use the first heading for the caption
+$header_opts = array(
+	'background-color' => '#B1B390'
+);
+
+$header->set_options($header_opts);
+
+$part->add_child($header);
+
+// Insert the caption
 
 $caption = new idg_view_html_slot;
 $caption->set_properties(array(
-	'name' => 'caption'
+	'name' => 'caption',
+	//'style' => 'font-style: italic;'
 ));
-$header->add_child($caption);
 
-$part->add_child($header);
+$caption_opts = array(
+	'image' => 'elements/fancy/caption.png',
+	'font-family' => 'Quintessential',
+	'background-color' => '#fff6e8'
+);
+$caption->set_options($caption_opts);
+
+$header->add_child($caption);
 
 // Add a container for the content
 
@@ -51,17 +86,24 @@ $content->set_properties(array(
 	'filter' => 'fancy_filter_eat_caption', // we don't want it twice
 ));
 
-// Substitute the page's description for the first heading
+// Substitute the page's description for the first heading, but
+// construct a container first because it allows filtering
+
+$heading_container = new idg_view_html_container;
+$heading_container->set_properties(array(
+	'filter' => 'fancy_filter_typo'
+));
 
 $heading = new idg_view_html_item;
 $heading->set_properties(array(
-    'class' => 'text',
-//    'style' => 'font-weight: bold;'
+    'class' => 'text'
 ));
 $heading->set_text('&lt;h1&gt;{description}&lt;/h1&gt;');
-$content->add_child($heading);
 
-// Insert the actual page text into the container and give it some style
+$heading_container->add_child($heading);
+$content->add_child($heading_container);
+
+// Insert the actual page text into the container
 
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
@@ -75,14 +117,19 @@ $part->add_child($content);
 
 // Create a footer programmatically
 
-$footer = new idg_view_html_item;
+$footer = new idg_view_html_renderer;
 $footer->set_properties(array(
 	'name' => 'footer',
-    'class' => 'text',
-    'style' => 'font-size: 130%; font-style: italic;'
+    'class' => 'fancy_footer',
+    'source' => '_site' // gotta have one
 ));
  
-$footer->set_text('gremp');
+$footer_opts = array(
+	'image' => 'elements/fancy/postmark.png',
+	'font-family' => 'Special Elite',
+	'background-color' => '#a2acbd'
+);
+$footer->set_options($footer_opts);
  
 $part->add_child($footer);
 

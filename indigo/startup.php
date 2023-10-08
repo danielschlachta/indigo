@@ -16,7 +16,12 @@ $idg_version = '1.2';
 
 $idg_program_name = $idg_short_name . ' version ' . $idg_version;
 
+$idg_min_php_version = '8.0.0';
+
 require_once($idg_path . '/diagnostics.php');
+
+if (version_compare(PHP_VERSION, $idg_min_php_version, '<'))
+	complain_version();
 
 require_once($idg_path . '/lib/site.php');
 require_once($idg_path . '/lib/view.php');

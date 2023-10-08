@@ -9,6 +9,8 @@
  * ======================================================================== */
 
 
+require_once($idg_path . '/lib/gfontapi.php');
+
 /*!
  * This layout takes one container that is then placed in a grid,
  * decorated with a navigation bar at the bottom and various other
@@ -30,60 +32,81 @@ require_once($idg_path . '/modules/mod_pagemap.php');
  
 require_once('fancy/navigation.php');
 require_once('fancy/caption.php');
+require_once('fancy/footer.php');
 
-function fancy_filter_typo(&$text)
+class fancy_options
 {
-	$output = str_replace(' - ', '&mdash;', $text);
-	$output = str_replace('&ldquo;', '&laquo;', $output);
-	$output = str_replace('&rdquo;', '&raquo;', $output);
+	static function get_font($obj,
+		$fallback_font = 'Noto Sans') {
+		$font = $obj->get_option('font-family');
+				
+		return $font ? $font : $fallback_font;
+	}
 	
-	return $output;
+	static function get_background_color($obj,
+		$fallback_color = '#e0e0e0') {
+		$color = $obj->get_option('background-color');
+				
+		return $color ? $color : $fallback_color;
+	}
 }
 
 class idg_view_html_part_fancy extends idg_view_node_param_obj
 {
+	var $google_font_api;
 	
-	function __construct(&$parent)
+	function __construct(&$parent, $parameters = null)
 	{
 		parent::__construct($parent);
 	}
-	
+		
+	function _find_fonts($obj) {
+		if (!$obj->children)
+			return;
+		
+		foreach ($obj->children as $child) {
+			if (@($opt = $child->properties['options'])) {
+				$font = $child->get_option('font-family');
+				$this->google_font_api->register_font($font);
+			}
+			
+			$this->_find_fonts($child);
+		}
+	}
+		
 	function render(&$document, &$view)
 	{
-		global $nav_font;
-		global $caption_font;
-		global $body_font;
-		global $body_bg_color;	
-		
+		// FIXME: currently ignored
 	    $style = $this->parent->get_property('style');
    	    $style_print = $this->parent->get_property('style-print');
 	
-		if ($this->parent->children == null)
+		$p = $this->parent;
+	
+		if ($p->children == null)
 			diag($this, get_class($this) . ' has no children');
 		
-		$head = ' <link rel="preconnect" href="https://fonts.gstatic.com">';
+		$font = fancy_options::get_font($p);
+		$bg_color = fancy_options::get_background_color($p, '#c0c0c0');
+			
+		$this->google_font_api = new google_font_api;
+		$this->google_font_api->register_font($font);
+		$this->_find_fonts($p);
 		
-		$nav_font_url = str_replace(' ', '+', $nav_font);
-		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$nav_font_url&display=swap\" " 
-			. "rel=\"stylesheet\">\n";
-		
-		$caption_font_url = str_replace(' ', '+', $caption_font);
-		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$caption_font_url&display=swap\" " 
-			. "rel=\"stylesheet\">\n";
-				
-		$body_font_url = str_replace(' ', '+', $body_font);
-		$head .= " <link href=\"https://fonts.googleapis.com/css2?family=$body_font_url&display=swap\" " 
-			. "rel=\"stylesheet\">\n";
+		$head = $this->google_font_api->get_header_lines();
+	
+		if ($stylesheet = $p->get_option('stylesheet'))
+			$head .= " <link href=\"$stylesheet\" rel=\"stylesheet\">\n";
 		
 		$view->stream_append('html-head', $head);
+	
+		//$idg_id = $p->idg_id;
 			
-		//$idg_id = $this->parent->idg_id;
-		
 		$css =  "	body {\n"
-			. "		font-family: '$body_font', 'Liberation Serif', sans-serif;\n" 
+			. "		font-family: '$font', 'Liberation Serif', sans-serif;\n" 
 			. "		font-size: 110%;\n"
 			. "		margin: 0;\n"
-			. "		background: $body_bg_color;\n"
+			. "		padding: 0;\n"
+			. "		background: $bg_color;\n"
 			. "	}\n\n"
 			. "	*, *:before, *:after {\n"
 			. "		box-sizing: border-box;\n"
@@ -92,7 +115,6 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "		max-width: 940px;\n"
 			. "		width: 66%;\n"
 			. "		margin: 2em;\n"
-			. "		padding-top: 1em;\n"
 			. "		float: left;\n"
 			. "		display: grid;\n"
 			. "		grid-template-columns: min-content 1fr;\n"
@@ -114,23 +136,13 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
 			. "		background: #ebd8b9;\n"
-			. "		padding-top: 0;\n"
+			. "		padding-top: 0.9em;\n"
+			. "		padding-bottom: 0.5em;\n"
+			. "		padding-right: 1.5em;\n"
 			. "	}\n\n"
 			. "	.footer {\n"
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
-			//. "		background: #8ca6cd;\n" // darker tint
-			. "		background: #a2acbd;\n"
-			. "	}\n\n"
-			. "	.header, .footer {\n"
-			. "		grid-column: 1 / -1;\n"
-			. "		clear: both;\n"
-			. "	}\n\n"
-			. "	@supports (display: grid) {\n"
-			. "		.wrapper > * {\n"
-			. "			width: auto;\n"
-			. "			margin: 0;\n"
-			. "		}\n"
 			. "	}\n\n";
 			  
 		$view->stream_append('css', $css);
@@ -140,13 +152,18 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		
 		$view->stream_append('html-body', "<div class=\"wrapper\">\n");
 		
-//		var_dump($this->parent->children[1]);
-//		die('');
-		
 		$parent =& $this->parent;
 		
 		// header
 		if ($header = $parent->get_child_by_key('name', 'header'))  {
+			$header_bg_color = fancy_options::get_background_color($header);
+			$css =	"	.header {\n"
+			. "		float: right;\n"
+			. "		width: 79.7872%;\n"
+			. "		background: $header_bg_color;\n"
+			. "	}\n\n";
+			$view->stream_append('css', $css);
+		
 			$view->stream_append('html-body', "<header class=\"header\">\n");
 			$header->_render($document, $view);	
 			$view->stream_append('html-body', "</header>\n");
@@ -175,6 +192,18 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		// navigation
 		if ($navigation = $parent->get_child_by_key('name', 'navigation')) 
 			$navigation->_render($document, $view);	
+			
+		$view->stream_append('css', "	.header, .footer {\n"
+			. "		grid-column: 1 / -1;\n"
+			. "		clear: both;\n"
+			. "	}\n\n"
+			. "	@supports (display: grid) {\n"
+			. "		.wrapper > * {\n"
+			. "			width: auto;\n"
+			. "			margin: 0;\n"
+			. "		}\n"
+			. "	}\n\n");
+			
 			
 		// page map
 		idg_pagemap::add_to_view($view, 'bottom');

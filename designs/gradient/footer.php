@@ -1,6 +1,6 @@
 <?php
 
-class idg_view_html_renderer_footer extends idg_view_node_obj
+class idg_view_html_renderer_gradient_footer extends idg_view_node_obj
 {	
 	function __construct(&$parent)
 	{

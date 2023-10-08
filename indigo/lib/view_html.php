@@ -79,9 +79,12 @@ class idg_view_html extends idg_view
 			'title' => false
 		);
 		
-		if (!$document) 
-		    die('Error: idg_view_html->render called with null argument.' 
+		if (!$document)
+		    die('idg_view_html: render called with null argument.' 
 		        . ' Forgot to call get_document()?');
+		
+		if (!$this->children)
+			die('<code>This page intentionally left blank.</code>');
 		
 		$document->get_properties($doc_prop);
 		

@@ -34,7 +34,7 @@ class idg_view extends idg_tree_node
 	{
 		parent::__construct();
 	}
-	
+
 	function stream_append($stream_name, $content)
 	{
 		if (array_key_exists($stream_name, $this->streams)) {

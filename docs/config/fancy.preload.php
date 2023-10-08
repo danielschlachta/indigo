@@ -1,14 +1,18 @@
 <?php
 
-$body_font = 'Enriqueta';
-$body_bg_color = '#fff6e8';
+function fancy_filter_typo(&$text)
+{
+	$output = str_replace(' - ', '&mdash;', $text);
+	$output = str_replace('&ldquo;', '&laquo;', $output);
+	$output = str_replace('&rdquo;', '&raquo;', $output);
+	$output = str_replace('...', '&hellip;', $output);
+	$output = str_replace('\'', '&rsquo;', $output);
+	
+	return $output;
+}
 
-$nav_font = 'Merriweather';
-$nav_bg_color = '#ffe7d6';
-
-$caption_font = 'Quintessential';
-
-$caption_image_left = 'elements/fancy/caption-left.png';
-$caption_image_right =  'elements/fancy/caption-right.png';
+function fancy_filter_eat_caption(&$text) {
+	 return idg_renderer_fancy_caption::filter_eat_caption($text);
+}
 
 ?>

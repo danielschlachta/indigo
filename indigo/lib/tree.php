@@ -64,6 +64,9 @@ class idg_tree_node extends idg_object
 		return $prop;
 	}
 	
+	/*! Assigns the corresponding values to the keys in the array.
+	 */
+	
 	function get_properties(&$prop_array)
 	{
 		foreach ($prop_array as $name => $value) {
@@ -86,7 +89,14 @@ class idg_tree_node extends idg_object
 		}
 	}
 	
-	function get_child_by_key($key_name, $key_value, $child_type = false)
+	/*!
+	 * Finds a child whose property $key_name is set to $key_value.
+	 * 
+	 * This function is recursive.
+	 */
+	
+	function get_child_by_key($key_name, $key_value, 
+		$child_type = false)
 	{
 		if ($this->is_leaf)
 			return false;
@@ -95,10 +105,20 @@ class idg_tree_node extends idg_object
 			if (($child->get_property($key_name) == $key_value) 
 				&& (!$child_type || (get_class($child) == $child_type)))
 				return $child;
+				
+			if ($childchild = $child->get_child_by_key(
+				$key_name, $key_value, $child_type))
+				return $childchild;
 		}
 		
 		return false;
 	}
+	
+	/*!
+	 * Returns an array of all children whose property $key_name is set to $key_value.
+	 * 
+	 * This function is not recursive!
+	 */
 	
 	function get_children_by_key($key_name, $key_value, $child_type = false)
 	{
@@ -165,8 +185,7 @@ class idg_tree_node extends idg_object
 		}
 		
 		if ($xml_version != '1.0')
-			diag($this, get_class($this) 
-				. "read_xml: wrong xml version ($xml_version)");
+			diag($this, "read_xml: wrong xml version ($xml_version)");
 		
 		$parser = xml_parser_create($encoding);
 		xml_set_object($parser, $this);
@@ -189,18 +208,26 @@ class idg_tree_node extends idg_object
 		
 		xml_parser_free($parser);
 	}
+
+	/*! 
+	 * Checks the whole subtree.
+	 */
 	
 	function check_all()
 	{
 		$dummy = false;
 		$this->_get_subtree($dummy, '$this->_check');
 	}
+	
+	/*! 
+	 * Prints an ASCII representation of a subtree.
+	 */
 
 	function print_debug()
 	{
+		$dummy = false;
 		$this->_get_subtree($dummy, '$this->_print_debug');
 	}
-	
 	
 	function _get_subtree(&$param,
 		$start_function, $end_function = false, $depth = 0, $path = '')

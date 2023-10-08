@@ -66,7 +66,7 @@ else {
 }
     
 if (!$design || !file_exists("../designs/$design.php"))
-	$design = 'blocks';
+	$design = 'fancy';
 	
 $view_preload = "config/$design.preload.php";	
 
@@ -75,15 +75,16 @@ if (file_exists($view_preload))
 
 require_once("../designs/$design.php");
 
-if (@!$page = $site->get_document()) {
+if (@!$document = $site->get_document()) {
 	require_once('error/error.php');
-	$page = get_error_page();
+	$document = get_error_document();
 }
 
 $view_php = "config/$design.php";
 $view_xml = "$cache_dir/$design.xml";
 
-if (!file_exists($view_xml) || filemtime($view_php) > filemtime($view_xml)) {
+if (!file_exists($view_xml) 
+	|| filemtime($view_php) > filemtime($view_xml)) {
 	if (!$fc = @fopen($view_xml, "w")) {
 			complain_cache($cache_dir, $view_xml);
 	} else {
@@ -92,14 +93,22 @@ if (!file_exists($view_xml) || filemtime($view_php) > filemtime($view_xml)) {
 			
 	require_once($view_php);
 	$view->write_xml($view_xml);
+	
+	if (!(filesize($view_xml) > 0))
+		die("Oops: $view_xml: zero length xml file");
 }
 
 $view = new idg_view_html;
 $view->read_xml($view_xml);
+
+$view_postload = "config/$design.postload.php";	
+
+if (file_exists($view_postload))
+	require_once($view_postload);
 		
 // $view->check_all();
 
-$view->render($page);
+$view->render($document);
 $view->printout();
 
 ?>
