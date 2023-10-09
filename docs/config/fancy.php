@@ -20,13 +20,13 @@ $part_opts = array(
 	'background-color' => '#fff6e8',
 );
 
-$part->set_options($part_opts);
+//$part->set_options($part_opts);
 
 $view->add_child($part);
 
 /*
  *  Add the navigation first as it normally appears like that on
- *  the screen. The order does not really matter here, 
+ *  the screen. The order does not really matter here,
  *  the html part will take care of that.
  */
 
@@ -41,7 +41,7 @@ $navigation_opts = array(
 	'font-family' => 'Merriweather',
 	'background-color' => '#ffe7d6'
 );
-$navigation->set_options($navigation_opts);	
+//$navigation->set_options($navigation_opts);
 
 $part->add_child($navigation);
 
@@ -57,7 +57,7 @@ $header_opts = array(
 	'background-color' => '#b1b390'
 );
 
-$header->set_options($header_opts);
+//$header->set_options($header_opts);
 
 $part->add_child($header);
 
@@ -86,7 +86,7 @@ $caption_opts = array(
 	'font-family' => 'Quintessential',
 	'background-color' => '#fff6e8'
 );
-$caption->set_options($caption_opts);
+//$caption->set_options($caption_opts);
 
 $header->add_child($caption);
 
@@ -98,7 +98,7 @@ $content->set_properties(array(
 	'filter' => 'fancy_filter_eat_caption', // we don't want it twice
 ));
 
-$content->set_option('font-family', 'Lekton'); // As mentioned in style.css ... UGLY HACK
+//$content->set_option('font-family', 'Lekton'); // As mentioned in style.css ... UGLY HACK
 
 // Substitute the page's description for the first heading, but
 // construct a container first because it allows filtering
@@ -135,16 +135,16 @@ $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
 	'name' => 'footer',
     'class' => 'fancy_footer',
-    'source' => '_site' // gotta have one
+    'source' => 'null' // gotta have one
 ));
- 
+
 $footer_opts = array(
 	'image' => 'elements/fancy/postmark.png',
 	'font-family' => 'Special Elite',
 	'background-color' => '#a2acbd'
 );
-$footer->set_options($footer_opts);
- 
+//$footer->set_options($footer_opts);
+
 $part->add_child($footer);
 
 ?>

@@ -2,9 +2,9 @@
 
 /* ========================================================================
  * Indigo/Web
- * 
+ *
  * File: designs/fancy/sidebar.php - sidebar for the 'fancy' layout
- * 
+ *
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
@@ -14,7 +14,7 @@
  *
  * The renderer will produce links for the named anchors
  * provided that the current page has more than one.
- * 
+ *
  * */
 
 class idg_view_html_renderer_fancy_sidebar extends idg_view_node_obj
@@ -24,16 +24,19 @@ class idg_view_html_renderer_fancy_sidebar extends idg_view_node_obj
 		parent::__construct($parent);
 	}
 
-	
+
 	function render(&$document, &$view)
 	{
+		if (!$this->datasource)
+			return;
+
 		$this->datasource->rewind();
-		
+
 		$doc_path = $document->get_path();
 		$url = false;
-		
+
 		$body = "<ul>\n";
-		
+
 		while ($node = $this->datasource->get_token()) {
 			if (!$url) {
 				if (@($node->properties['path'] != $doc_path))
@@ -45,21 +48,21 @@ class idg_view_html_renderer_fancy_sidebar extends idg_view_node_obj
 			} else {
 				if ($node->get_data() < $depth)
 					break;
-					
+
 				if ($node->properties['type'] != 'anchor')
 					continue;
-				
+
 				$name = $node->properties['name'];
 				$anchor = $node->properties['anchor'];
-	
-				$body .= 
+
+				$body .=
 					"  <li><div><a href=\"$url#$anchor\">$name</a></div>\n";
 			}
-	
+
 		}
 
 		$body .= "</ul>\n";
-		
+
 		if ($body != "<ul>\n</ul>\n")
 			$view->stream_append('html-body', "$body\n");
 	}

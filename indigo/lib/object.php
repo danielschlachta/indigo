@@ -8,13 +8,10 @@
 // Global lists maintained for all objects
 
 class idg_object_type {
-	static $idg_object_counters = array();
-	static $idg_type_objects = array();
-
 	protected $properties = array();
 	protected $hooks = array();
 
-	/*!@ \todo get rid of this */
+	/*! @todo get rid of this */
 
 	function __construct() {
 		$this->set_known('options');
@@ -64,6 +61,9 @@ class idg_object {
 	protected $hooks = array();
 	protected $text;
 
+	private static $idg_object_counters = array();
+	private static $idg_type_objects = array();
+
 	/*!
 	 * Constructs an idg object and assigns the corresponding idg type.
 	 *
@@ -83,16 +83,16 @@ class idg_object {
 			diag($this,
 				"constructing $type: no corresponding idg_object_type");
 
-		if (@!$idg_type_objects[$type]) {
+		if (@!idg_object::$idg_type_objects[$type]) {
 			$this->type_obj = new $type_obj_name();
-			$idg_type_objects[$type] =& $this->type_obj;
+			idg_object::$idg_type_objects[$type] =& $this->type_obj;
 		} else
-			$this->type_obj =& $idg_type_objects[$type];
+			$this->type_obj =& idg_object::$idg_type_objects[$type];
 
-		if (@!$idg_object_counters[$type])
-			$id_count = $idg_object_counters[$type] = 1;
+		if (@!idg_object::$idg_object_counters[$type])
+			$id_count = idg_object::$idg_object_counters[$type] = 1;
 		else
-			$id_count = ++$idg_object_counters[$type];
+			$id_count = ++idg_object::$idg_object_counters[$type];
 
 		$this->idg_id = $type . '-' . $id_count;
 	}
@@ -277,7 +277,7 @@ class idg_object {
 		return $retstr;
 	}
 
-	private function get_xml_tag($tag_type, $tag_id = '')
+	protected function get_xml_tag($tag_type, $tag_id = '')
 	{
 		if ($tag_id == '')
 			$use_id = $this->get_idg_type();

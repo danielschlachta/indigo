@@ -13,125 +13,125 @@
  *
  * Takes at least two containers: one is the fixed sidebar (either left or
  * right), the other is the scrollable content. If a third container is present
- * it will occupy the content area behind the second one. 
+ * it will occupy the content area behind the second one.
  */
 
 class idg_view_html_part_fixedbar extends idg_view_node_param_obj
 {
-	
+
 	function __construct(&$parent)
 	{
 		parent::__construct($parent);
 	}
-	
+
 	function render(&$document, &$view)
 	{
-		if (count($this->parent->children) < 2 || 
+		if (count($this->parent->children) < 2 ||
 		    count($this->parent->children) > 3)
 			diag($this, get_class($this) . ' must have two or three children');
-		
+
 		$fixed = $this->parent->children[0];
 		$fixed_id = $fixed->idg_id . '-part';
 		$style_fixed = $fixed->get_property('style');
-		
+
 		$main = $this->parent->children[1];
 		$main_id = $main->idg_id . '-part';
 		$style_main = $main->get_property('style');
-	
+
 	    if (count($this->parent->children) > 2) {
     	    $bg = $this->parent->children[2];
 	    	$bg_id = $bg->idg_id . '-part';
     		$style_bg = $bg->get_property('style');
     	}
-		
+
 		$fixed_width = $this->parameters['fixed-width'];
 		$fixed_position = $this->parameters['fixed-position'];
 		$attach_right = ($fixed_position == 'right');
-		
+
 		$style = $this->parent->get_property('style');
-		
-		$css = "body { padding: 0; margin: 0; width: 100%; " 
-			. "overflow-x: hidden; $style; }\n" 
-			. "div#$fixed_id { overflow: hidden; position: fixed; top: 0;" 
-			. " $fixed_position: 0; height: 100%; width: $fixed_width;" 
-			. " overflow: hidden; $style_fixed }\n" 
-			. "div#$main_id { overflow-y: hidden;" 
+
+		$css = "body { padding: 0; margin: 0; width: 100%; "
+			. "overflow-x: hidden; $style; }\n"
+			. "div#$fixed_id { overflow: hidden; position: fixed; top: 0;"
+			. " $fixed_position: 0; height: 100%; width: $fixed_width;"
+			. " overflow: hidden; $style_fixed }\n"
+			. "div#$main_id { overflow-y: hidden;"
 			. " margin-$fixed_position: $fixed_width; $style_main }\n";
-		
+
 		if (@$style_bg)
 		    $css .= "div#$bg_id { $style_bg }\n";
-		
+
 		$view->stream_append('css', $css);
-		
+
 		if (@$bg) {
 		    $body = "<div id=\"$bg_id\">\n";
-    	
+
     		$view->stream_append('html-body', $body);
     		$bg->_render($document, $view);
-    		
+
     		$body = "</div>\n";
     	} else
     	    $body = '';
-		
+
 		$body .= "<div id=\"$fixed_id\">\n";
-		
+
 		$view->stream_append('html-body', $body);
 		$fixed->_render($document, $view);
-		
+
 		$body = "</div>\n";
 		$body .= "<div id=\"$main_id\">\n";
-		
+
 		$view->stream_append('html-body', $body);
 		$main->_render($document, $view);
-		
+
 		$body = "</div>\n";
 		$view->stream_append('html-body', $body);
 	}
 }
 
 /*!
- * A simple one with the scroll bar always visible 
+ * A simple one with the scroll bar always visible
  */
 
 class idg_view_html_part_fixedcontent extends idg_view_node_param_obj
 {
-	
+
 	function __construct(&$parent)
 	{
 		parent::__construct($parent);
 	}
-	
+
 	function render(&$document, &$view)
 	{
 	    $style = $this->parent->get_property('style');
    	    $style_print = $this->parent->get_property('style-print');
-	
+
 	    if ($this->parent->children == null)
 			diag($this, get_class($this) . ' must have at least one child');
-		
-		$idg_id = $this->parent->idg_id;
+
+		$idg_id = $this->parent->get_idg_id();
 		$fixed = $this->parent->children[0];
-		
-		$css = "body { padding: 0; margin: 0; " . "width: 100%; height: 100%; " 
-			. "overflow-x: hidden; $style }\n" 
-			. "div#$idg_id { position: relative; top: 0; left: 0; " 
+
+		$css = "body { padding: 0; margin: 0; " . "width: 100%; height: 100%; "
+			. "overflow-x: hidden; $style }\n"
+			. "div#$idg_id { position: relative; top: 0; left: 0; "
 			. "z-index: 130; }\n";
-	
+
 		$css_print = "div#$idg_id { overflow-y: hidden; $style_print }\n";
-		
+
 		$view->stream_append('css', $css);
 		$view->stream_append('css-print', $css_print);
-		
+
 		$body = "<div id=\"$idg_id\">\n";
 		$view->stream_append('html-body', $body);
-		
+
 		$fixed->_render($document, $view);
-		
+
 		$body = "</div>\n";
 		$view->stream_append('html-body', $body);
-		
+
 		$childcount = count($this->parent->children);
-		
+
 		for ($i = 1; $i < $childcount; $i++) {
 			$part = $this->parent->children[$i];
 			$part->_render($document, $view);

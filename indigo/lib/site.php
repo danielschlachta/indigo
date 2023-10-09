@@ -65,20 +65,18 @@ class idg_site extends idg_site_element
 		return $document_obj;
 	}
 
-	/*!
-	 *  @todo This is rather mysterious! Seems to be a stub ... */
-
-	function get_datasource($source_name)
+	function get_datasource()
 	{
-		$param = false;
-		$tree = new idg_datasource_tree($param);
+		$dummy = false;
+		$tree = new idg_datasource_tree($dummy);
 
 		if ($this->children) {
 			foreach ($this->children as $child) {
-				if (!$child->traverse($tree, '$this->_token'))
-					return false;
+				if (!$child->traverse($tree, '$this->add_token'))
+					diag($this, 'traverse failed for $this->add_token');
 			}
 		}
+
 		return $tree;
 	}
 

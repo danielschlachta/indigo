@@ -109,7 +109,7 @@ class idg_tree_node extends idg_object
 		if (@!$fp = fopen($file_name, 'w'))
 			diag($this, 'xml: could not write ' . $file_name);
 
-		$this->_get_subtree($xml,
+		$this->traverse($xml,
 			'$this->_xml_write_start', '$this->_xml_write_end');
 		fwrite($fp, $xml);
 		fclose($fp);
@@ -294,9 +294,13 @@ class idg_tree_node extends idg_object
 		}
 	}
 
-	function _xml_default_handler($parser, $data)
-	{
+	function _xml_default_handler($parser, $data) {}
+
+	function add_token(&$tree, &$depth, &$path) {
+		return true;
 	}
+
+	/*! @todo get rid of this? */
 
 	function print_debug_all(&$dummy, &$depth, &$path)
 	{
