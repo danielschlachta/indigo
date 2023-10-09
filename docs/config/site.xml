@@ -9,6 +9,7 @@
 			name="Home" 
 			description="Welcome to indigo" 
 			navigation-comment="The page of pages">
+			
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
 			    file: randomsymbols.jpg; width: 90; height: 90;
@@ -19,7 +20,8 @@
 			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
 		    </datasource>
 
-		    <renderer slot="caption"
+		    <renderer 
+				slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -52,7 +54,8 @@
 			    caption: Quick Links; links: main/about/about.html
 		    </datasource>
 			
-			<renderer slot="caption"
+			<renderer 
+				slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -78,7 +81,8 @@
 			    caption: Choose your poison; file: infobox.html
 		    </datasource>
 		    
-		    <renderer slot="caption"
+		    <renderer 
+				slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -105,14 +109,15 @@
 			    caption: Nothing here to see; file: infobox.html
 		    </datasource>
 
-			<renderer slot="caption"
+			<renderer 
+				slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
 		    
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
-			    filename: resources/tutorial/indigo.html
+			    filename: resources/tutorial/what.html
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
@@ -315,7 +320,8 @@
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 		    
-		    <renderer slot="caption"
+		    <renderer 
+				slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -339,7 +345,8 @@
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 		    
-		    <renderer slot="caption"
+		    <renderer 
+				slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    
@@ -363,7 +370,8 @@
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 
-			<renderer slot="caption"
+			<renderer 
+				slot="caption"
 			    class="idg_renderer_fancy_caption"
 			    nullable="yes"
 			    source="text1_src" />			    

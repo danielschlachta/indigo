@@ -39,7 +39,6 @@ class idg_view_html_type extends idg_view_type
 class idg_view_html extends idg_view
 {
 	
-	var $idg_type = 'view';
 	var $idg_translation = array(
 		'view' => 'idg_view_html', 
 		'part' => 'idg_view_html_part', 
@@ -48,18 +47,22 @@ class idg_view_html extends idg_view
 		'item' => 'idg_view_html_item', 
 		'slot' => 'idg_view_html_slot'
 	);
-	
+		
 	function __construct()
 	{
-		$this->streams = array(
-			'html-head' => '',
-			'html-body-start' => '',
-			'html-body' => '',
-			'css' => '',
-			'css-print' => '',
-			'js' => ''
-		);
 		parent::__construct();
+		$this->set_idg_type('view');
+		
+		$this->set_streams(
+			array(
+				'html-head' => '',
+				'html-body-start' => '',
+				'html-body' => '',
+				'css' => '',
+				'css-print' => '',
+				'js' => ''
+			)
+		);
 	}
 
 	private function _milliseconds() {
@@ -166,7 +169,6 @@ class idg_view_html_element_type extends idg_view_html_type
 		$this->set_known('style-link-hover');
 		$this->set_known('style-image');
 		$this->set_known('class');
-		$this->set_mandatory('class');
 	}
 }
 
@@ -203,12 +205,10 @@ class idg_view_html_part_type extends idg_view_html_element_type
 
 class idg_view_html_part extends idg_view_html_element
 {
-	
-	var $idg_type = 'part';
-	
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('part');
 	}
 }
 
@@ -236,12 +236,10 @@ class idg_view_html_container_type extends idg_view_html_element_type
 
 class idg_view_html_container extends idg_view_html_element
 {
-	
-	var $idg_type = 'container';
-	
 	function __construct()
 	{
-		parent::__construct();
+		parent::__construct();	
+		$this->set_idg_type('container');
 	}
 	
 	function _render(&$document, &$view)
@@ -251,7 +249,7 @@ class idg_view_html_container extends idg_view_html_element
 		$style = $this->get_property('style');
 		
 		if ($style) {
-			$idg_id = $this->idg_id;
+			$idg_id = $this->get_idg_id();
 			$style_head = $this->get_property('style-head');
 			$style_subhead = $this->get_property('style-subhead');
 			$style_link = $this->get_property('style-link');
@@ -330,12 +328,12 @@ class idg_view_html_renderer_type extends idg_view_html_element_type
 
 class idg_view_html_renderer extends idg_view_html_element
 {	
-	var $idg_type = 'renderer';
 	var $datasource;
 	
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('renderer');
 	}
 	
 	/*!
@@ -368,11 +366,10 @@ class idg_view_html_item_type extends idg_view_html_element_type
 
 class idg_view_html_item extends idg_view_html_element
 {
-	var $idg_type = 'item';
-	
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('item');
 	}
 }
 
@@ -396,18 +393,17 @@ class idg_view_html_slot_type extends idg_tree_node_type
 
 class idg_view_html_slot extends idg_tree_node
 {
-	var $idg_type = 'slot';
-	
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('slot');
 	}
 	
 	function _render(&$document, &$view)
 	{
 		$name = $this->get_property('name');
 		$renderers = $document->get_renderers($name);
-		$idg_id = $this->idg_id;
+		$idg_id = $this->get_idg_id();
 		$filter = $this->get_property('filter');
 		if ($filter)
 			$view->_set_filter($filter);
@@ -464,7 +460,7 @@ class idg_view_html_slot extends idg_tree_node
 			$css .= "	}\n\n";
 		}
 		
-		// TODO: add css-print?
+		/*! @todo css-print? */
 			
 		
 		if ($anchor_count > 0)

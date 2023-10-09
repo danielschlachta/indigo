@@ -1,18 +1,10 @@
 <?php
 
-/* ========================================================================
- * Indigo/Web
- *
- * File: site.php - contains the site structure and configuration
- * 
- *  Note that the [class name]_declaration_type 
- *  and [class name]_declaration classes have to be included here to 
- *  avoid circularity in tree.php.
- *
- * (c) 2023 Daniel Schlachta
- * ======================================================================== */
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
 
-require_once($idg_path . '/lib/tree.php');
 require_once($idg_path . '/lib/datasource.php');
 
 class idg_datasource_declaration_type extends idg_object_type
@@ -20,28 +12,30 @@ class idg_datasource_declaration_type extends idg_object_type
 	function __construct()
 	{
 		parent::__construct();
+		
 		$this->set_known('name');
 		$this->set_known('class');
-		$this->set_mandatory('name');
 		$this->set_mandatory('class');
 	}
 }
 
 class idg_datasource_declaration extends idg_tree_node
 {	
-	var $idg_type = 'datasource';
-	
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('datasource');
 	}
+	
+	/*! @todo: make this an object's functionality */
 	
 	function get_instance(&$datasource = null)
 	{
 		if (!$class_name = $this->get_property('class'))
-			return false;
+			return;
 			
 		$parameters = array();
+		
 		if (($text = $this->get_text())) {
 			$lines = explode(";", $text);
 			foreach ($lines as $line) {
@@ -66,10 +60,8 @@ class idg_datasource_declaration extends idg_tree_node
 	}
 }
 
-
 class idg_renderer_declaration_type extends idg_object_type
 {
-	
 	function __construct()
 	{
 		parent::__construct();
@@ -89,19 +81,17 @@ class idg_renderer_declaration_type extends idg_object_type
 }
 
 class idg_renderer_declaration extends idg_tree_node
-{
-	
-	var $idg_type = 'renderer';
-	
+{	
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type = 'renderer';
 	}
 	
 	function get_instance(&$datasource = null)
 	{
-		if (!$class_name = $this->get_property('class')) 
-			diag($this, "xml: internal error: class property not set");
+		if (!$class_name = @$this->get_property('class')) 
+			diag($this, "$obj_name: 'class' property missing");
 		
 		$nullable = $this->get_property('nullable') == "yes";
 		
@@ -114,7 +104,7 @@ class idg_renderer_declaration extends idg_tree_node
 		}
 		
 		if (!$nullable)
-			diag($this, "xml: unknown class '$class_name'");
+			diag($this, "$name: unknown class '$class'");
 	}
 	
 	function _token(&$tree, &$depth, &$path)

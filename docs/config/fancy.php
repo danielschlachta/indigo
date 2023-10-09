@@ -61,6 +61,18 @@ $header->set_options($header_opts);
 
 $part->add_child($header);
 
+// Add a container for the sidebar
+
+$sidebar = new idg_view_html_renderer;
+
+$sidebar->set_properties(array(
+	'name' => 'sidebar',
+	'class' => 'fancy_sidebar',
+	'source' => '_site'
+));
+
+$part->add_child($sidebar);
+
 // Insert the caption
 
 $caption = new idg_view_html_slot;

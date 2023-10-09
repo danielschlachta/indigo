@@ -1,6 +1,6 @@
 <?php
 
-function get_error_page()
+function get_error_document()
 {
 	global $site;
 	

@@ -11,28 +11,30 @@
 require_once($idg_path . '/lib/tree.php');
 
 class idg_view_type extends idg_tree_node_type
-{	
+{
 	function __construct()
 	{
 		parent::__construct();
 		$this->set_known('name');
 		$this->set_known('tag');
-		$this->set_mandatory('name');
 	}
 }
 
 class idg_view extends idg_tree_node
 {
-	var $idg_type = 'view';
-	
-	var $streams;
+	protected $streams = array();
 	var $filters = array();
-	
+
 	var $output;
-	
+
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('view');
+	}
+
+	function set_streams($streams) {
+		$this->streams = $streams;
 	}
 
 	function stream_append($stream_name, $content)
@@ -43,7 +45,7 @@ class idg_view extends idg_tree_node
 					if ($is_set) {
 						if (!function_exists($filter))
 							diag($this, "Unknown filter: $filter");
-						
+
 						$tmp = $filter($content);
 					} else
 						$tmp = false;
@@ -55,17 +57,17 @@ class idg_view extends idg_tree_node
 		} else
 			diag($this, 'Unknown stream: ' . $stream_name);
 	}
-	
+
 	function _set_filter($name)
 	{
 		$this->filters[$name] = true;
 	}
-	
+
 	function _unset_filter($name)
 	{
 		$this->filters[$name] = false;
 	}
-	
+
 	function printout()
 	{
 		echo $this->output;
@@ -73,38 +75,38 @@ class idg_view extends idg_tree_node
 }
 
 class idg_view_node_obj
-{	
+{
 	var $parent;
 	var $text;
-	
+
 	function __construct($parent)
 	{
 		$this->parent = $parent;
-		$this->text = $parent->text;
+		$this->text = $parent->get_text();
 	}
 }
 
 class idg_view_node_param_obj extends idg_view_node_obj
 {
 	var $parameters = array();
-	
+
 	function __construct(&$parent)
 	{
 		parent::__construct($parent);
 		$this->get_parameters();
 	}
-	
+
 	function get_parameters()
 	{
 		if (!($text = $this->parent->get_text()))
 			return;
-		
+
 		$lines = explode(";", $text);
 		foreach ($lines as $line) {
 			if ($line) {
-				if (!preg_match('/([a-zA-Z][a-zA-Z0-9-]+):[\  ]+(.*)/', 
+				if (!preg_match('/([a-zA-Z][a-zA-Z0-9-]+):[\  ]+(.*)/',
 					$line, $match))
-					diag($this, get_class($parent) 
+					diag($this, get_class($parent)
 					. ': Invalid parameter format (view_html): ' . $line);
 				$this->parameters[$match[1]] = $match[2];
 			}

@@ -11,7 +11,9 @@ ini_set('display_errors',1);
 error_reporting(E_ALL);
 
 function diag($obj, $msg) {
-	echo "<h2>$msg</h2>";
+	$name = get_class($obj);
+	echo "<h1>$msg</h1>\n";
+	echo "<h2>PHP object type: $name</h2>\n";
 	echo '<pre>';
 	debug_print_backtrace();
 	echo '</pre>';

@@ -83,7 +83,7 @@ class idg_view_html_renderer_sourcefile extends idg_view_node_obj
 	{
     	$this->datasource->rewind();     	
 		$token = $this->datasource->get_token();
-		$parameters = $token->data;
+		$parameters = $token->get_data();
 	
     	
         $language = $parameters['language'];
@@ -96,7 +96,7 @@ class idg_view_html_renderer_sourcefile extends idg_view_node_obj
 		if (!$height)
     	    $height = '100%';
                 
-        $text = $this->datasource->get_token()->data;
+        $text = $this->datasource->get_token()->get_data();
 
 		$geshi = new GeSHi($text, $language);
 		$geshi->enable_keyword_links(false);

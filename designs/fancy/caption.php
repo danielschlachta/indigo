@@ -85,7 +85,7 @@ class idg_renderer_fancy_caption extends idg_view_node_obj
 		$view->stream_append('css', $css);
 		
 		while ($token = $this->datasource->get_token()) {
-			if (preg_match($caption_preg, $token->data, $match)) {
+			if (preg_match($caption_preg, $token->get_data(), $match)) {
 				$caption = preg_replace('|[ \r\n]*$|', '', $match[0]);
 				
 				$view->stream_append('html-body', 

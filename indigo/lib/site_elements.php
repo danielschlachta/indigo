@@ -27,8 +27,6 @@ class idg_site_element_type extends idg_tree_node_type
 		$this->set_known('navigation-comment');
 		$this->set_known('index-document', 'yes');
 		$this->set_known('show-name');
-		$this->set_known('hidden', 'yes');
-		$this->set_known('changefreq', 'yes');
 		
 		$this->set_mandatory('id');
 		$this->set_mandatory('name');
@@ -75,18 +73,15 @@ class idg_folder_type extends idg_site_element_type
 
 class idg_folder extends idg_site_element
 {
-	var $idg_type = 'folder';
-	
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('folder');
 	}
 	
 	function _token(&$tree, &$depth, &$path)
 	{
-		if ($this->get_property('hidden') == 'yes')
-			return true;
-		$prop = $this->get_all_properties();
+		$prop = $this->get_properties();
 		$prop['type'] = 'folder';
 		$tree->add_node($depth, $prop, false);
 		
@@ -110,8 +105,8 @@ class idg_document_type extends idg_site_element_type
 	function __construct()
 	{
 		parent::__construct();
-		$this->add_hook('title', '$this->_get_default_title');
-		$this->add_hook('last-change', '$this->_get_last_change');
+		$this->set_hook('title', '$this->_get_default_title');
+		$this->set_hook('last-change', '$this->_get_last_change');
 		$this->child_types[] = 'idg_datasource_declaration';
 		$this->child_types[] = 'idg_renderer_declaration';
 	}
@@ -119,8 +114,6 @@ class idg_document_type extends idg_site_element_type
 
 class idg_document extends idg_site_element
 {
-	var $idg_type = 'document';
-	
 	var $last_change = false;
 	var $params = array();
 	
@@ -129,6 +122,7 @@ class idg_document extends idg_site_element
 	function __construct()
 	{
 		parent::__construct();
+		$this->set_idg_type('document');
 	}
 	
 	function get_uri()
@@ -254,9 +248,7 @@ class idg_document extends idg_site_element
 	
 	function _token(&$tree, &$depth, &$path)
 	{
-		if ($this->get_property('hidden') == 'yes')
-			return true;
-		$prop = $this->get_all_properties();
+		$prop = $this->get_properties();
 		$prop['path'] = $this->get_path();
 		$prop['uri'] = '?display=' . $prop['path'];
 		$prop['type'] = 'document';
