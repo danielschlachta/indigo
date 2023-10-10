@@ -102,6 +102,7 @@ $framedimg->set_properties(array(
 
 $part->add_child($framedimg);
 
+
 $infobox = new idg_view_html_renderer;
 $infobox->set_properties(array(
 	'class' => 'blocks_infobox',

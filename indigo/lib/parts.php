@@ -31,16 +31,16 @@ class idg_view_html_part_fixedbar extends idg_view_node_param_obj
 			diag($this, get_class($this) . ' must have two or three children');
 
 		$fixed = $this->parent->children[0];
-		$fixed_id = $fixed->idg_id . '-part';
+		$fixed_id = $fixed->get_idg_id() . '-part';
 		$style_fixed = $fixed->get_property('style');
 
 		$main = $this->parent->children[1];
-		$main_id = $main->idg_id . '-part';
+		$main_id = $main->get_idg_id() . '-part';
 		$style_main = $main->get_property('style');
 
 	    if (count($this->parent->children) > 2) {
     	    $bg = $this->parent->children[2];
-	    	$bg_id = $bg->idg_id . '-part';
+	    	$bg_id = $bg->get_idg_id() . '-part';
     		$style_bg = $bg->get_property('style');
     	}
 
@@ -109,7 +109,7 @@ class idg_view_html_part_fixedcontent extends idg_view_node_param_obj
 	    if ($this->parent->children == null)
 			diag($this, get_class($this) . ' must have at least one child');
 
-		$idg_id = $this->parent->qet_idg_id();
+		$idg_id = $this->parent->get_idg_id();
 		$fixed = $this->parent->children[0];
 
 		$css = "body { padding: 0; margin: 0; " . "width: 100%; height: 100%; "
