@@ -86,7 +86,6 @@ if (@!$document = $site->get_document()) {
 $view_php = "config/$design.php";
 $view_xml = "$cache_dir/$design.xml";
 
-/*
 if (!file_exists($view_xml)
 	|| filemtime($view_php) > filemtime($view_xml)) {
 	if (!$fc = @fopen($view_xml, "w")) {
@@ -101,7 +100,7 @@ if (!file_exists($view_xml)
 
 	if (!(filesize($view_xml) > 0))
 		die("Oops: $view_xml: zero length xml file");
-} */
+} 
 
 $view = new idg_view_html;
 $view->read_xml($view_xml);

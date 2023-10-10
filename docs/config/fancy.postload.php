@@ -2,19 +2,19 @@
 
 require_once($idg_path . '/../designs/fancy.php');
 
-function fancy_get_footer_tag() {
+function fancy_filter_get_footer_tag() {
 	global $document;
 
 	$date = new DateTimeImmutable($document->get_property('last-change'));
 
 	return 'This page was last updated on '
 		. $date->format('m/d/Y')
-		. '; copyright 2010&ndash;2023 '
-		. '<a href="mailto:daniel@schlachta.info">Daniel Schlachta</a>.';
+		. '. Copyright (c) 2023 '
+		. '<a href="mailto:daniel@schlachta.info">Daniel Schlachta</a>';
 }
 
 
 $footer = $view->get_child_by_key('name', 'footer');
-$footer->set_hook('tag', 'fancy_get_footer_tag');
+$footer->set_hook('tag', 'fancy_filter_get_footer_tag');
 
 ?>

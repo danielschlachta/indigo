@@ -209,7 +209,8 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 
 
 		// page map
-		idg_pagemap::add_to_view($view, 'bottom');
+		idg_pagemap::add_to_view($view,
+			'bottom: 0', 'right: 0', '25%','93%');
 	}
 }
 
