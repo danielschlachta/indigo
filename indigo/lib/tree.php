@@ -89,7 +89,7 @@ class idg_tree_node extends idg_object
 	function add_child(&$child)
 	{
 		if (!in_array(get_class($child), $this->type_obj->child_types))
-			diag($this, $this->idg_id
+			diag($this, $this->get_idg_id()
 				. ': add child: incompatible child type \''
 				. get_class($child) . '\'');
 		$child->parent =& $this;
@@ -113,51 +113,6 @@ class idg_tree_node extends idg_object
 			'$this->_xml_write_start', '$this->_xml_write_end');
 		fwrite($fp, $xml);
 		fclose($fp);
-	}
-
-	function read_xml($file_name)
-	{
-		$xml_version = false;
-		$encoding = 'utf-8';
-
-		if (@!$fp = fopen($file_name, 'r'))
-			diag($this, 'xml: could not read ' . $file_name);
-
-		$xml = '';
-		while ($chunk = fread($fp, 8129))
-			$xml .= $chunk;
-
-		if (preg_match('/<\?xml version="(.+)".+encoding="(.+)"\?>/',
-			$xml, $match)) {
-			$xml_version = $match[1];
-			$encoding = $match[2];
-		} else if (preg_match('/<\?xml version="(.+)"\?>/', $xml, $match)) {
-			$xml_version = $match[1];
-		}
-
-		if ($xml_version != '1.0')
-			diag($this, "read_xml: wrong xml version ($xml_version)");
-
-		$parser = xml_parser_create($encoding);
-		xml_set_object($parser, $this);
-		xml_set_element_handler($parser, "_xml_read_start", "_xml_read_end");
-		xml_set_character_data_handler($parser, "_xml_character_data");
-		xml_set_default_handler($parser, "_xml_default_handler");
-		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-
-		$this->_xml_stack = false;
-
-		if (!xml_parse($parser, $xml)) {
-			$err_code = xml_get_error_code($parser);
-			$err_string = xml_error_string($err_code);
-			$err_line = xml_get_current_line_number($parser);
-			$err_col = xml_get_current_column_number($parser);
-
-			diag($this, "xml error($err_code): $err_string<br />"
-				. "<b>Line:</b> $err_line<br><b>Column: $err_col");
-		}
-
-		xml_parser_free($parser);
 	}
 
 	/*!
@@ -209,7 +164,53 @@ class idg_tree_node extends idg_object
 		return $retval;
 	}
 
-	function _xml_write_start(&$xml, &$depth, &$path)
+	function read_xml($file_name)
+	{
+		$xml_version = false;
+		$encoding = 'utf-8';
+
+		if (@!$fp = fopen($file_name, 'r'))
+			diag($this, 'xml: could not read ' . $file_name);
+
+		$xml = '';
+		while ($chunk = fread($fp, 8129))
+			$xml .= $chunk;
+
+		if (preg_match('/<\?xml version="(.+)".+encoding="(.+)"\?>/',
+			$xml, $match)) {
+			$xml_version = $match[1];
+			$encoding = $match[2];
+		} else if (preg_match('/<\?xml version="(.+)"\?>/',
+			$xml, $match)) {
+			$xml_version = $match[1];
+		}
+
+		if ($xml_version != '1.0')
+			diag($this, "read_xml: wrong xml version ($xml_version)");
+
+		$parser = xml_parser_create($encoding);
+		xml_set_object($parser, $this);
+		xml_set_element_handler($parser, "_xml_read_start", "_xml_read_end");
+		xml_set_character_data_handler($parser, "_xml_character_data");
+		xml_set_default_handler($parser, "_xml_default_handler");
+		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
+
+		$this->_xml_stack = false;
+
+		if (!xml_parse($parser, $xml)) {
+			$err_code = xml_get_error_code($parser);
+			$err_string = xml_error_string($err_code);
+			$err_line = xml_get_current_line_number($parser);
+			$err_col = xml_get_current_column_number($parser);
+
+			diag($this, "xml error $err_code: $err_string, "
+				. "line $err_line, column $err_col");
+		}
+
+		xml_parser_free($parser);
+	}
+
+	private function _xml_write_start(&$xml, &$depth, &$path)
 	{
 		global $idg_xml_indent;
 
@@ -233,7 +234,7 @@ class idg_tree_node extends idg_object
 		return true;
 	}
 
-	function _xml_write_end(&$xml, &$depth, &$path)
+	private function _xml_write_end(&$xml, &$depth, &$path)
 	{
 		global $idg_xml_indent;
 
@@ -249,15 +250,20 @@ class idg_tree_node extends idg_object
 		return true;
 	}
 
-	function _xml_read_start($parser, $name, $properties)
+	private function _xml_read_start($parser, $name, $properties)
 	{
 		$class_name = $name;
+
+		if ($name == 'attribute') {
+			$this->_xml_stack[] = new idg_tree_node();
+			return;
+		}
 
 		if ($this->idg_translation
 			&& @($trans = $this->idg_translation[$class_name]))
 			$class_name = $trans;
 		else
-			diag($this, "xml: unknown tag '$class_name'");
+			diag($this, "read_xml: unknown tag '$class_name'");
 
 		if (!$this->_xml_stack) {
 			if ($class_name != get_class($this))
@@ -274,27 +280,26 @@ class idg_tree_node extends idg_object
 			$obj = new $class_name;
 
 			$obj->set_properties($properties);
-			$this->_xml_stack[count($this->_xml_stack) - 1]->add_child($obj);
+			$pos = count($this->_xml_stack) - 1;
+			$this->_xml_stack[$pos]->add_child($obj);
 		}
 		$this->_xml_stack[] =& $obj;
 	}
 
-	function _xml_read_end($parser, $name)
+	private function _xml_read_end($parser, $name)
 	{
 		array_pop($this->_xml_stack);
 	}
 
-	function _xml_character_data($parser, $character_data)
+	private function _xml_character_data($parser, $character_data)
 	{
-		if ($data = trim($character_data)) {
-			$text =& $this->_xml_stack[count($this->_xml_stack) - 1]->text;
-			if ($text)
-				$text .= "\n";
-			$text .= $data;
-		}
+		$pos = count($this->_xml_stack) - 1;
+		$this->_xml_stack[$pos]->text .= $character_data;
 	}
 
-	function _xml_default_handler($parser, $data) {}
+	private function _xml_default_handler($parser, $data) {
+		// <!-- and <? come here to die.
+	}
 
 	function add_token(&$tree, &$depth, &$path) {
 		return true;

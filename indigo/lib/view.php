@@ -77,12 +77,10 @@ class idg_view extends idg_tree_node
 class idg_view_node_obj
 {
 	var $parent;
-	var $text;
 
 	function __construct($parent)
 	{
 		$this->parent = $parent;
-		$this->text = $parent->get_text();
 	}
 }
 
@@ -101,13 +99,13 @@ class idg_view_node_param_obj extends idg_view_node_obj
 		if (!($text = $this->parent->get_text()))
 			return;
 
-		$lines = explode(";", $text);
+		$lines = explode(";", trim($text));
 		foreach ($lines as $line) {
-			if ($line) {
+			if ($line != '') {
 				if (!preg_match('/([a-zA-Z][a-zA-Z0-9-]+):[\  ]+(.*)/',
 					$line, $match))
-					diag($this, get_class($parent)
-					. ': Invalid parameter format (view_html): ' . $line);
+					diag($this,
+					'invalid parameter format: `' . $line . '`');
 				$this->parameters[$match[1]] = $match[2];
 			}
 		}

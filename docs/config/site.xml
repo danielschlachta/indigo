@@ -2,14 +2,14 @@
 <site name="indigo"
 	content-language="en"
 	title-separator=" - "
-	index-document="main/home">  
-	   
+	index-document="main/home">
+
 	<folder id="main" show-name="no">
-		<document id="home" 
-			name="Home" 
-			description="Welcome to indigo" 
+		<document id="home"
+			name="Home"
+			description="Welcome to indigo"
 			navigation-comment="The page of pages">
-			
+
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
 			    file: randomsymbols.jpg; width: 90; height: 90;
@@ -20,30 +20,24 @@
 			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
 		    </datasource>
 
-		    <renderer 
-				slot="caption"
-			    class="idg_renderer_fancy_caption"
-			    nullable="yes"
-			    source="text1_src" />			    
-
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
 			    filename: main/home/home.html
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />			    
+			    source="text1_src" />
    		    <datasource name="readme_src"
 			    class="idg_datasource_textfile">
 			    filename: ../README.md
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_markdown"
-			    source="readme_src" />		
+			    source="readme_src" />
 	    </document>
-	    
-	    <document id="about" 
-			name="About" 
+
+	    <document id="about"
+			name="About"
 			description="What it's about">
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
@@ -53,24 +47,18 @@
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: main/about/about.html
 		    </datasource>
-			
-			<renderer 
-				slot="caption"
-			    class="idg_renderer_fancy_caption"
-			    nullable="yes"
-			    source="text1_src" />			    
-		    
+
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
 			    filename: main/about/about.html
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />		
+			    source="text1_src" />
 	    </document>
-	    
-	    <document id="designs" 
-			name="Designs" 
+
+	    <document id="designs"
+			name="Designs"
 			description="The old switcheroo">
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
@@ -80,12 +68,6 @@
 			    class="idg_datasource_blocks_infobox">
 			    caption: Choose your poison; file: infobox.html
 		    </datasource>
-		    
-		    <renderer 
-				slot="caption"
-			    class="idg_renderer_fancy_caption"
-			    nullable="yes"
-			    source="text1_src" />			    
 
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
@@ -93,13 +75,13 @@
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />		
+			    source="text1_src" />
 	    </document>
-    </folder>  
+    </folder>
 
 	<folder id="resources" name="Resources" show-name="no">
-	    <document id="tutorial" name="Tutorial" 
-			description="How it works">
+	    <document id="tutorial" name="Tutorial"
+			description="Indigo - the tutorial">
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
 			    file: machine.png; width: 90; height: 57;
@@ -109,32 +91,26 @@
 			    caption: Nothing here to see; file: infobox.html
 		    </datasource>
 
-			<renderer 
-				slot="caption"
-			    class="idg_renderer_fancy_caption"
-			    nullable="yes"
-			    source="text1_src" />			    
-		    
-		    <datasource name="text1_src"
+			<datasource name="text1_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/tutorial/what.html
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />		
-		    
+			    source="text1_src" />
+
 		    <datasource name="text2_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/tutorial/how.html
-		    </datasource>	    
+		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
 			    source="text2_src"
 			    anchor="how"
-                name="How it works" />
+                name="Getting started" />
 		    <datasource name="site_src"
 			    class="idg_datasource_sourcefile">
-			    filename: demo/hello/site.xml; language: xml; 
+			    filename: demo/hello/site.xml; language: xml;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -148,7 +124,7 @@
 			    source="text3_src" />
 		    <datasource name="scatter_src"
 			    class="idg_datasource_sourcefile">
-			    filename: demo/hello/scatter.xml; language: xml; 
+			    filename: demo/hello/scatter.xml; language: xml;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -174,7 +150,7 @@
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
 			    source="text5_src" />
-		    
+
 		    <datasource name="text6_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/tutorial/dynamic.html
@@ -186,7 +162,7 @@
 			    name="Creating dynamic content" />
 		    <datasource name="strip_src"
 			    class="idg_datasource_sourcefile">
-			    filename: demo/hello-dynamic/strip.php; language: php; 
+			    filename: demo/hello-dynamic/strip.php; language: php;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -198,7 +174,7 @@
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
 			    source="text7_src" />
-		    
+
 		    <datasource name="text8_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/tutorial/phpscript.html
@@ -210,7 +186,7 @@
 			    name="Embedding php code" />
 		    <datasource name="error_src"
 			    class="idg_datasource_sourcefile">
-			    filename: demo/hello-dynamic/error.php; language: php; 
+			    filename: demo/hello-dynamic/error.php; language: php;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -224,7 +200,7 @@
 			    source="text9_src" />
 		    <datasource name="rend_src"
 			    class="idg_datasource_sourcefile">
-			    filename: demo/hello-dynamic/display_error.php; language: php; 
+			    filename: demo/hello-dynamic/display_error.php; language: php;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -236,7 +212,7 @@
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
 			    source="text10_src" />
-			    
+
 		    <datasource name="text11_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/tutorial/datasources.html
@@ -248,7 +224,7 @@
 			    name="Accessing data sources" />
 		    <datasource name="nav_src"
 			    class="idg_datasource_sourcefile">
-			    filename: demo/navi/navigation.php; language: php; 
+			    filename: demo/navi/navigation.php; language: php;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -259,8 +235,8 @@
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text12_src" />				
-			    
+			    source="text12_src" />
+
 		    <datasource name="text13_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/tutorial/newdatasources.html
@@ -272,7 +248,7 @@
 			    name="Creating data sources" />
 		    <datasource name="src_src"
 			    class="idg_datasource_sourcefile">
-			    filename: demo/final/datasource_imagelist.php; language: php; 
+			    filename: demo/final/datasource_imagelist.php; language: php;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -283,8 +259,8 @@
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text14_src" />				
-	    
+			    source="text14_src" />
+
 		    <datasource name="text15_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/tutorial/more.html
@@ -296,7 +272,7 @@
 			    name="More features" />
 		    <datasource name="example_src"
 			    class="idg_datasource_sourcefile">
-			    filename: resources/tutorial/html_item.php; language: php; 
+			    filename: resources/tutorial/html_item.php; language: php;
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_sourcefile"
@@ -319,22 +295,16 @@
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
-		    
-		    <renderer 
-				slot="caption"
-			    class="idg_renderer_fancy_caption"
-			    nullable="yes"
-			    source="text1_src" />			    
-		    
+
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/reference/reference.html
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />		
+			    source="text1_src" />
         </document>
-        
+
         <document id="examples" name="Examples" description="Stuff you can use">
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
@@ -344,22 +314,16 @@
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
-		    
-		    <renderer 
-				slot="caption"
-			    class="idg_renderer_fancy_caption"
-			    nullable="yes"
-			    source="text1_src" />			    
-		    
+
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/examples/examples.html
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />		
+			    source="text1_src" />
         </document>
-        
+
    	    <document id="license" name="License" description="Legalese">
 		    <datasource name="framedimg"
 			    class="idg_datasource_blocks_framedimg">
@@ -370,19 +334,13 @@
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
 
-			<renderer 
-				slot="caption"
-			    class="idg_renderer_fancy_caption"
-			    nullable="yes"
-			    source="text1_src" />			    
-		    
 		    <datasource name="text1_src"
 			    class="idg_datasource_textfile">
 			    filename: resources/license/license.html
 		    </datasource>
 		    <renderer slot="main-text"
 			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />		
+			    source="text1_src" />
         </document>
-    </folder>  
+    </folder>
 </site>

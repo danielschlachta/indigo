@@ -75,9 +75,10 @@ $part->add_child($sidebar);
 
 // Insert the caption
 
-$caption = new idg_view_html_slot;
+$caption = new idg_view_html_renderer;
 $caption->set_properties(array(
-	'name' => 'caption',
+	'class' => 'famcy_caption'
+	'source' => 'null'
 	//'style' => 'font-style: italic;'
 ));
 
@@ -89,13 +90,13 @@ $caption_opts = array(
 //$caption->set_options($caption_opts);
 
 $header->add_child($caption);
-
+*/
 // Add a container for the content
 
 $content = new idg_view_html_container;
 $content->set_properties(array(
 	'name' => 'content',
-	'filter' => 'fancy_filter_eat_caption', // we don't want it twice
+	'filter' => 'fancy_filter_typo'
 ));
 
 //$content->set_option('font-family', 'Lekton'); // As mentioned in style.css ... UGLY HACK
@@ -104,13 +105,11 @@ $content->set_properties(array(
 // construct a container first because it allows filtering
 
 $heading_container = new idg_view_html_container;
-$heading_container->set_properties(array(
-	'filter' => 'fancy_filter_typo'
-));
 
 $heading = new idg_view_html_item;
 $heading->set_properties(array(
     'class' => 'text'
+
 ));
 $heading->set_text('&lt;h1&gt;{description}&lt;/h1&gt;');
 
@@ -122,8 +121,7 @@ $content->add_child($heading_container);
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
-	'list-style-image' => 'elements/fancy/list-image.png',
-	'filter' => 'fancy_filter_typo'
+	'list-style-image' => 'elements/fancy/list-image.png'
 ));
 $content->add_child($main_text);
 

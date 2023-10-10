@@ -161,7 +161,6 @@ class idg_object {
 		$this->hooks[$name] = $function_name;
 	}
 
-
 	/*! Helper: executes members of this object and global functions. */
 
 	function execute($function_name) {
@@ -356,56 +355,6 @@ class idg_object {
 		return $xml;
 	}
 
-		/*!
-	 * This allows passing key => value pairs to an actual instance
-	 * of the element.
-	 *
-	 * This is useful mostly for html_parts. Note that
-	 * there are no getter functions because the values
-	 * are mostly accessed from idg_tree_node.
-	 *
-	 * @todo get rid of this junk
-	 *
-	 * */
-
-	function set_options($options) {
-		if (!is_array($options))
-			diag($this, 'set_options: argument must be an array.');
-
-		$this->set_property('options',
-			urlencode(serialize($options)));
-	}
-
-	/*! Updates an individual key => value pair.
-	 *
-	 * This causes the whole of the parameter array to be
-	 * re-constructed.
-	 *
-	 */
-
-	function set_option($key, $value) {
-		$options = $this->get_options();
-
-		if (!$options)
-			$options = array();
-
-		$options[$key] = $value;
-
-		$this->set_options($options);
-	}
-
-	function get_options() {
-		$options = $this->get_property('options');
-
-		if ($options)
-			return unserialize(urldecode($options));
-	}
-
-	function get_option($key) {
-		if (($options = $this->get_options())
-		&& array_key_exists($key, $options))
-			return $options[$key];
-	}
 
 	function set_property($name, $value) {
 		$name = strtolower($name);

@@ -40,7 +40,7 @@ class idg_datasource_declaration extends idg_tree_node {
 
 		$parameters = array();
 
-		if (($text = $this->get_text())) {
+		if (($text = trim($this->get_text()))) {
 			$lines = explode(";", $text);
 			foreach ($lines as $line) {
 				if ($line) {

@@ -38,7 +38,7 @@ class idg_view_html_renderer_fancy_footer extends idg_view_node_obj
 
 		$bg_color = fancy_options::get_background_color($decl);
 
-		$image = $decl->get_option('image');
+		//$image = $decl->get_option('image');
 
 		$css = "	.footer {\n"
 			. "		font-family: '$font';\n"
@@ -48,7 +48,7 @@ class idg_view_html_renderer_fancy_footer extends idg_view_node_obj
 			. "		margin: -1em 0 -1em 0;\n"
 			. "		margin-right: 10px;\n";
 
-		if ($image) {
+		if (@$image) {
 			$size = getimagesize($image);    // doing it always, not
 			$padding = $size[0] + 20 . "px"; // much overhead
 

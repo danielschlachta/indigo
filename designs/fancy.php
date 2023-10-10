@@ -39,16 +39,16 @@ class fancy_options
 {
 	static function get_font($obj,
 		$fallback_font = 'Noto Sans') {
-		$font = $obj->get_option('font-family');
+		//$font = $obj->get_option('font-family');
 
-		return $font ? $font : $fallback_font;
+		return @$font ? $font : $fallback_font;
 	}
 
 	static function get_background_color($obj,
 		$fallback_color = '#e0e0e0') {
-		$color = $obj->get_option('background-color');
+		//$color = $obj->get_option('background-color');
 
-		return $color ? $color : $fallback_color;
+		return @$color ? $color : $fallback_color;
 	}
 }
 
@@ -67,7 +67,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 
 		foreach ($obj->children as $child) {
 			if (@($opt = $child->get_property('options'))) {
-				$font = $child->get_option('font-family');
+				//$font = $child->get_option('font-family');
 				$this->google_font_api->register_font($font);
 			}
 
@@ -81,26 +81,24 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 	    $style = $this->parent->get_property('style');
    	    $style_print = $this->parent->get_property('style-print');
 
-		$p = $this->parent;
+		if ($this->parent->children == null)
+			diag($this, 'part has no children');
 
-		if ($p->children == null)
-			diag($this, get_class($this) . ' has no children');
-
-		$font = fancy_options::get_font($p);
-		$bg_color = fancy_options::get_background_color($p, '#c0c0c0');
+		$font = fancy_options::get_font($view);
+		$bg_color = fancy_options::get_background_color($view, '#c0c0c0');
 
 		$this->google_font_api = new google_font_api;
 		$this->google_font_api->register_font($font);
-		$this->_find_fonts($p);
+		$this->_find_fonts($view);
 
 		$head = $this->google_font_api->get_header_lines();
 
-		if ($stylesheet = $p->get_option('stylesheet'))
-			$head .= " <link href=\"$stylesheet\" rel=\"stylesheet\">\n";
+		//if ($stylesheet = $view->get_option('stylesheet'))
+		//	$head .= " <link href=\"$stylesheet\" rel=\"stylesheet\">\n";
 
 		$view->stream_append('html-head', $head);
 
-		//$idg_id = $p->idg_id;
+		//$idg_id = $view->idg_id;
 
 		$css =  "	body {\n"
 			. "		font-family: '$font', 'Liberation Serif', sans-serif;\n"
@@ -129,14 +127,15 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "	.sidebar {\n"
 			. "		float: left;\n"
 			. "		width: 19.1489%;\n"
-			// . "		background: #B1B390;\n" // khaki !!!
-			. "		background: #bdd5c4;\n"
+			// . "		background: #B1B390;\n"
+			. "		background: #e0e0e0;\n"
 			. "		padding-top: 0;\n"
 			. "	}\n\n"
 			. "	.content {\n"
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
-			. "		background: #ebd8b9;\n"
+	//		. "		background: #ebd8b9;\n"
+			. "		background: #e0e0e0;\n"
 			. "		padding-top: 0.9em;\n"
 			. "		padding-bottom: 0.5em;\n"
 			. "		padding-right: 1.5em;\n"
@@ -153,10 +152,8 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 
 		$view->stream_append('html-body', "<div class=\"wrapper\">\n");
 
-		$parent =& $this->parent;
-
 		// header
-		if ($header = $parent->get_child_by_key('name', 'header'))  {
+		if ($header = $view->get_child_by_key('name', 'header'))  {
 			$header_bg_color = fancy_options::get_background_color($header);
 			$css =	"	.header {\n"
 			. "		float: right;\n"
@@ -173,7 +170,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		// sidebar
 		$view->stream_append('html-body', "<aside class=\"sidebar\">\n");
 
-		if ($sidebar = $parent->get_child_by_key('name', 'sidebar'))
+		if ($sidebar = $view->get_child_by_key('name', 'sidebar'))
 			$sidebar->_render($document, $view);
 
 		$view->stream_append('html-body', "</aside>\n");
@@ -181,7 +178,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		// content
 		$view->stream_append('html-body', "<article class=\"content\">\n");
 
-		if ($content = $parent->get_child_by_key('name', 'content'))
+		if ($content = $view->get_child_by_key('name', 'content'))
 			$content->_render($document, $view);
 		else
 			$view->stream_append('html-body', "<code>This page intentionally left blank.</code>\n");
@@ -189,14 +186,14 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		$view->stream_append('html-body', "</article>\n");
 
 		// footer
-		if ($footer = $parent->get_child_by_key('name', 'footer')) {
+		if ($footer = $view->get_child_by_key('name', 'footer')) {
 			$view->stream_append('html-body', "<footer class=\"footer\">\n");
 			$footer->_render($document, $view);
 			$view->stream_append('html-body', "\n</footer>\n");
 		}
 
 		// navigation
-		if ($navigation = $parent->get_child_by_key('name', 'navigation'))
+		if ($navigation = $view->get_child_by_key('name', 'navigation'))
 			$navigation->_render($document, $view);
 
 		$view->stream_append('css', "	.header, .footer {\n"

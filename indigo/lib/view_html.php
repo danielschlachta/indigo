@@ -89,6 +89,7 @@ class idg_view_html extends idg_view
 		if (!$this->children)
 			die('<code>This page intentionally left blank.</code>');
 
+		/*! @todo this does not work */
 		$document->get_properties($doc_prop);
 
 		$style = $this->get_property('style');
