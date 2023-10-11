@@ -27,9 +27,6 @@ class idg_tree_node extends idg_object
 	private $parent;
 	protected $children; // accessed in view_html
 
-	/*! @todo What is this for? I.e. is it different from count(children) == 0? */
-	protected $is_leaf = true;
-
 	protected $idg_translation; // array (idg_type => php type) for instance creation
 
 	private $_xml_stack;
@@ -50,26 +47,22 @@ class idg_tree_node extends idg_object
 	/*!
 	 * Finds a child whose property \c $key_name is set to \c $key_value.
 	 *
-	 * This function is recursive.
+	 * This function is recursive. Returns NULL if nothing was found.
 	 */
 
 	function get_child_by_key($key_name, $key_value,
-		$child_type = false)
-	{
-		if ($this->is_leaf)
-			return false;
+		$child_type = false) {
 
-		foreach ($this->children as $child) {
-			if (($child->get_property($key_name) == $key_value)
-				&& (!$child_type || (get_class($child) == $child_type)))
-				return $child;
+		if ($this->children)
+			foreach ($this->children as $child) {
+				if (($child->get_property($key_name) == $key_value)
+					&& (!$child_type || (get_class($child) == $child_type)))
+					return $child;
 
-			if ($childchild = $child->get_child_by_key(
-				$key_name, $key_value, $child_type))
-				return $childchild;
-		}
-
-		return false;
+				if ($childchild = $child->get_child_by_key(
+					$key_name, $key_value, $child_type))
+					return $childchild;
+			}
 	}
 
 	/*!
@@ -101,8 +94,6 @@ class idg_tree_node extends idg_object
 				. get_class($child) . '\'');
 		$child->parent =& $this;
 		$this->children[] =& $child;
-
-		$this->is_leaf = false;
 	}
 
 	function write_xml($file_name)
@@ -197,7 +188,8 @@ class idg_tree_node extends idg_object
 
 		$parser = xml_parser_create($encoding);
 		xml_set_object($parser, $this);
-		xml_set_element_handler($parser, "_xml_read_start", "_xml_read_end");
+		xml_set_element_handler($parser,
+			"_xml_read_start", "_xml_read_end");
 		xml_set_character_data_handler($parser, "_xml_character_data");
 		xml_set_default_handler($parser, "_xml_default_handler");
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
@@ -224,7 +216,8 @@ class idg_tree_node extends idg_object
 		for ($indent = '', $i = 0; $i < $depth; $i++)
 			$indent .= $idg_xml_indent;
 
-		$tag_type = $this->is_leaf && !$this->text ? 'single' : 'start';
+		$tag_type = !$this->children && !$this->text ? 'single'
+			: 'start';
 		$xml_array = $this->get_xml_tag($tag_type);
 
 		foreach ($xml_array as $xml_line) {
@@ -245,7 +238,7 @@ class idg_tree_node extends idg_object
 	{
 		global $idg_xml_indent;
 
-		if ($this->is_leaf && !$this->text)
+		if (!$this->children && !$this->text)
 			return true;
 
 		for ($indent = '', $i = 0; $i < $depth; $i++)
@@ -323,6 +316,47 @@ class idg_tree_node extends idg_object
 		echo $this->print_debug($indent);
 
 		return true;
+	}
+}
+
+class idg_tree_node_implementation {
+	private $parent;
+
+	function __construct($parent)
+	{
+		$this->parent = $parent;
+	}
+
+	function get_idg_id() {
+		return $this->parent->get_idg_id();
+	}
+
+	function get_child_count() {
+		if ($children = $this->parent->get_children())
+			return count($children);
+
+		return 0;
+	}
+
+	function get_children() {
+		return $this->parent->get_children();
+	}
+
+	function get_property($name) {
+		return $this->parent->get_property($name);
+	}
+
+	/*! Returns child by number or NULL, i.e. fails silently. */
+
+	function get_child($index) {
+		$children = $this->parent->get_children();
+
+		if ($children && count($children) > $index)
+			return $children[$index];
+	}
+
+	function get_text() {
+		return $this->parent->get_text();
 	}
 }
 

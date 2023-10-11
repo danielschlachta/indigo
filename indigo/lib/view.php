@@ -1,19 +1,13 @@
 <?php
 
-/* ========================================================================
- * Indigo/Web
- *
- * File: view.php - contains the generic view structure
- *
- * (c) 2023 Daniel Schlachta
- * ======================================================================== */
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
 
-require_once($idg_path . '/lib/tree.php');
 
-class idg_view_type extends idg_tree_node_type
-{
-	function __construct()
-	{
+abstract class idg_view_type extends idg_tree_node_type {
+	function __construct()	{
 		parent::__construct();
 		$this->set_known('name');
 		$this->set_known('tag');
@@ -21,20 +15,15 @@ class idg_view_type extends idg_tree_node_type
 	}
 }
 
-class idg_view extends idg_tree_node
-{
+abstract class idg_view extends idg_tree_node {
 	protected $streams = array();
 	protected $filters = array();
+	protected $printout = '';
 
-	public $output;
-
-	function __construct()
+	function __construct($streams)
 	{
 		parent::__construct();
 		$this->set_idg_type('view');
-	}
-
-	function set_streams($streams) {
 		$this->streams = $streams;
 	}
 
@@ -51,11 +40,12 @@ class idg_view extends idg_tree_node
 			if (($stream_name == 'html-body')) {
 				foreach ($this->filters as $filter => $is_set) {
 					if ($is_set) {
-						if (!function_exists($filter))
-							diag($this, "unknown filter: $filter");
+						$tmp = $filter($content);
+					} else
+						$tmp = false;
 
-						$content = $filter($content);
-					}
+					if ($tmp)
+						$content = $tmp;
 				}
 
 				if ($filter = $this->get_property('filter')) {
@@ -71,56 +61,16 @@ class idg_view extends idg_tree_node
 			diag($this, 'Unknown stream: ' . $stream_name);
 	}
 
-	function printout()
-	{
-		echo $this->output;
+	function print() {
+		echo($this->printout);
+	}
+
+	function _print($text) {
+		$this->printout .= $text;
 	}
 }
 
-class idg_view_node_obj
-{
-	private $parent;
-
-	function __construct($parent)
-	{
-		$this->parent = $parent;
-	}
-
-	function get_idg_id() {
-		return $this->parent->get_idg_id();
-	}
-
-	function get_child_count() {
-		if ($children = $this->parent->get_children())
-			return count($children);
-
-		return 0;
-	}
-
-	function get_children() {
-		return $this->parent->get_children();
-	}
-
-	function get_property($name) {
-		return $this->parent->get_property($name);
-	}
-
-	/*! Returns child by number or NULL, i.e. fails silently. */
-
-	function get_child($index) {
-		$children = $this->parent->get_children();
-
-		if ($children && count($children) > $index)
-			return $children[$index];
-	}
-
-	function get_text() {
-		return $this->parent->get_text();
-	}
-}
-
-class idg_view_node_param_obj extends idg_view_node_obj
-{
+class idg_view_node_param_obj extends idg_tree_node_implementation {
 	var $parameters = array();
 
 	function __construct(&$parent)

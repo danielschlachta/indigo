@@ -36,7 +36,7 @@ class idg_view_html_type extends idg_view_type
 
 class idg_view_html extends idg_view
 {
-	var $idg_translation = array(
+	protected $idg_translation = array(
 		'view' => 'idg_view_html',
 		'part' => 'idg_view_html_part',
 		'container' => 'idg_view_html_container',
@@ -45,21 +45,19 @@ class idg_view_html extends idg_view
 		'slot' => 'idg_view_html_slot'
 	);
 
+	protected $streams = array(
+		'html-head' => '',
+		'html-body-start' => '',
+		'html-body' => '',
+		'css' => '',
+		'css-print' => '',
+		'js' => ''
+	);
+
 	function __construct()
 	{
-		parent::__construct();
+		parent::__construct($this->streams);
 		$this->set_idg_type('view');
-
-		$this->set_streams(
-			array(
-				'html-head' => '',
-				'html-body-start' => '',
-				'html-body' => '',
-				'css' => '',
-				'css-print' => '',
-				'js' => ''
-			)
-		);
 	}
 
 	static function uuid_v4() {
@@ -132,23 +130,23 @@ class idg_view_html extends idg_view
 
 		$milli_time = $this->_milliseconds() - $start;
 
-		$output = '<!-- document UUID=' . $document->uuid
+		$this->_print('<!-- document UUID=' . $document->uuid
 			. ' generated on ' . date('r', time())
 			. " by $idg_program_name, time: $milli_time ms  -->\n"
-			. "<!DOCTYPE html>\n";
+			. "<!DOCTYPE html>\n");
 
-		$output .= '<html lang="' . $doc_prop['content-language'] . "\">\n"
+		$this->_print('<html lang="' . $doc_prop['content-language'] . "\">\n"
 			. "<head>\n"
 			. " <title>" . $doc_prop['title'] . "</title>\n"
 			. " <meta http-equiv=\"Content-Type\" content=\"text/html;"
-				. " charset=utf-8\">\n";
+				. " charset=utf-8\">\n");
 
 		if ($icon)
-			$output .= " <link rel=\"shortcut icon\" href=\"$icon\" "
-				. "type=\"image/x-icon\">\n";
+			$this->_print(" <link rel=\"shortcut icon\" href=\"$icon\" "
+				. "type=\"image/x-icon\">\n");
 
 		if ($this->streams['html-head'] != '')
-			$output .= $this->streams['html-head'] . "\n";
+			$this->_print($this->streams['html-head'] . "\n");
 
 		$css = '';
 
@@ -164,20 +162,18 @@ class idg_view_html extends idg_view
 		}
 
 		if ($css != '')
-			$output .= " <style>\n$css </style>\n";
+			$this->_print(" <style>\n$css </style>\n");
 
 		if ($this->streams['js'] != '') {
-			$output .= " <script>\n";
-			$output .= $this->streams['js'];
-			$output .= " </script>\n";
+			$this->_print(" <script>\n");
+			$this->_print($this->streams['js']);
+			$this->_print(" </script>\n");
 		}
-		$output .= "</head>\n<body>\n";
+		$this->_print("</head>\n<body>\n");
 
-		$output .= $this->streams['html-body-start'];
-		$output .= $this->streams['html-body'];
-		$output .= "</body>\n</html>";
-
-		$this->output = $output;
+		$this->_print($this->streams['html-body-start']);
+		$this->_print($this->streams['html-body']);
+		$this->_print("</body>\n</html>");
 	}
 }
 
@@ -299,7 +295,7 @@ class idg_view_html_container extends idg_view_html_element
 
 			$view->stream_append('css', $css);
 
-			if (($style_print = $this->get_property('style-print'))) {
+			if ($style_print = $this->get_property('style-print')) {
 				$css_print = "div#$idg_id { $style_print }\n";
 				$view->stream_append('css-print', $css_print);
 			}
@@ -421,16 +417,14 @@ class idg_view_html_slot_type extends idg_tree_node_type
 	}
 }
 
-class idg_view_html_slot extends idg_tree_node
-{
-	function __construct()
-	{
+class idg_view_html_slot extends idg_tree_node {
+
+	function __construct() {
 		parent::__construct();
 		$this->set_idg_type('slot');
 	}
 
-	function _render(&$document, &$view)
-	{
+	function _render(&$document, &$view) {
 		$name = $this->get_property('name');
 		$renderers = $document->get_renderers($name);
 		$idg_id = $this->get_idg_id();
@@ -441,8 +435,8 @@ class idg_view_html_slot extends idg_tree_node
 		$anchor_count = 0;
 
 		foreach ($renderers as $renderer) {
-			if (!$renderer)
-				continue;
+			$name = get_class($renderer);
+			echo "<!-- rendering for: $name -->\n";
 
 			if (($anchor = $renderer->anchor)) {
 				$anchor_count++;
@@ -450,7 +444,7 @@ class idg_view_html_slot extends idg_tree_node
 			} else
 				$body = '';
 
-			$body .= "<div class=\"$idg_id\">\n";
+			$body .= "<div class=\"TRARA $idg_id\">\n";
 			$view->stream_append('html-body', $body);
 			$renderer->render($document, $view);
 			$body = "</div>\n";

@@ -17,8 +17,8 @@
  *
  * */
 
-class idg_view_html_renderer_fancy_sidebar extends idg_view_node_obj
-{
+class idg_view_html_renderer_fancy_sidebar
+	extends idg_tree_node_implementation {
 	function __construct(&$parent)
 	{
 		parent::__construct($parent);

@@ -1,6 +1,6 @@
 <?php
 
-class idg_view_html_renderer_blocks_navigation extends idg_view_node_obj
+class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementation
 {
 
 	function __construct(&$parent)

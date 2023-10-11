@@ -100,7 +100,7 @@ if (!file_exists($view_xml)
 
 	if (!(filesize($view_xml) > 0))
 		die("Oops: $view_xml: zero length xml file");
-} 
+}
 
 $view = new idg_view_html;
 $view->read_xml($view_xml);
@@ -113,6 +113,6 @@ if (file_exists($view_postload))
 $view->check();
 
 $view->render($document);
-$view->printout();
+$view->print();
 
 ?>

@@ -35,7 +35,7 @@ class idg_datasource_blocks_infobox extends idg_datasource
 	}
 }
 
-class idg_view_html_renderer_blocks_infobox extends idg_view_node_obj
+class idg_view_html_renderer_blocks_infobox extends idg_tree_node_implementation
 {
 	var $text;
 

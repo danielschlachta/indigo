@@ -5,13 +5,9 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-// Global lists maintained for all objects
-
 class idg_object_type {
 	protected $properties = array();
 	protected $hooks = array();
-
-	/*! @todo get rid of this */
 
 	function __construct() {
 		$this->set_known('options');

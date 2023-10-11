@@ -8,7 +8,7 @@
  * (c) 2020 Daniel Schlachta
  * ======================================================================== */
 
-class idg_view_html_renderer_null extends idg_view_node_obj
+class idg_view_html_renderer_null extends idg_tree_node_implementation
 {
 	function __construct(&$parent)
 	{
@@ -21,7 +21,7 @@ class idg_view_html_renderer_null extends idg_view_node_obj
 }
 
 
-class idg_view_html_renderer_textfile extends idg_view_node_obj
+class idg_view_html_renderer_textfile extends idg_tree_node_implementation
 {
 	function __construct(&$parent)
 	{
@@ -38,7 +38,7 @@ class idg_view_html_renderer_textfile extends idg_view_node_obj
 	}
 }
 
-class idg_view_html_renderer_phpscript extends idg_view_node_obj
+class idg_view_html_renderer_phpscript extends idg_tree_node_implementation
 {
 	function __construct(&$parent)
 	{
