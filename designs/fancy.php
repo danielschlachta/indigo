@@ -8,9 +8,6 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
-
-require_once($idg_path . '/lib/gfontapi.php');
-
 /*!
  * This layout takes one container that is then placed in a grid,
  * decorated with a navigation bar at the bottom and various other
@@ -20,14 +17,6 @@ require_once($idg_path . '/lib/gfontapi.php');
  *
  */
 
-$body_font = @is_null($body_font) ? 'GentiumAlt' : $body_font;
-$body_bg_color = @is_null($body_bg_color) ? '#e0e0e0' : $body_bg_color;
-
-$caption_font = @is_null($caption_font) ? 'Noto Serif' : $caption_font;
-
-$nav_font = @is_null($nav_font) ? 'Noto Sans' : $nav_font;
-$nav_bg_color = @is_null($nav_bg_color) ? 'c0c0c0' : $nav_bg_color;
-
 require_once($idg_path . '/modules/mod_pagemap.php');
 
 require_once('fancy/navigation.php');
@@ -35,44 +24,11 @@ require_once('fancy/caption.php');
 require_once('fancy/sidebar.php');
 require_once('fancy/footer.php');
 
-class fancy_options
-{
-	static function get_font($obj,
-		$fallback_font = 'Noto Sans') {
-		//$font = $obj->get_option('font-family');
-
-		return @$font ? $font : $fallback_font;
-	}
-
-	static function get_background_color($obj,
-		$fallback_color = '#e0e0e0') {
-		//$color = $obj->get_option('background-color');
-
-		return @$color ? $color : $fallback_color;
-	}
-}
-
 class idg_view_html_part_fancy extends idg_view_node_param_obj
 {
-	var $google_font_api;
-
 	function __construct(&$parent, $parameters = null)
 	{
 		parent::__construct($parent);
-	}
-
-	function _find_fonts($obj) {
-		if (!$obj->children)
-			return;
-
-		foreach ($obj->children as $child) {
-			if (@($opt = $child->get_property('options'))) {
-				//$font = $child->get_option('font-family');
-				$this->google_font_api->register_font($font);
-			}
-
-			$this->_find_fonts($child);
-		}
 	}
 
 	function render(&$document, &$view)
@@ -84,28 +40,22 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		if ($this->parent->children == null)
 			diag($this, 'part has no children');
 
-		$font = fancy_options::get_font($view);
-		$bg_color = fancy_options::get_background_color($view, '#c0c0c0');
-
-		$this->google_font_api = new google_font_api;
-		$this->google_font_api->register_font($font);
-		$this->_find_fonts($view);
-
-		$head = $this->google_font_api->get_header_lines();
-
 		//if ($stylesheet = $view->get_option('stylesheet'))
-		//	$head .= " <link href=\"$stylesheet\" rel=\"stylesheet\">\n";
+		$stylesheet = '../designs/fancy/elements/default.css';
+		$head = " <link href=\"$stylesheet\" rel=\"stylesheet\">\n";
+
+		$stylesheet = 'elements/fancy/style.css';
+		$head = " <link href=\"$stylesheet\" rel=\"stylesheet\">\n";
 
 		$view->stream_append('html-head', $head);
 
 		//$idg_id = $view->idg_id;
 
 		$css =  "	body {\n"
-			. "		font-family: '$font', 'Liberation Serif', sans-serif;\n"
+			. "		font-family: Liberation Serif', sans-serif;\n"
 			. "		font-size: 110%;\n"
 			. "		margin: 0;\n"
 			. "		padding: 0;\n"
-			. "		background: $bg_color;\n"
 			. "	}\n\n"
 			. "	*, *:before, *:after {\n"
 			. "		box-sizing: border-box;\n"
@@ -124,51 +74,48 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 			. "		margin-bottom: 10px;\n"
 			. "		border-radius: 5px;\n"
 			. "	}\n\n"
-			. "	.sidebar {\n"
+			. "	aside {\n"
 			. "		float: left;\n"
 			. "		width: 19.1489%;\n"
-			// . "		background: #B1B390;\n"
-			. "		background: #e0e0e0;\n"
 			. "		padding-top: 0;\n"
 			. "	}\n\n"
-			. "	.content {\n"
+			. "	article {\n"
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
-	//		. "		background: #ebd8b9;\n"
-			. "		background: #e0e0e0;\n"
 			. "		padding-top: 0.9em;\n"
 			. "		padding-bottom: 0.5em;\n"
 			. "		padding-right: 1.5em;\n"
 			. "	}\n\n"
-			. "	.footer {\n"
+			. "	footer {\n"
 			. "		float: right;\n"
 			. "		width: 79.7872%;\n"
 			. "	}\n\n";
 
 		$view->stream_append('css', $css);
 
-		$css_print = "    	#navigation { display: none; }\n\n";
+		$css_print = "    	nav { display: none; }\n\n";
 		$view->stream_append('css-print', $css_print);
+
+		$view->stream_append('css',
+			  "	@supports (display: grid) {\n"
+			. "		.wrapper > * {\n"
+			. "			width: auto;\n"
+			. "			margin: 0;\n"
+			. "		}\n"
+			. "	}\n\n");
+
 
 		$view->stream_append('html-body', "<div class=\"wrapper\">\n");
 
 		// header
 		if ($header = $view->get_child_by_key('name', 'header'))  {
-			$header_bg_color = fancy_options::get_background_color($header);
-			$css =	"	.header {\n"
-			. "		float: right;\n"
-			. "		width: 79.7872%;\n"
-			. "		background: $header_bg_color;\n"
-			. "	}\n\n";
-			$view->stream_append('css', $css);
-
-			$view->stream_append('html-body', "<header class=\"header\">\n");
+			$view->stream_append('html-body', "<header id=\"#hd\">\n");
 			$header->_render($document, $view);
 			$view->stream_append('html-body', "</header>\n");
 		}
 
 		// sidebar
-		$view->stream_append('html-body', "<aside class=\"sidebar\">\n");
+		$view->stream_append('html-body', "<aside>\n");
 
 		if ($sidebar = $view->get_child_by_key('name', 'sidebar'))
 			$sidebar->_render($document, $view);
@@ -176,7 +123,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 		$view->stream_append('html-body', "</aside>\n");
 
 		// content
-		$view->stream_append('html-body', "<article class=\"content\">\n");
+		$view->stream_append('html-body', "<article>\n");
 
 		if ($content = $view->get_child_by_key('name', 'content'))
 			$content->_render($document, $view);
@@ -187,26 +134,17 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 
 		// footer
 		if ($footer = $view->get_child_by_key('name', 'footer')) {
-			$view->stream_append('html-body', "<footer class=\"footer\">\n");
+			$view->stream_append('html-body', "<footer>\n");
 			$footer->_render($document, $view);
 			$view->stream_append('html-body', "\n</footer>\n");
 		}
 
 		// navigation
-		if ($navigation = $view->get_child_by_key('name', 'navigation'))
+		if ($navigation = $view->get_child_by_key('name', 'navigation')) {
+			$view->stream_append('html-body', "	<nav>\n");
 			$navigation->_render($document, $view);
-
-		$view->stream_append('css', "	.header, .footer {\n"
-			. "		grid-column: 1 / -1;\n"
-			. "		clear: both;\n"
-			. "	}\n\n"
-			. "	@supports (display: grid) {\n"
-			. "		.wrapper > * {\n"
-			. "			width: auto;\n"
-			. "			margin: 0;\n"
-			. "		}\n"
-			. "	}\n\n");
-
+			$view->stream_append('html-body', "	</nav>\n");
+		}
 
 		// page map
 		idg_pagemap::add_to_view($view,

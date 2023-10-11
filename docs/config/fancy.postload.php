@@ -10,7 +10,7 @@ function fancy_filter_get_footer_tag() {
 	return 'This page was last updated on '
 		. $date->format('m/d/Y')
 		. '. Copyright (c) 2023 '
-		. '<a href="mailto:daniel@schlachta.info">Daniel Schlachta</a>';
+		. '<a href="mailto:Daniel Schlachta <daniel@schlachta.info>">Daniel Schlachta</a>';
 }
 
 

@@ -20,8 +20,6 @@
  *
  */
 
-require_once($idg_path . '/lib/uuid.php');
-
 class idg_view_html_type extends idg_view_type
 {
 	var $child_types = array('idg_view_html_part');
@@ -29,16 +27,15 @@ class idg_view_html_type extends idg_view_type
 	function __construct()
 	{
 		parent::__construct();
+
 		$this->set_known('icon');
 		$this->set_known('style');
 		$this->set_known('style-print');
-		$this->set_known('name');
 	}
 }
 
 class idg_view_html extends idg_view
 {
-
 	var $idg_translation = array(
 		'view' => 'idg_view_html',
 		'part' => 'idg_view_html_part',
@@ -64,6 +61,30 @@ class idg_view_html extends idg_view
 			)
 		);
 	}
+
+	static function uuid_v4() {
+		return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+			// 32 bits for "time_low"
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+
+			// 16 bits for "time_mid"
+			mt_rand(0, 0xffff),
+
+			// 16 bits for "time_hi_and_version",
+			// four most significant bits holds version number 4
+			mt_rand(0, 0x0fff) | 0x4000,
+
+			// 16 bits, 8 bits for "clk_seq_hi_res",
+			// 8 bits for "clk_seq_low",
+			// two most significant bits holds zero and one for variant DCE1.1
+			mt_rand(0, 0x3fff) | 0x8000,
+
+			// 48 bits for "node"
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+		);
+	}
+
+	/*! @todo helper/visibility/name  */
 
 	private function _milliseconds() {
 		$mt = explode(' ', microtime());
@@ -95,7 +116,7 @@ class idg_view_html extends idg_view
 		$style = $this->get_property('style');
 		$icon = $this->get_property('icon');
 
-		$document->uuid = UUID::v4();
+		$document->uuid = idg_view_html::uuid_v4();
 
 		$start = $this->_milliseconds();
 

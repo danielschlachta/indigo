@@ -41,7 +41,7 @@ class idg_view_html_part_minimal extends idg_view_node_param_obj
 			diag($this->get_class($this) . " needs exactly three "
 				. "elements in its container (see doc).");
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 		$fixed = $this->parent->children[0];
 
 		$head = ' <link rel="stylesheet" href="' . $elements_minimal

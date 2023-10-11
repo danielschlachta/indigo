@@ -20,14 +20,14 @@ class idg_view_html_renderer_blocks_framedimg extends idg_view_node_obj
 
 	function render(&$document, &$view)
 	{
-		$idg_id = $this->parent->get_idg_id();
-		$this->datasource->rewind();
-		$token = $this->datasource->get_token();
-		$parameters = $token->get_data();
+		$idg_id = $this->get_idg_id();
+//		$this->datasource->rewind();
+//		$token = $this->datasource->get_token();
+//		$parameters = $token->get_data();
 
-		$img = $document->get_path() . '/images/' . $parameters['file'];
-		$width = $parameters['width'];
-		$height = $parameters['height'];
+		$img = $document->get_path() . '/images/' . @$parameters['file'];
+		$width = @$parameters['width'];
+		$height = @$parameters['height'];
 		$top = round((110 - $height) / 2) + 36;
 		$left = round((110 - $width) / 2) + 36;
 		$top_ie = $top - 1;

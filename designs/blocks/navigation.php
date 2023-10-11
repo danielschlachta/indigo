@@ -13,7 +13,7 @@ class idg_view_html_renderer_blocks_navigation extends idg_view_node_obj
 		global $font_blocks;
 		global $elements;
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 
 		$doc_path = $document->get_path();
 
@@ -46,13 +46,13 @@ class idg_view_html_renderer_blocks_navigation extends idg_view_node_obj
 						$close_doc = true;
 						$name = $node->properties['name'];
 						$path = $node->properties['path'];
-						$uri = $node->properties['uri'];
+						$url = $node->properties['url'];
 						if ($path == $doc_path)
 							$body .= "  <li id=\"current\">"
 								. "<div><a href=\"#top\">$name</a></div>\n";
 						else
 							$body .=
-								"  <li><div><a href=\"$uri\">$name</a></div>\n";
+								"  <li><div><a href=\"$url\">$name</a></div>\n";
 						$is_first = true;
 					} else if ($node->properties['type'] == 'anchor') {
 						if ($is_first) {
@@ -62,7 +62,7 @@ class idg_view_html_renderer_blocks_navigation extends idg_view_node_obj
 						$anchor = $node->properties['anchor'];
 						$name = $node->properties['name'];
 						$body .=
-							"    <li><a href=\"$uri#$anchor\">$name</a></li>\n";
+							"    <li><a href=\"$url#$anchor\">$name</a></li>\n";
 					}
 				}
 				if (!$is_first)

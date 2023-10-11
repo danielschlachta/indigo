@@ -33,30 +33,20 @@ class idg_view_html_renderer_fancy_footer extends idg_view_node_obj
 
 	function render(&$document, &$view)
 	{
-		$decl = $view->get_child_by_key('name', 'footer');
-		$font = fancy_options::get_font($decl);
+		$image = 'elements/fancy/postmark.png';
 
-		$bg_color = fancy_options::get_background_color($decl);
-
-		//$image = $decl->get_option('image');
-
-		$css = "	.footer {\n"
-			. "		font-family: '$font';\n"
-			. "		font-size: 100%;\n"
-			. "		font-weight: normal;\n"
-			. "		padding-left: 1em;\n"
-			. "		margin: -1em 0 -1em 0;\n"
-			. "		margin-right: 10px;\n";
+		$css = "	footer {\n"
+			. "		grid-column: 1 / -1;\n"
+			. "		clear: both;\n"
+			. "		margin: -1em 0 -1em 10px;\n";
 
 		if (@$image) {
-			$size = getimagesize($image);    // doing it always, not
-			$padding = $size[0] + 20 . "px"; // much overhead
-
-			$css .= "		background: $bg_color url($image) no-repeat"
-				. " left center;\n"
-				. "		padding-left: $padding;\n";
+			$css .= "		background-image: url($image);"
+				. "		background-position: left center;\n"
+				. "		background-repeat: no-repeat;\n"
+				. "		text-align: right;\n";
 		} else
-			$css .= "		background-color: $bg_color;\n";
+			$css .= "		padding-left: 1em;\n";
 
 		$css .= "	}\n\n";
 
@@ -65,9 +55,7 @@ class idg_view_html_renderer_fancy_footer extends idg_view_node_obj
 		$tag = @$this->parent->get_property('tag');
 
 		if ($tag)
-			$view->stream_append('html-body',
-				"<div id=\"footer-text\">$tag</div>");
-
+			$view->stream_append('html-body', $tag);
 	}
 }
 

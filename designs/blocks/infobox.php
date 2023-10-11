@@ -57,10 +57,10 @@ class idg_view_html_renderer_blocks_infobox extends idg_view_node_obj
 
 		$view->_set_filter('blocks_filter_infobox');
 
-		$idg_id = $this->parent->get_idg_id();
-		$this->datasource->rewind();
-		$token = $this->datasource->get_token();
-		$parameters = $token->get_data();
+		$idg_id = $this->get_idg_id();
+		//$this->datasource->rewind();
+		//$token = $this->datasource->get_token();
+		//$parameters = $token->get_data();
 
 		$caption = @$parameters['caption'];
 		if (@$parameters['file']) {

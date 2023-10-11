@@ -17,15 +17,16 @@ class idg_view_type extends idg_tree_node_type
 		parent::__construct();
 		$this->set_known('name');
 		$this->set_known('tag');
+		$this->set_known('filter');
 	}
 }
 
 class idg_view extends idg_tree_node
 {
 	protected $streams = array();
-	var $filters = array();
+	protected $filters = array();
 
-	var $output;
+	public $output;
 
 	function __construct()
 	{
@@ -37,41 +38,44 @@ class idg_view extends idg_tree_node
 		$this->streams = $streams;
 	}
 
-	function stream_append($stream_name, $content)
-	{
+	function stream_append($stream_name, $content)	{
 		if (array_key_exists($stream_name, $this->streams)) {
 			if (($stream_name == 'html-body')) {
 				foreach ($this->filters as $filter => $is_set) {
 					if ($is_set) {
 						if (!function_exists($filter))
-							diag($this, "Unknown filter: $filter");
+							diag($this, "unknown filter: $filter");
 
-						$tmp = $filter($content);
-					} else
-						$tmp = false;
-					if ($tmp)
-						$content = $tmp;
+						$content = $filter($content);
+					}
+				}
+
+				if ($filter = $this->get_property('filter')) {
+					if (!function_exists($filter))
+						diag($this, "unknown filter: $filter");
+
+					$content = $filter($content);
 				}
 			}
+
 			$this->streams[$stream_name] .= $content;
 		} else
 			diag($this, 'Unknown stream: ' . $stream_name);
-	}
-
-	function _set_filter($name)
-	{
-		$this->filters[$name] = true;
-	}
-
-	function _unset_filter($name)
-	{
-		$this->filters[$name] = false;
 	}
 
 	function printout()
 	{
 		echo $this->output;
 	}
+
+	protected function set_filter($name) {
+		$this->filters[$name] = true;
+	}
+
+	protected function unset_filter($name)	{
+		$this->filters[$name] = false;
+	}
+
 }
 
 class idg_view_node_obj
@@ -81,6 +85,13 @@ class idg_view_node_obj
 	function __construct($parent)
 	{
 		$this->parent = $parent;
+	}
+
+	function get_idg_id() {
+		if ($this->parent)
+			return $this->parent->get_idg_id();
+		else
+			diag('internal error: no parent');
 	}
 }
 

@@ -42,7 +42,7 @@ class idg_view_html_renderer_fancy_sidebar extends idg_view_node_obj
 				if (@($node->properties['path'] != $doc_path))
 					continue;
 				else {
-					$url = $node->properties['uri'];
+					$url = $node->properties['url'];
 					$depth = $node->get_data();
 				}
 			} else {

@@ -19,11 +19,11 @@ class idg_view_html_item_toolbox extends idg_view_node_obj
 		global $font_blocks;
 		global $elements;
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 
 		$body = "<div id=\"$idg_id\">\n<div id=\"$idg_id-body\">\n"
 			. "<ul>\n"
-			. " <li><a href=\"private\">Login</a></li>\n"
+			. " <li><a href=\"mailto:Daniel Schlachta <daniel@schlachta.info>\">Contact</a></li>\n"
 			. " <li><a href=\"javascript:void(0);\" onClick=\"document.getElementById('framedimg').src='"
 			. $this->qr_link($document) . "'\">QR Code</a></li>\n"
 			. "</ul>\n</div>\n</div>\n";

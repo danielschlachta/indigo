@@ -9,22 +9,8 @@
  * ======================================================================== */
 
 /*!
- * Create a caption from a datasource.
- *
- * Renderer that scans its datasource
- * for occurences of \c &lt;h1> and emits only the
- * first one and its contents, decorated in a way
- * that is suitable for use as a headline with
- * idg_view_html_part_fancy.
- *
- * Takes the following options (set with \c set_option or \c set_options):
- *  + \c font-family
- *  + \c background-color
- *  + \c image
- *
- * Use \c filter_eat_caption to eliminate the
- * same content from a different datasource.
- * */
+ * Create a caption potentially with an image
+ */
 
 class idg_view_html_renderer_fancy_caption extends idg_view_node_obj
 {
@@ -35,32 +21,33 @@ class idg_view_html_renderer_fancy_caption extends idg_view_node_obj
 
 	function render(&$document, &$view)
 	{
-		//$font = fancy_options::get_font($decl);
-		//$image = $decl->get_option('image');
+		$image = 'elements/fancy/caption.png';
 
-		$css = "	.header {\n"
-			. "		padding: 25px 5px 25px 0;\n"
+		$idg_id = $this->get_idg_id();
+
+		$css = "	header {\n"
+			. "		grid-column: 1 / -1;\n"
+			. "		clear: both;\n"
+			. "		float: right;\n"
+			. "		width: 79.7872%;\n"
 			. "		margin: 0;\n"
 			. "	}\n\n"
-			. "	.caption {\n"
-			//. "		font-family: '$font';\n"
-			//. "		font-size: 100%;\n"
-			//. "		font-weight: normal;\n"
-			. "		padding-left: 1em;\n";
-
-		if (@$image)
-			$css .= "		background: url($image) no-repeat;\n"
-			. "		background-position: right center;\n";
-
-		$css .= "		margin-right: 10px;\n"
+			.	"	#caption {\n"
+			. "		margin: 0;\n"
 			. "	}\n\n";
+
+			if (@$image)
+			$css .= "	#$idg_id {\n"
+				. "		background-image: url($image);\n"
+				. "		background-repeat: no-repeat;\n"
+				. "		background-position: right center;\n"
+				.  "	}\n\n";
 
 		$view->stream_append('css', $css);
 
 		$caption = $document->get_property('description');
-		$view->stream_append('html-body',
-			"<div class=\"caption\">$caption</div>\n");
-
+		$view->stream_append('html-body', "<div id=\"$idg_id\">"
+			. "<h1 id=\"caption\">$caption</h1></div>");
 	}
 }
 

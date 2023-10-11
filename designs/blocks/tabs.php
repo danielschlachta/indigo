@@ -12,7 +12,7 @@ class idg_view_html_renderer_tabs extends idg_view_node_obj
 		global $font_blocks;
 		global $elements;
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 		$body = "<div id=\"$idg_id-tabbox\">\n<div id=\"$idg_id-tabs\">\n<ul>\n";
 
 		$document_path = $document->get_path();
@@ -29,14 +29,14 @@ class idg_view_html_renderer_tabs extends idg_view_node_obj
 						break;
 					if ($node->properties['type'] == 'document') {
 						$name = $node->properties['name'];
-						$uri = $node->properties['uri'];
+						$url = $node->properties['url'];
 						$path = $node->properties['path'];
 						if ($path == $document_path) {
 							$body .= "<li id=\"current\">"
 								. "<div>$name</div></li>\n";
 							$has_current = true;
 						} else
-							$body .= "<li><a href=\"$uri\">$name</a></li>\n";
+							$body .= "<li><a href=\"$url\">$name</a></li>\n";
 					}
 				}
 				break;

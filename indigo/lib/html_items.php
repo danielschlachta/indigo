@@ -18,7 +18,7 @@ class idg_view_html_item_image extends idg_view_node_param_obj
 
 	function render(&$document, &$view)
 	{
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 
 		$style = $this->parent->get_property('style');
 
@@ -52,7 +52,7 @@ class idg_view_html_item_text extends idg_view_node_obj
 
 	function render(&$document, &$view)
 	{
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 
 		if (!$text = $this->parent->get_text())
 			return;

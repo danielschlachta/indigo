@@ -9,7 +9,7 @@ class idg_view_html_renderer_gradient_footer extends idg_view_node_obj
 
 	function render(&$document, &$view)
 	{
-    	$idg_id = $this->parent->get_idg_id();
+    	$idg_id = $this->get_idg_id();
 
 	    $css = "p#$idg_id { padding-bottom: 1em; }\n"
 			. "p#$idg_id a { text-decoration: none; color: #25253d; }\n"

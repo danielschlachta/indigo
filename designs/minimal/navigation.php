@@ -22,7 +22,7 @@ class idg_view_html_renderer_minimal_navigation extends idg_view_node_obj
 		global $font_blocks;
 		global $elements;
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 
 		$doc_path = $document->get_path();
 
@@ -47,8 +47,8 @@ class idg_view_html_renderer_minimal_navigation extends idg_view_node_obj
 			    while ($node = $this->datasource->get_token()) {
 					    if ($node->properties['type'] == 'document') {
 						    $name = $node->properties['name'];
-						    $uri = $node->properties['uri'];
-                			$body .= "<a href=\"$uri\">&middot; $name</a>\n";
+						    $url = $node->properties['url'];
+                			$body .= "<a href=\"$url\">&middot; $name</a>\n";
                 		}
         		}
         	}

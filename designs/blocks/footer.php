@@ -11,7 +11,7 @@ class idg_view_html_renderer_blocks_footer extends idg_view_node_obj
 		global $font_blocks;
 		global $elements;
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 		$style = $this->parent->get_property('style');
 		$last_change = substr($document->get_property('last-change'), 0, 10);
 		$style_heading = $this->parent->get_property('style-heading');
@@ -47,7 +47,7 @@ class idg_view_html_renderer_blocks_footer extends idg_view_node_obj
 		if ($style_image)
 			$css .= "div#$idg_id-content img { $style_image }\n";
 
-		$uri = $document->get_site()->get_site_url();
+		$url = $document->get_site()->get_site_url();
 
 		$body = "<div id=\"$idg_id-box\">\n"
 			. "<div id=\"$idg_id-frame\">\n"
@@ -57,7 +57,7 @@ class idg_view_html_renderer_blocks_footer extends idg_view_node_obj
 			. "<img src=\"$elements/footer/link.png\""
 			. " width=\"11\" height=\"10\" alt=\"\">top</a></span>\n"
 			. " &copy;2023 <i>daniel@schlachta.info</i><span> |"
-			. " <a href=\"https://validator.w3.org/nu/?doc=$uri\">"
+			. " <a href=\"https://validator.w3.org/nu/?doc=$url\">"
 			. "<img src=\"$elements/footer/link.png\""
 			. " width=\"11\" height=\"10\" alt=\"\">HTML5</a></span>\n"
 			. "</p>\n</div>\n</div>\n</div>\n";

@@ -50,7 +50,7 @@ $centercol->add_child($centercol_body);
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(
 	'name' => 'main-text',
-	'style' => 'padding: 0 0 0 17px; background: url(elements/blocks/line_blue.png);',
+	'style' => 'padding: 0 0 0 17px; background: url(elements/blocks/line_blue.png); font-family: Garamond, Georgia, \'DejaVu Serif\', serif;',
 	'style-link' => $style_link,
 	'style-link-hover' => $style_link_hover,
 	'list-style-image' => 'elements/blocks/bullet.png',
@@ -97,16 +97,15 @@ $part->add_child($logo);
 $framedimg = new idg_view_html_renderer;
 $framedimg->set_properties(array(
 	'class' => 'blocks_framedimg',
-	'source' => 'framedimg'
+	'source' => 'null'
 ));
 
 $part->add_child($framedimg);
 
-
 $infobox = new idg_view_html_renderer;
 $infobox->set_properties(array(
 	'class' => 'blocks_infobox',
-	'source' => 'infobox'
+	'source' => 'null'
 ));
 $part->add_child($infobox);
 

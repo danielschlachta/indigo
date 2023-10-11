@@ -276,8 +276,7 @@ class idg_object {
 		return $retstr;
 	}
 
-	protected function get_xml_tag($tag_type, $tag_id = '')
-	{
+	protected function get_xml_tag($tag_type, $tag_id = '')	{
 		if ($tag_id == '')
 			$use_id = $this->get_idg_type();
 		else

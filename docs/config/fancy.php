@@ -3,15 +3,15 @@
 $view = new idg_view_html;
 $view->set_properties(array(
 	'name' => 'fancy',
-	'icon' => 'favicon.png'
+	'icon' => 'favicon.png',
+	'filter' => 'fancy_filter_typo'
 ));
 
 // Create the layout and add it to the view
 
 $part = new idg_view_html_part;
-
 $part->set_properties(array(
-	'class' => 'fancy'
+	'class' => 'fancy',
 ));
 
 $part_opts = array(
@@ -38,28 +38,29 @@ $navigation->set_properties(array(
 ));
 
 $navigation_opts = array(
-	'font-family' => 'Merriweather',
-	'background-color' => '#ffe7d6'
+	'font-family' => 'Merriweather'
 );
 //$navigation->set_options($navigation_opts);
 
 $part->add_child($navigation);
 
-// Add a container for the header
+// Insert the caption
 
-$header = new idg_view_html_container;
-
-$header->set_properties(array(
-	'name' => 'header'
+$caption = new idg_view_html_renderer;
+$caption->set_properties(array(
+	'name' => 'header',
+	'class' => 'fancy_caption',
+	'source' => 'null',
+	//'style' => 'font-style: italic;'
 ));
 
-$header_opts = array(
-	'background-color' => '#b1b390'
+$caption_opts = array(
+	'image' => 'elements/fancy/caption.png',
+	'font-family' => 'Quintessential',
 );
+//$caption->set_options($caption_opts);
 
-//$header->set_options($header_opts);
-
-$part->add_child($header);
+$part->add_child($caption);
 
 // Add a container for the sidebar
 
@@ -73,48 +74,14 @@ $sidebar->set_properties(array(
 
 $part->add_child($sidebar);
 
-// Insert the caption
-
-$caption = new idg_view_html_renderer;
-$caption->set_properties(array(
-	'class' => 'famcy_caption'
-	'source' => 'null'
-	//'style' => 'font-style: italic;'
-));
-
-$caption_opts = array(
-	'image' => 'elements/fancy/caption.png',
-	'font-family' => 'Quintessential',
-	'background-color' => '#fff6e8'
-);
-//$caption->set_options($caption_opts);
-
-$header->add_child($caption);
-*/
 // Add a container for the content
 
 $content = new idg_view_html_container;
 $content->set_properties(array(
-	'name' => 'content',
-	'filter' => 'fancy_filter_typo'
+	'name' => 'content'
 ));
 
 //$content->set_option('font-family', 'Lekton'); // As mentioned in style.css ... UGLY HACK
-
-// Substitute the page's description for the first heading, but
-// construct a container first because it allows filtering
-
-$heading_container = new idg_view_html_container;
-
-$heading = new idg_view_html_item;
-$heading->set_properties(array(
-    'class' => 'text'
-
-));
-$heading->set_text('&lt;h1&gt;{description}&lt;/h1&gt;');
-
-$heading_container->add_child($heading);
-$content->add_child($heading_container);
 
 // Insert the actual page text into the container
 

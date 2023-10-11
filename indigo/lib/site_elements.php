@@ -73,16 +73,16 @@ class idg_document extends idg_site_element
 		$this->set_idg_type('document');
 	}
 
-	function get_uri()
+	function get_url()
 	{
-		$uri = '?display=' . $this->get_path();
+		$url = '?display=' . $this->get_path();
 		if ($this->variables) {
 			foreach ($this->variables as $name => $value) {
-				$uri .= "&amp;$name=$value";
+				$url .= "&amp;$name=$value";
 			}
 		}
 
-		return $uri;
+		return $url;
 	}
 
 	function set_variable($name, $value = false)
@@ -197,7 +197,7 @@ class idg_document extends idg_site_element
 	{
 		$prop = $this->get_properties();
 		$prop['path'] = $this->get_path();
-		$prop['uri'] = '?display=' . $prop['path'];
+		$prop['url'] = '?display=' . $prop['path'];
 		$prop['type'] = 'document';
 
 		$tree->add_node($depth, $prop, false);

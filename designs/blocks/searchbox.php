@@ -12,7 +12,7 @@ class idg_view_html_item_searchbox extends idg_view_node_obj
 		global $font_blocks;
 		global $elements;
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 
 		$body = "<div id=\"$idg_id\">\n<form onsubmit=\"append();\" action=\"https://google.com/search\">\n"
 			. "<div id=\"$idg_id-caption\">Search</div>\n"

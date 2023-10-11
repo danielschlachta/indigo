@@ -12,7 +12,7 @@ class idg_view_html_renderer_mobile_navigation extends idg_view_node_obj
     {
         global $elements;
 
-        $idg_id = $this->parent->get_idg_id();
+        $idg_id = $this->get_idg_id();
 
         $css = "div#$idg_id { overflow: hidden; background-color: #3b456d; "
             . " position: fixed; top: 0; left: 0; width: 100%; font-size: 180%; }\n"

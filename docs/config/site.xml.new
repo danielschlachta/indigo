@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<site name="indigo"
+	content-language="en"
+	title-separator=" - "
+	index-document="main/home">
+
+	<attribute name="fancy::stylesheet">elements/fancy/style.css</attribute>
+
+	<folder id="main" show-name="no">
+		<document id="home"
+			name="Home"
+			description="Welcome to indigo"
+			navigation-comment="The page of pages">
+
+<!--
+		    <attribute name="blocks::image">
+				<option name="src">randomsybols.jpg</option>
+				<option name="width">90px</option>
+				<option name="height">90px</option>
+		    </attribute>
+		    <attribute name="blocks::infobox">
+					Latest news from CNN
+					<option name="rss">http://rss.cnn.com/rss/cnn_latest.rss</option>
+					<option name="rss-maxitems">4</option>
+		    </attribute>
+-->
+		    <datasource name="text1_src"
+			    class="idg_datasource_textfile">
+			    filename: main/home/home.html
+		    </datasource>
+		    <renderer slot="main-text"
+			    class="idg_view_html_renderer_textfile"
+			    source="text1_src" />
+   		    <datasource name="readme_src"
+			    class="idg_datasource_textfile">
+			    filename: ../README.md
+		    </datasource>
+		    <renderer slot="main-text"
+			    class="idg_view_html_renderer_markdown"
+			    source="readme_src" />
+	    </document>
+
+
+    </folder>
+    <folder id="resources" name="Resources" show-name="no">
+	    <document id="tutorial" name="Tutorial"
+			description="Indigo - the tutorial">
+			<!-- <xi:include href="resources/tutorial/page.xml"
+				xmlns:xi="http://www.w3.org/2003/XInclude"/> -->
+		</document>
+	</folder>
+</site>

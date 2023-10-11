@@ -109,7 +109,7 @@ class idg_view_html_part_fixedcontent extends idg_view_node_param_obj
 	    if ($this->parent->children == null)
 			diag($this, get_class($this) . ' must have at least one child');
 
-		$idg_id = $this->parent->get_idg_id();
+		$idg_id = $this->get_idg_id();
 		$fixed = $this->parent->children[0];
 
 		$css = "body { padding: 0; margin: 0; " . "width: 100%; height: 100%; "

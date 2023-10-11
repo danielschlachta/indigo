@@ -13,25 +13,20 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
 		if (!$this->datasource)
 			return;
 
-		$font = fancy_options::get_font($this->parent);
-		$bg_color = fancy_options::get_background_color($this->parent);
-
 		$css = "	body {\n"
 			. "		margin-top: 2em;\n"
 			. "		font-size: 110%;\n"
 			. "	}\n\n"
-			. "	#navigation {\n"
+			. "	nav {\n"
 			. "		position: fixed;\n"
 			. "		border-radius: 1em;\n"
 			. "		top: 0; left: 0;\n"
 			. "		height: 4em; width: 95%;\n"
 			. "		margin: -1.1em 0 0 2%;\n"
 			. "		padding: 1.9em 4% 0 1em;\n"
-			. " 		background: $bg_color;\n"
 			. "	}\n\n"
 			. "	.navlink, .navlink-selected {\n"
 			. "		color: black;\n"
-			. "		font-family: '$font';\n"
 			. "		padding: 0 1em 0 1em;\n"
 			. "		text-decoration: none;\n"
         	. "	}\n\n"
@@ -44,7 +39,7 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
 
         $view->stream_append('css', $css);
 
-       	$body = "	<nav id=\"navigation\">\n";
+       	$body = '';
 
         $this->datasource->rewind();
 
@@ -64,8 +59,6 @@ class idg_view_html_renderer_fancy_navigation extends idg_view_node_obj
                 $body .= "		<a class=\"$class\" href=\"?display=$path\"><span>$name</span></a>\n";
             }
         }
-
-        $body .= "	</nav>\n";
 
         $view->stream_append('html-body', $body);
     }
