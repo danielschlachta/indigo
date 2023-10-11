@@ -52,7 +52,7 @@ class idg_view_html_renderer_fancy_footer extends idg_view_node_obj
 
 		$view->stream_append('css', $css);
 
-		$tag = @$this->parent->get_property('tag');
+		$tag = $this->get_property('tag');
 
 		if ($tag)
 			$view->stream_append('html-body', $tag);

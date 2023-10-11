@@ -12,7 +12,7 @@ class idg_view_html_renderer_gradient_navigation extends idg_view_node_obj
     {
         global $elements;
 
-        $style = $this->parent->get_property('style');
+        $style = $this->get_property('style');
         $idg_id = $this->get_idg_id();
 
         $css = " div#$idg_id { padding-top: 5px; padding-left: 2px; "

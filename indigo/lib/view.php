@@ -38,6 +38,14 @@ class idg_view extends idg_tree_node
 		$this->streams = $streams;
 	}
 
+	function set_filter($name) {
+		$this->filters[$name] = true;
+	}
+
+	function unset_filter($name)	{
+		$this->filters[$name] = false;
+	}
+
 	function stream_append($stream_name, $content)	{
 		if (array_key_exists($stream_name, $this->streams)) {
 			if (($stream_name == 'html-body')) {
@@ -67,20 +75,11 @@ class idg_view extends idg_tree_node
 	{
 		echo $this->output;
 	}
-
-	protected function set_filter($name) {
-		$this->filters[$name] = true;
-	}
-
-	protected function unset_filter($name)	{
-		$this->filters[$name] = false;
-	}
-
 }
 
 class idg_view_node_obj
 {
-	var $parent;
+	private $parent;
 
 	function __construct($parent)
 	{
@@ -88,10 +87,35 @@ class idg_view_node_obj
 	}
 
 	function get_idg_id() {
-		if ($this->parent)
-			return $this->parent->get_idg_id();
-		else
-			diag('internal error: no parent');
+		return $this->parent->get_idg_id();
+	}
+
+	function get_child_count() {
+		if ($children = $this->parent->get_children())
+			return count($children);
+
+		return 0;
+	}
+
+	function get_children() {
+		return $this->parent->get_children();
+	}
+
+	function get_property($name) {
+		return $this->parent->get_property($name);
+	}
+
+	/*! Returns child by number or NULL, i.e. fails silently. */
+
+	function get_child($index) {
+		$children = $this->parent->get_children();
+
+		if ($children && count($children) > $index)
+			return $children[$index];
+	}
+
+	function get_text() {
+		return $this->parent->get_text();
 	}
 }
 
@@ -107,7 +131,7 @@ class idg_view_node_param_obj extends idg_view_node_obj
 
 	function get_parameters()
 	{
-		if (!($text = $this->parent->get_text()))
+		if (!($text = $this->get_text()))
 			return;
 
 		$lines = explode(";", trim($text));

@@ -14,7 +14,7 @@ $idg_xml_indent = '  ';
 
 class idg_tree_node_type extends idg_object_type
 {
-	var $child_types = array('idg_tree_node');
+	public $child_types = array('idg_tree_node');
 
 	function __construct()
 	{
@@ -24,24 +24,31 @@ class idg_tree_node_type extends idg_object_type
 
 class idg_tree_node extends idg_object
 {
-	var $parent;
-	var $children;
+	private $parent;
+	protected $children; // accessed in view_html
 
-	var $is_leaf = true;
-	var $child_count;
-	var $child_counts = array();
+	/*! @todo What is this for? I.e. is it different from count(children) == 0? */
+	protected $is_leaf = true;
 
-	var $idg_translation; // array (idg_type => php type) for instance creation
+	protected $idg_translation; // array (idg_type => php type) for instance creation
 
-	var $_xml_stack;
+	private $_xml_stack;
 
 	function __construct()
 	{
 		parent::__construct();
 	}
 
+	function get_parent() {
+		return $this->parent;
+	}
+
+	function get_children() {
+		return $this->children;
+	}
+
 	/*!
-	 * Finds a child whose property $key_name is set to $key_value.
+	 * Finds a child whose property \c $key_name is set to \c $key_value.
 	 *
 	 * This function is recursive.
 	 */

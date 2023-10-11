@@ -1,12 +1,9 @@
 <?php
 
-/* ========================================================================
- * Indigo/Web
- *
- * File: html_items.php - basic builtin items
- *
- * (c) 2023 Daniel Schlachta
- * ======================================================================== */
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
 
 class idg_view_html_item_image extends idg_view_node_param_obj
 {
@@ -20,7 +17,7 @@ class idg_view_html_item_image extends idg_view_node_param_obj
 	{
 		$idg_id = $this->get_idg_id();
 
-		$style = $this->parent->get_property('style');
+		$style = $this->get_property('style');
 
 		$img_src = $this->parameters['source'];
 		$width = $this->parameters['width'];
@@ -54,20 +51,18 @@ class idg_view_html_item_text extends idg_view_node_obj
 	{
 		$idg_id = $this->get_idg_id();
 
-		if (!$text = $this->parent->get_text())
+		if (!$text = $this->get_text())
 			return;
-
-		//die($text);
 
     	$css = '';
 
-    	if ($style = $this->parent->get_property('style'))
+    	if ($style = $this->get_property('style'))
 			$css .= "	span#$idg_id {\n		$style\n	}\n\n";
 
-	    if ($style_link = $this->parent->get_property('style-link'))
+	    if ($style_link = $this->get_property('style-link'))
 			$css .= "	span#$idg_id a {\n		$style_link\n	}\n\n";
 
-		if ($style_link_hover = $this->parent->get_property('style-link-hover'))
+		if ($style_link_hover = $this->get_property('style-link-hover'))
 			$css .= "	span#$idg_id a:hover {\n		$style_link_hover\n	}\n\n";
 
 		if ($css != '')
@@ -85,9 +80,9 @@ class idg_view_html_item_text extends idg_view_node_obj
 
 		if ($css != '') {
 			$text = "<span id=\"$idg_id\">"
-				. $this->parent->get_text() . "</span>";
+				. $this->get_text() . "</span>";
 		} else
-			$text = $this->parent->get_text();
+			$text = $this->get_text();
 
 		foreach ($vars as $name => $value) {
 			$text = preg_replace("/\{$name\}/", $value, $text);

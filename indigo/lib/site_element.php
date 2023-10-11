@@ -31,9 +31,8 @@ class idg_site_element_type extends idg_tree_node_type
 	}
 }
 
-class idg_site_element extends idg_tree_node
-{
-	var $site;
+class idg_site_element extends idg_tree_node {
+	private $site;
 
 	function __construct()
 	{
@@ -48,7 +47,7 @@ class idg_site_element extends idg_tree_node
 		$site = $this;
 
 		while ($site && (get_class($site) != 'idg_site')) {
-			$site =& $site->parent;
+			$site = $site->get_parent();
 		}
 
 		if (!$site)

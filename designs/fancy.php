@@ -33,11 +33,7 @@ class idg_view_html_part_fancy extends idg_view_node_param_obj
 
 	function render(&$document, &$view)
 	{
-			// FIXME: currently ignored
-	    $style = $this->parent->get_property('style');
-   	    $style_print = $this->parent->get_property('style-print');
-
-		if ($this->parent->children == null)
+		if ($this->get_child_count() == 0)
 			diag($this, 'part has no children');
 
 		//if ($stylesheet = $view->get_option('stylesheet'))

@@ -28,21 +28,23 @@ class idg_view_html_part_minimal extends idg_view_node_param_obj
 	{
 		global $elements_minimal;
 
-	    $style = $this->parent->get_property('style');
-   	    $style_print = $this->parent->get_property('style-print');
+	    $style = $this->get_property('style');
+   	    $style_print = $this->get_property('style-print');
 
-	    if ($this->parent->children == null
-			|| ($childcount = count($this->parent->children)) != 1)
+		$children = $this->get_children();
+
+	    if (!$children
+			|| ($childcount = count($children)) != 1)
 			diag($this, get_class($this)
 				. " needs exactly one container (found $childcount).");
 
-		if (count($this->parent->children[0]->children,
+		if (count($children[0]->get_children(),
 			COUNT_RECURSIVE) != 3)
 			diag($this->get_class($this) . " needs exactly three "
 				. "elements in its container (see doc).");
 
 		$idg_id = $this->get_idg_id();
-		$fixed = $this->parent->children[0];
+		$fixed = $children[0];
 
 		$head = ' <link rel="stylesheet" href="' . $elements_minimal
 			. '/style.css">';
@@ -56,7 +58,7 @@ class idg_view_html_part_minimal extends idg_view_node_param_obj
 		$body = "</div>\n";
 		$view->stream_append('html-body', $body);
 
-		$part = $this->parent->children[0];
+		$part = $children[0];
 	}
 }
 

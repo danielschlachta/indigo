@@ -26,20 +26,19 @@ class idg_view_html_part_fixedbar extends idg_view_node_param_obj
 
 	function render(&$document, &$view)
 	{
-		if (count($this->parent->children) < 2 ||
-		    count($this->parent->children) > 3)
+		if ($this->get_child_count() < 2 ||
+		    $this->get_child_count() > 3)
 			diag($this, get_class($this) . ' must have two or three children');
 
-		$fixed = $this->parent->children[0];
+		$fixed = $this->get_child(0);
 		$fixed_id = $fixed->get_idg_id() . '-part';
 		$style_fixed = $fixed->get_property('style');
 
-		$main = $this->parent->children[1];
+		$main = $this->get_child(1);
 		$main_id = $main->get_idg_id() . '-part';
 		$style_main = $main->get_property('style');
 
-	    if (count($this->parent->children) > 2) {
-    	    $bg = $this->parent->children[2];
+	    if ($bg = $this->get_child(2)) {
 	    	$bg_id = $bg->get_idg_id() . '-part';
     		$style_bg = $bg->get_property('style');
     	}
@@ -48,7 +47,7 @@ class idg_view_html_part_fixedbar extends idg_view_node_param_obj
 		$fixed_position = $this->parameters['fixed-position'];
 		$attach_right = ($fixed_position == 'right');
 
-		$style = $this->parent->get_property('style');
+		$style = $this->get_property('style');
 
 		$css = "body { padding: 0; margin: 0; width: 100%; "
 			. "overflow-x: hidden; $style; }\n"
@@ -103,14 +102,14 @@ class idg_view_html_part_fixedcontent extends idg_view_node_param_obj
 
 	function render(&$document, &$view)
 	{
-	    $style = $this->parent->get_property('style');
-   	    $style_print = $this->parent->get_property('style-print');
+	    $style = $this->get_property('style');
+   	    $style_print = $this->get_property('style-print');
 
-	    if ($this->parent->children == null)
+	    if ($this->get_child_count() == 0)
 			diag($this, get_class($this) . ' must have at least one child');
 
 		$idg_id = $this->get_idg_id();
-		$fixed = $this->parent->children[0];
+		$fixed = $this->get_child(0);
 
 		$css = "body { padding: 0; margin: 0; " . "width: 100%; height: 100%; "
 			. "overflow-x: hidden; $style }\n"
@@ -130,10 +129,10 @@ class idg_view_html_part_fixedcontent extends idg_view_node_param_obj
 		$body = "</div>\n";
 		$view->stream_append('html-body', $body);
 
-		$childcount = count($this->parent->children);
+		$childcount = $this->get_child_count();
 
 		for ($i = 1; $i < $childcount; $i++) {
-			$part = $this->parent->children[$i];
+			$part = $this->get_child($i);
 			$part->_render($document, $view);
 		}
 	}

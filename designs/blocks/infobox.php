@@ -55,7 +55,7 @@ class idg_view_html_renderer_blocks_infobox extends idg_view_node_obj
 		global $font_blocks;
 		global $elements;
 
-		$view->_set_filter('blocks_filter_infobox');
+		$view->set_filter('blocks_filter_infobox');
 
 		$idg_id = $this->get_idg_id();
 		//$this->datasource->rewind();
@@ -110,7 +110,7 @@ class idg_view_html_renderer_blocks_infobox extends idg_view_node_obj
 				$this->text = "File not found: $links";
 			}
 		} else {
-			$view->_unset_filter('blocks_filter_infobox');
+			$view->unset_filter('blocks_filter_infobox');
 			return;
 		}
 

@@ -144,11 +144,11 @@ class idg_document extends idg_site_element
 	function get_path()
 	{
 		$path = $this->get_property('id');
-		$tmp = $this->parent;
+		$tmp = $this->get_parent();
 
 		while ($tmp && (get_class($tmp) != 'idg_site')) {
 			$path = $tmp->get_property('id') . '/' . $path;
-			$tmp =& $tmp->parent;
+			$tmp = $tmp->get_parent();
 		}
 
 		return $path;
@@ -165,7 +165,7 @@ class idg_document extends idg_site_element
 			$title = $this->get_property('name');
 		}
 
-		$tmp = $this->parent;
+		$tmp = $this->get_parent();
 
 		while ($tmp) {
 			if (($tmp->get_property('show-name') != 'no')

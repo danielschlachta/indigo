@@ -309,7 +309,7 @@ class idg_view_html_container extends idg_view_html_element
 
 		$filter = $this->get_property('filter');
 		if ($filter)
-			$view->_set_filter($filter);
+			$view->set_filter($filter);
 
 		if ($this->children) {
 			foreach ($this->children as $child) {
@@ -318,7 +318,7 @@ class idg_view_html_container extends idg_view_html_element
 		}
 
 		if ($filter)
-			$view->_unset_filter($filter);
+			$view->unset_filter($filter);
 
 		if ($body)
 			$view->stream_append('html-body', $body);
@@ -434,9 +434,9 @@ class idg_view_html_slot extends idg_tree_node
 		$name = $this->get_property('name');
 		$renderers = $document->get_renderers($name);
 		$idg_id = $this->get_idg_id();
-		$filter = $this->get_property('filter');
-		if ($filter)
-			$view->_set_filter($filter);
+
+		if ($filter = $this->get_property('filter'))
+			$view->set_filter($filter);
 
 		$anchor_count = 0;
 
@@ -458,7 +458,7 @@ class idg_view_html_slot extends idg_tree_node
 		}
 
 		if ($filter)
-			$view->_unset_filter($filter);
+			$view->unset_filter($filter);
 
 		$style = $this->get_property('style');
 		$style_link = $this->get_property('style-link');

@@ -12,12 +12,12 @@ class idg_view_html_renderer_blocks_footer extends idg_view_node_obj
 		global $elements;
 
 		$idg_id = $this->get_idg_id();
-		$style = $this->parent->get_property('style');
+		$style = $this->get_property('style');
 		$last_change = substr($document->get_property('last-change'), 0, 10);
-		$style_heading = $this->parent->get_property('style-heading');
-		$style_link = $this->parent->get_property('style-link');
-		$style_link_hover = $this->parent->get_property('style-link-hover');
-		$style_image = $this->parent->get_property('style-image');
+		$style_heading = $this->get_property('style-heading');
+		$style_link = $this->get_property('style-link');
+		$style_link_hover = $this->get_property('style-link-hover');
+		$style_image = $this->get_property('style-image');
 
 		$bg_col = '#b4d2b0';
 		$bo_col = '#1e3723';
