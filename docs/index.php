@@ -68,8 +68,11 @@ else {
     }
 }
 
+if ($design == 'mobile')
+	$site->set_property('title-reverse-order', 'no');
+
 if (!$design || !file_exists("../designs/$design.php"))
-	$design = 'fancy';
+	$design = 'blocks';
 
 $view_preload = "config/$design.preload.php";
 
@@ -100,7 +103,7 @@ if (!file_exists($view_xml)
 	$view->write_xml($view_xml);
 
 	if (!(filesize($view_xml) > 0))
-		die("Oops: $view_xml: zero length xml file");
+		unlink($viw_xml);
 }
 
 $view = new idg_view_html;

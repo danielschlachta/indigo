@@ -1,4 +1,4 @@
- <?php
+<?php
 
 class idg_view_html_renderer_mobile_navigation extends idg_tree_node_implementation
 {
@@ -29,7 +29,7 @@ class idg_view_html_renderer_mobile_navigation extends idg_tree_node_implementat
 
         $view->stream_append('css', $css);
 
-        $title = strtoupper($document->_get_default_title());
+        $title = strtoupper($document->get_default_title());
         $title_image = $view->get_property('icon');
 
         $body = "<div id=\"$idg_id\">\n"
