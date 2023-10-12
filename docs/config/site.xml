@@ -80,7 +80,9 @@
     </folder>
 
 	<folder id="resources" name="Resources" show-name="no">
-	    <xi:include href="http://cortes.schlachta.local/~daniel/indigo/docs/resources/tutorial/tutorial.xml" />
+	    <xi:include 
+	        href="http://cortes.schlachta.local/~daniel/indigo/docs/resources/tutorial/tutorial.xml"
+	        xmlns:xi="http://www.w3.org/2003/XInclude" />
 
    	    <document id="reference" name="Reference" description="Further Reading">
 		    <datasource name="framedimg"

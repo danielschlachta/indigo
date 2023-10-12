@@ -30,7 +30,6 @@ class idg_tree_node extends idg_object
 	protected $children; // accessed in view_html
 
 	/*! @todo nicer mech.? */
-
 	protected $idg_xml_translation;
 
 	private $_xml_current_object;
@@ -216,6 +215,7 @@ class idg_tree_node extends idg_object
 		xml_set_character_data_handler($parser, "_xml_character_data");
 		xml_set_default_handler($parser, "_xml_default_handler");
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
+		//xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, true);
 
 		if (!xml_parse($parser, $xml)) {
 			$err_code = xml_get_error_code($parser);
@@ -271,6 +271,11 @@ class idg_tree_node extends idg_object
 	}
 
 	private function _xml_read_start($parser, $name, $properties) {
+		$cn = $this->_xml_current_object ? get_class($this->_xml_current_object) : 'NULL';
+		$pn = array_key_exists('name', $properties) ? 'name: ' . $properties['name'] : '';
+
+		echo "<!-- read_start: $name current: $cn $pn -->\n";
+
 		if ($name == 'xi:include') {
 			if (!$href = @$properties['href'])
 				diag($this,
@@ -298,7 +303,7 @@ class idg_tree_node extends idg_object
 	}
 
 	private function _xml_read_end($parser, $name) {
-		if ($this->_xml_current_object)
+		if ($this->_xml_current_object && $name != 'xi:include')
 			$this->_xml_current_object =
 				$this->_xml_current_object->get_parent();
 	}
