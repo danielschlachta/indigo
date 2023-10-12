@@ -19,11 +19,12 @@ class idg_site_element_type extends idg_tree_node_type
 		$this->set_known('name');
 
 		$this->set_known('title');
-		$this->set_known('content-language', 'yes');
-		$this->set_known('title-separator', 'yes');
+		$this->set_known('content-language');
+		$this->set_known('title-separator');
+		$this->set_known('title-reverse-order');
 		$this->set_known('description');
 		$this->set_known('navigation-comment');
-		$this->set_known('index-document', 'yes');
+		$this->set_known('index-document');
 		$this->set_known('show-name');
 
 		$this->set_mandatory('id');
@@ -88,21 +89,18 @@ class idg_site_type extends idg_site_element_type
 }
 
 
-class idg_document_type extends idg_site_element_type
-{
-	function __construct()
-	{
+class idg_document_type extends idg_site_element_type {
+	function __construct()	{
 		parent::__construct();
-		$this->set_hook('title', '$this->_get_default_title');
-		$this->set_hook('last-change', '$this->_get_last_change');
+		$this->set_hook('title', '$this->get_default_title');
+		$this->set_hook('last-change', '$this->get_last_change');
 		$this->child_types[] = 'idg_datasource_declaration';
 		$this->child_types[] = 'idg_renderer_declaration';
 		$this->child_types[] = 'idg_attribute';
 	}
 }
 
-class idg_document extends idg_site_element
-{
+class idg_document extends idg_site_element {
 	var $last_change = false;
 	var $params = array();
 
@@ -147,7 +145,7 @@ class idg_document extends idg_site_element
 			return $this->get_site()->get_datasource();
 		}
 
-		/* FIXME: Tell where */
+		/*! @todo Tell where */
 
 		if (!$source_name)
 			diag($this,  "idg_renderer_declaration: no datasource");
@@ -195,47 +193,44 @@ class idg_document extends idg_site_element
 		return $path;
 	}
 
-	function _get_default_title()
-	{
+	function get_default_title() {
 		$site = $this->get_site();
 		$index = $site->get_document();
 
-		if ($this->get_property('show-name') == 'no') {
-			$title = '';
-		} else {
-			$title = $this->get_property('name');
-		}
+		$tmp = $this;
+		$path = '';
+		$reverse = $site->get_property('title-reverse-order') != 'no';
+		$separator = $site->get_property('title-separator');
 
-		$tmp = $this->get_parent();
+		if (!$separator)
+			$separator = ' - ';
 
 		while ($tmp) {
 			if (($tmp->get_property('show-name') != 'no')
 				&& (($p_title = $tmp->get_property('name')) != '')) {
-				$title = $title . ($title != '' ?
-					$tmp->get_property('title-separator') : '') . $p_title;
+				$path = ($reverse ? $path : $p_title)
+					. ($path != '' ? $separator : '')
+					. ($reverse ? $p_title : $path);
 			}
 
-			$tmp =& $tmp->parent;
+			$tmp = $tmp->get_parent();
 		}
 
-		return $title;
+		return $path;
 	}
 
-	function set_last_change($time)
-	{
+	function set_last_change($time)	{
 		if (!$this->last_change || $this->last_change < $time)
 			$this->last_change = $time;
 	}
 
-	function _get_last_change()
-	{
+	function get_last_change()	{
 		if (!($last_change = $this->last_change))
 			$last_change = time();
 		return date("d.m.Y h:i", $last_change);
 	}
 
-	function add_token(&$tree, &$depth, &$path)
-	{
+	function add_token(&$tree, &$depth, &$path)	{
 		$prop = $this->get_properties();
 		$prop['path'] = $this->get_path();
 		$prop['url'] = '?display=' . $prop['path'];

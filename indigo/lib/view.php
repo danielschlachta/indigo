@@ -34,6 +34,8 @@ abstract class idg_view extends idg_tree_node {
 		$this->filters[$name] = false;
 	}
 
+	/*! @todo HTML specific stream selection! */
+
 	function stream_append($stream_name, $content)	{
 		if (array_key_exists($stream_name, $this->streams)) {
 			if (($stream_name == 'html-body')) {
@@ -69,35 +71,5 @@ abstract class idg_view extends idg_tree_node {
 	}
 }
 
-class idg_view_node_param_obj extends idg_tree_node_implementation {
-	var $parameters = array();
-
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-		$this->get_parameters();
-	}
-
-	function get_parameters()
-	{
-		if (!($text = $this->get_text()))
-			return;
-
-		$cn = get_class($this);
-
-		echo "<!-- param obj: $cn: $text -->\n";
-
-		$lines = explode(";", trim($text));
-		foreach ($lines as $line) {
-			if ($line != '') {
-				if (!preg_match('/([a-zA-Z][a-zA-Z0-9-]+):[\  ]+(.*)/',
-					$line, $match))
-					diag($this,
-					'invalid parameter format: `' . $line . '`');
-				$this->parameters[$match[1]] = $match[2];
-			}
-		}
-	}
-}
 
 ?>

@@ -24,7 +24,7 @@ class idg_view_html_item_toolbox extends idg_tree_node_implementation
 		$body = "<div id=\"$idg_id\">\n<div id=\"$idg_id-body\">\n"
 			. "<ul>\n"
 			. " <li><a href=\"mailto:Daniel Schlachta <daniel@schlachta.info>\">Contact</a></li>\n"
-			. " <li><a href=\"javascript:void(0);\" onClick=\"document.getElementById('framedimg').src='"
+			. " <li><a href=\"javascript:void(0);\" onClick=\"document.getElementById('framedimage').src='"
 			. $this->qr_link($document) . "'\">QR Code</a></li>\n"
 			. "</ul>\n</div>\n</div>\n";
 

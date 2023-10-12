@@ -5,7 +5,7 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_item_image extends idg_view_node_param_obj
+class idg_view_html_item_image extends idg_tree_node_implementation
 {
 
 	function __construct(&$parent)
@@ -15,18 +15,26 @@ class idg_view_html_item_image extends idg_view_node_param_obj
 
 	function render(&$document, &$view)
 	{
-		$idg_id = $this->get_idg_id();
+		if (!$image = $this->get_attribute('image'))
+			return;
 
+		if (!$img_src = $image->get_option('src'))
+			return;
+
+		$idg_id = $this->get_idg_id();
 		$style = $this->get_property('style');
 
-		$img_src = $this->parameters['source'];
-		$width = $this->parameters['width'];
-		$height = $this->parameters['height'];
-		$alt_text = @$this->parameters['alt-text'];
-		$classname = @$this->parameters['classname'];
+		$width = $image->get_option('width');
+		$width = $width ? "		width: $width;\n" : "";
+
+		$height = $image->get_option('height');
+		$height = $height ? "		height: $height;\n" : "";
+
+		$alt_text = $image->get_option('alt');
+		$alt_text = $alt_text ? " alt=\"$alt_text\"" : "";
 
 		$body = "<img id=\"$idg_id\" src=\"$img_src\" "
-			. "width=\"$width\" height=\"$height\" " . "alt=\"$alt_text\">\n";
+			. "width=\"$width\" height=\"$height\"$alt_text>\n";
 		$view->stream_append('html-body', $body);
 
 		$css = "	img#$idg_id {\n		border: 0;\n";

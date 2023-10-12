@@ -356,7 +356,7 @@ class idg_object {
 			);
 
 		if ($this->text) {
-			$text_lines = explode("\n", $this->text);
+			$text_lines = explode("\n", htmlentities($this->text));
 
 			foreach ($text_lines as $line)
 				$xml[] = array(

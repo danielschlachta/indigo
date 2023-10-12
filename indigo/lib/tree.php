@@ -27,6 +27,11 @@ class idg_tree_node_type extends idg_object_type
 class idg_tree_node extends idg_object
 {
 	private $parent;
+
+	private $attributes = array();
+	private $current_attribute;
+	private $current_option;
+
 	protected $children; // accessed in view_html
 
 	/*! @todo nicer mech.? */
@@ -41,6 +46,17 @@ class idg_tree_node extends idg_object
 
 	function get_parent() {
 		return $this->parent;
+	}
+
+	function create_attribute($name) {
+		if (@$this->attributes[$name])
+			diag($this, "duplicate attribute: $name");
+
+		return $this->attributes[$name] = new idg_attribute($name);
+	}
+
+	function get_attribute($name) {
+		return @$this->attributes[$name];
 	}
 
 	/*! Set the parent object manually.
@@ -105,8 +121,7 @@ class idg_tree_node extends idg_object
 		return $retval;
 	}
 
-	function add_child(&$child)
-	{
+	function add_child(&$child) {
 		if (!in_array(get_class($child), $this->type_obj->child_types))
 			diag($this, $this->get_idg_id()
 				. ': add child: incompatible child type \''
@@ -183,6 +198,52 @@ class idg_tree_node extends idg_object
 		fclose($fp);
 	}
 
+	private function _xml_write_start(&$xml, &$depth, &$path) {
+		global $idg_xml_indent;
+
+		for ($indent = '', $i = 0; $i < $depth; $i++)
+			$indent .= $idg_xml_indent;
+
+		$tag_type = !$this->children && !$this->text
+			&& count($this->attributes) == 0
+				? 'single'	: 'start';
+		$xml_array = $this->get_xml_tag($tag_type);
+
+		foreach ($xml_array as $xml_line) {
+			$indent_count =& $xml_line['indent'];
+			$text =& $xml_line['line'];
+
+			$tmp_indent = $indent;
+
+			for ($i = 0; $i < $indent_count; $i++)
+				$tmp_indent .= $idg_xml_indent;
+			$xml .= "$tmp_indent$text\n";
+		}
+
+		return true;
+	}
+
+	private function _xml_write_end(&$xml, &$depth, &$path)	{
+		global $idg_xml_indent;
+
+		if (!$this->children && !$this->text
+			&& count($this->attributes) == 0)
+			return true;
+
+		for ($indent = '', $i = 0; $i < $depth; $i++)
+			$indent .= $idg_xml_indent;
+
+		if (count($this->attributes) > 0) {
+			foreach ($this->attributes as $attr_name => $attr_obj)
+				$xml .= $attr_obj->get_xml("$indent	");
+		}
+
+		$xml_array = $this->get_xml_tag('end');
+		$xml .= $indent . $xml_array[0]['line'] . "\n";
+
+		return true;
+	}
+
 	function read_xml($file_name, $parent = NULL) {
 		$this->_xml_current_object = $parent;
 
@@ -230,58 +291,40 @@ class idg_tree_node extends idg_object
 		xml_parser_free($parser);
 	}
 
-	private function _xml_write_start(&$xml, &$depth, &$path)
-	{
-		global $idg_xml_indent;
-
-		for ($indent = '', $i = 0; $i < $depth; $i++)
-			$indent .= $idg_xml_indent;
-
-		$tag_type = !$this->children && !$this->text ? 'single'
-			: 'start';
-		$xml_array = $this->get_xml_tag($tag_type);
-
-		foreach ($xml_array as $xml_line) {
-			$indent_count =& $xml_line['indent'];
-			$text =& $xml_line['line'];
-
-			$tmp_indent = $indent;
-
-			for ($i = 0; $i < $indent_count; $i++)
-				$tmp_indent .= $idg_xml_indent;
-			$xml .= "$tmp_indent$text\n";
-		}
-
-		return true;
-	}
-
-	private function _xml_write_end(&$xml, &$depth, &$path)	{
-		global $idg_xml_indent;
-
-		if (!$this->children && !$this->text)
-			return true;
-
-		for ($indent = '', $i = 0; $i < $depth; $i++)
-			$indent .= $idg_xml_indent;
-
-		$xml_array = $this->get_xml_tag('end');
-		$xml .= $indent . $xml_array[0]['line'] . "\n";
-
-		return true;
-	}
-
 	private function _xml_read_start($parser, $name, $properties) {
-		$cn = $this->_xml_current_object ? get_class($this->_xml_current_object) : 'NULL';
-		$pn = array_key_exists('name', $properties) ? 'name: ' . $properties['name'] : '';
-
-		echo "<!-- read_start: $name current: $cn $pn -->\n";
-
 		if ($name == 'xi:include') {
 			if (!$href = @$properties['href'])
 				diag($this,
 					"xml: xi:include: must specify property 'href'");
 
 			$this->read_xml($href, $this->_xml_current_object);
+			return;
+		}
+
+		if ($name == 'attribute') {
+			if (!$this->_xml_current_object)
+				diag($this, 'xml: attribute has no parent');
+
+			if (!$attr_name = @$properties['name'])
+				diag($this,
+					"xml: attribute $name has no 'name' property'");
+
+			$this->current_attribute =
+				$this->_xml_current_object->create_attribute(
+					$attr_name);
+			return;
+		}
+
+		if ($name == 'option') {
+			if (!$opt_name = @$properties['name'])
+				diag($this, "xml: option has no 'name' property");
+
+			if (!$this->current_attribute) {
+				diag($this,
+					"xml: option '$opt_name' outside attribute");
+			}
+
+			$this->current_option = $opt_name;
 			return;
 		}
 
@@ -303,14 +346,27 @@ class idg_tree_node extends idg_object
 	}
 
 	private function _xml_read_end($parser, $name) {
-		if ($this->_xml_current_object && $name != 'xi:include')
+		if ($this->_xml_current_object
+			&& $name != 'xi:include'
+			&& $name != 'attribute'
+			&& $name != 'option')
 			$this->_xml_current_object =
 				$this->_xml_current_object->get_parent();
+
+		if ($name == 'attribute')
+			$this->current_attribute = NULL;
 	}
 
 	private function _xml_character_data($parser, $character_data) {
 		if (trim($character_data) == '')
 			return;
+
+		if ($this->current_attribute) {
+			$this->current_attribute->set_option($this->current_option,
+				$this->current_attribute->get_option(
+					$this->current_option) . $character_data);
+			return;
+		}
 
 		if (!$this->_xml_current_object)
 			diag($this,
@@ -342,11 +398,15 @@ class idg_tree_node extends idg_object
 }
 
 class idg_tree_node_implementation {
-	private $parent;
+	protected $parent;
 
 	function __construct($parent)
 	{
 		$this->parent = $parent;
+	}
+
+	function clear() {
+		$this->parent = NULL;
 	}
 
 	function get_idg_id() {
@@ -377,17 +437,12 @@ class idg_tree_node_implementation {
 			return $children[$index];
 	}
 
+	function get_attribute($name) {
+		return $this->parent->get_attribute($name);
+	}
+
 	function get_text() {
 		return $this->parent->get_text();
-	}
-}
-
-class idg_attribute_type extends idg_object_type {
-	public $child_types = array('idg_option');
-
-	function __construct() {
-		parent::__construct();
-		$this->set_known('name');
 	}
 }
 
@@ -403,21 +458,29 @@ class idg_attribute {
 		}
 		else
 			$this->name = $name;
-
-		echo "<!-- constructed attr. $this->name scope $this->scope -->\n";
 	}
 
+	function get_option($name) {
+		return @$this->options[$name];
+	}
 
-}
+	function set_option($name, $value) {
+		$this->options[$name] = $value;
+	}
 
-class idg_option_type extends idg_object_type {
+	function get_xml($indent) {
+		$name = $this->name;
 
-	function __construct() {
-		parent::__construct();
-		$this->set_known('name');
+		$xml = "$indent<attribute name=\"$name\">\n";
+
+		foreach ($this->options as $name => $value)
+			$xml .=
+				"$indent	<option name=\"$name\">$value</option>\n";
+
+		$xml .= "$indent</attribute>\n";
+
+		return $xml;
 	}
 }
-
-class idg_option extends idg_tree_node {}
 
 ?>

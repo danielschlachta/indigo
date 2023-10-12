@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<site name="indigo"
-	content-language="en"
-	title-separator=" - "
-	index-document="main/home">
+<site name="indigo"	content-language="en" index-document="main/home">
 
-	<folder id="main" show-name="no">
+	<folder id="main" name="Main" show-name="no">
 		<document id="home"
 			name="Home"
 			description="Welcome to indigo"
 			navigation-comment="The page of pages">
 
-		    <datasource name="framedimg"
-			    class="idg_datasource_blocks_framedimg">
-			    file: randomsymbols.jpg; width: 90; height: 90;
-		    </datasource>
+            <attribute name="image">
+                <option name="src">main/home/images/randomsymbols.jpg</option>
+                <option name="width">90px</option>
+                <option name="height">90px</option>
+            </attribute>
+            
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
@@ -39,11 +38,14 @@
 	    <document id="about"
 			name="About"
 			description="What it's about">
-		    <datasource name="framedimg"
-			    class="idg_datasource_blocks_framedimg">
-			    file: fractal.jpg; width: 90; height: 90;
-		    </datasource>
-		    <datasource name="infobox"
+
+            <attribute name="image">
+                <option name="src">main/about/images/fractal.jpg</option>
+                <option name="width">90px</option>
+                <option name="height">90px</option>
+            </attribute>		    
+            
+            <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: main/about/about.html
 		    </datasource>
@@ -60,10 +62,13 @@
 	    <document id="designs"
 			name="Designs"
 			description="The old switcheroo">
-		    <datasource name="framedimg"
-			    class="idg_datasource_blocks_framedimg">
-			    file: me.jpg; width: 90; height: 90;
-		    </datasource>
+
+            <attribute name="image">
+                <option name="src">main/desings/images/none.jpg</option>
+                <option name="width">90px</option>
+                <option name="height">90px</option>
+            </attribute>		    
+
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Choose your poison; file: infobox.html
@@ -84,11 +89,16 @@
 	        href="http://cortes.schlachta.local/~daniel/indigo/docs/resources/tutorial/tutorial.xml"
 	        xmlns:xi="http://www.w3.org/2003/XInclude" />
 
-   	    <document id="reference" name="Reference" description="Further Reading">
-		    <datasource name="framedimg"
-			    class="idg_datasource_blocks_framedimg">
-			    file: telescope.jpg; width: 90; height: 90;
-		    </datasource>
+   	    <document id="reference" 
+   	        name="Reference" 
+   	        description="Further Reading">
+   	        
+            <attribute name="image">
+                <option name="src">resources/reference/images/telescope.jpg</option>
+                <option name="width">90px</option>
+                <option name="height">90px</option>
+            </attribute>		    
+
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html
@@ -103,12 +113,17 @@
 			    source="text1_src" />
         </document>
 
-        <document id="examples" name="Examples" description="Stuff you can use">
-		    <datasource name="framedimg"
-			    class="idg_datasource_blocks_framedimg">
-			    file: fractal.jpg; width: 90; height: 90;
-		    </datasource>
-		    <datasource name="infobox"
+        <document id="examples" 
+            name="Examples" 
+            description="Stuff you can use">
+            
+            <attribute name="image">
+                <option name="src">resources/examples/images/none.jpg</option>
+                <option name="width">90px</option>
+                <option name="height">90px</option>
+            </attribute>		    		    
+            
+            <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html
 		    </datasource>
@@ -122,11 +137,16 @@
 			    source="text1_src" />
         </document>
 
-   	    <document id="license" name="License" description="Legalese">
-		    <datasource name="framedimg"
-			    class="idg_datasource_blocks_framedimg">
-			    file: fractal.jpg; width: 90; height: 90;
-		    </datasource>
+   	    <document id="license" 
+   	        name="License" 
+   	        description="Legalese">
+   	        
+		    <attribute name="image">
+                <option name="src">resources/reference/images/none.jpg</option>
+                <option name="width">90px</option>
+                <option name="height">90px</option>
+            </attribute>		    
+            
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html

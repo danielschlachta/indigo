@@ -80,7 +80,7 @@ $logo_text->set_properties(array(
 	'class' => 'text',
 	'style' => 'padding-right: 8px; font-family: verdana, sans-serif; color: #394a71; font-style: italic;'
 ));
-$logo_text->set_text('&lt;b&gt;indigo&lt;/b&gt;&amp;nbsp;/ web');
+$logo_text->set_text('<b>indigo</b> / web');
 
 $logo->add_child($logo_text);
 
@@ -88,19 +88,21 @@ $logo_image = new idg_view_html_item;
 $logo_image->set_properties(array(
 	'class' => 'image'
 ));
-$logo_image->set_text('source: elements/blocks/indigo.png; width: 90; height: 70;');
+
+$image = $logo_image->create_attribute('image');
+$image->set_option('src', 'elements/blocks/indigo.png');
 
 $logo->add_child($logo_image);
 
 $part->add_child($logo);
 
-$framedimg = new idg_view_html_renderer;
-$framedimg->set_properties(array(
-	'class' => 'blocks_framedimg',
+$imageframe = new idg_view_html_renderer;
+$imageframe->set_properties(array(
+	'class' => 'blocks_imageframe',
 	'source' => 'null'
 ));
 
-$part->add_child($framedimg);
+$part->add_child($imageframe);
 
 $infobox = new idg_view_html_renderer;
 $infobox->set_properties(array(

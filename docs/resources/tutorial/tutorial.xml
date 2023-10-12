@@ -2,11 +2,12 @@
 <document id="tutorial" name="Tutorial"
     description="Indigo - the tutorial">
 	
-	<datasource name="framedimg"
-	    class="idg_datasource_blocks_framedimg">
-	    file: sneakers.jpg; width: 90; height: 90;
-    </datasource>
-	
+    <attribute name="image">
+        <option name="src">resources/tutorial/images/sneakers.jpg</option>
+        <option name="width">90px</option>
+        <option name="height">90px</option>
+    </attribute>		    	
+
     <datasource name="text1_src"
         class="idg_datasource_textfile">
         filename: resources/tutorial/what.html

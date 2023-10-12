@@ -84,6 +84,7 @@ if (@!$document = $site->get_document()) {
 }
 
 $view_php = "config/$design.php";
+
 $view_xml = "$cache_dir/$design.xml";
 
 if (!file_exists($view_xml)
@@ -104,6 +105,8 @@ if (!file_exists($view_xml)
 
 $view = new idg_view_html;
 $view->read_xml($view_xml);
+
+require_once($view_php);
 
 $view_postload = "config/$design.postload.php";
 

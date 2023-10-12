@@ -93,23 +93,12 @@ class idg_view_html extends idg_view
 	{
 		global $idg_program_name;
 
-		$doc_prop = array(
-			'name' => false,
-			'title-separator' => false,
-			'content-language' => false,
-			'index-document' => false,
-			'title' => false
-		);
-
 		if (!$document)
 		    die('idg_view_html: render called with null argument.'
 		        . ' Forgot to call get_document()?');
 
 		if (!$this->children)
 			die('<code>This page intentionally left blank.</code>');
-
-		/*! @todo this does not work */
-		$document->get_properties($doc_prop);
 
 		$style = $this->get_property('style');
 		$icon = $this->get_property('icon');
@@ -135,9 +124,12 @@ class idg_view_html extends idg_view
 			. " by $idg_program_name, time: $milli_time ms  -->\n"
 			. "<!DOCTYPE html>\n");
 
-		$this->_print('<html lang="' . $doc_prop['content-language'] . "\">\n"
+		$this->_print('<html lang="'
+			. $document->get_site()->get_property('content-language')
+			. "\">\n"
 			. "<head>\n"
-			. " <title>" . $doc_prop['title'] . "</title>\n"
+			. " <title>" . $document->get_property('title')
+			. "</title>\n"
 			. " <meta http-equiv=\"Content-Type\" content=\"text/html;"
 				. " charset=utf-8\">\n");
 
@@ -205,6 +197,8 @@ class idg_view_html_element extends idg_tree_node
 		$instance->render($document, $view);
 	}
 }
+
+/*! @todo give this a better name */
 
 class idg_view_html_part_type extends idg_view_html_element_type
 {

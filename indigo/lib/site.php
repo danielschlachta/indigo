@@ -6,7 +6,7 @@
  */
 
 require_once($idg_path . '/lib/tree.php');
-require_once($idg_path . '/lib/declarations.php');
+require_once($idg_path . '/lib/declaration.php');
 require_once($idg_path . '/lib/site_element.php');
 
 class idg_site extends idg_site_element {
