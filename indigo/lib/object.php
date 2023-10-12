@@ -53,8 +53,8 @@ class idg_object {
 
 	protected $type_obj;
 
-	protected $properties = array();
-	protected $hooks = array();
+	private $properties = array();
+	private $hooks = array();
 	protected $text;
 
 	private static $idg_object_counters = array();
@@ -91,6 +91,11 @@ class idg_object {
 			$id_count = ++idg_object::$idg_object_counters[$type];
 
 		$this->idg_id = $type . '-' . $id_count;
+	}
+
+	function clear() {
+		unset($this->parent);
+		unset($this->children);
 	}
 
 	function get_idg_id() {
@@ -140,7 +145,20 @@ class idg_object {
 		}
 	}
 
+	function set_property($name, $value) {
+		if (!$this->type_obj)
+			diag($this, 'set_property: idg object has no type');
+
+		if (!$this->type_obj->get_known($name))
+			diag($this, 'set_property: unknown property: ' . $name);
+
+		$this->properties[$name] = $value;
+	}
+
 	function set_properties($prop_array) {
+		if (!$this->type_obj)
+			diag($this, 'set_properties: idg object has no type');
+
 		foreach ($prop_array as $name => $value) {
 			if ($this->type_obj->get_known($name))
 				$this->properties[$name] = $value;
@@ -348,16 +366,6 @@ class idg_object {
 		}
 
 		return $xml;
-	}
-
-
-	function set_property($name, $value) {
-		$name = strtolower($name);
-		if (@$this->type_obj->known_properties[$name])
-			$this->properties[$name] = $value;
-		else
-			diag($this, get_class($this)
-			    . ': set_property: unknown property: ' . $name);
 	}
 
 }

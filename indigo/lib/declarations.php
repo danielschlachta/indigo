@@ -9,7 +9,7 @@ require_once($idg_path . '/lib/datasource.php');
 
 abstract class idg_declaration_type extends idg_object_type {
 
-	/*! Must return true, else traversal will fail! */
+	/* Must return true, else traversal will fail! */
 	function add_token(&$tree, &$depth, &$path) { return true; }
 }
 

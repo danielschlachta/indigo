@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<document id="tutorial" name="Tutorial"
+    description="Indigo - the tutorial">
+	
+	<datasource name="framedimg"
+	    class="idg_datasource_blocks_framedimg">
+	    file: sneakers.jpg; width: 90; height: 90;
+    </datasource>
+	
+    <datasource name="text1_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/what.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text1_src" />
+
+    <datasource name="text2_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/how.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text2_src"
+        anchor="how"
+        name="Getting started" />
+    <datasource name="site_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/hello/site.xml; language: xml;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="site_src" />
+    <datasource name="text3_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/how1.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text3_src" />
+    <datasource name="scatter_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/hello/scatter.xml; language: xml;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="scatter_src" />
+    <datasource name="text4_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/how2.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text4_src" />
+    <datasource name="index_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/hello/index.php; language: php;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="index_src" />
+    <datasource name="text5_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/how3.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text5_src" />
+
+    <datasource name="text6_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/dynamic.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text6_src"
+        anchor="dynamic"
+        name="Creating dynamic content" />
+    <datasource name="strip_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/hello-dynamic/strip.php; language: php;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="strip_src" />
+    <datasource name="text7_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/dynamic1.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text7_src" />
+
+    <datasource name="text8_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/phpscript.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text8_src"
+        anchor="phpscript"
+        name="Embedding php code" />
+    <datasource name="error_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/hello-dynamic/error.php; language: php;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="error_src" />
+    <datasource name="text9_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/phpscript1.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text9_src" />
+    <datasource name="rend_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/hello-dynamic/display_error.php; language: php;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="rend_src" />
+    <datasource name="text10_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/phpscript2.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text10_src" />
+
+    <datasource name="text11_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/datasources.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text11_src"
+        anchor="datasource"
+        name="Accessing data sources" />
+    <datasource name="nav_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/navi/navigation.php; language: php;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="nav_src" />
+    <datasource name="text12_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/datasources1.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text12_src" />
+
+    <datasource name="text13_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/newdatasources.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text13_src"
+        anchor="newdatasource"
+        name="Creating data sources" />
+    <datasource name="src_src"
+        class="idg_datasource_sourcefile">
+        filename: demo/final/datasource_imagelist.php; language: php;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="src_src" />
+    <datasource name="text14_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/newdatasources1.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text14_src" />
+
+    <datasource name="text15_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/more.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text15_src"
+        anchor="more"
+        name="More features" />
+    <datasource name="example_src"
+        class="idg_datasource_sourcefile">
+        filename: resources/tutorial/html_item.php; language: php;
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_sourcefile"
+        source="example_src" />
+    <datasource name="text16_src"
+        class="idg_datasource_textfile">
+        filename: resources/tutorial/more1.html
+    </datasource>
+    <renderer slot="main-text"
+        class="idg_view_html_renderer_textfile"
+        source="text16_src" />
+
+</document>

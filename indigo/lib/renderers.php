@@ -40,9 +40,9 @@ class idg_view_html_renderer_textfile extends idg_tree_node_implementation
 
 class idg_view_html_renderer_phpscript extends idg_tree_node_implementation
 {
-	function __construct(&$parent)
+	function __construct()
 	{
-		parent::__construct($parent);
+		parent::__construct();
 	}
 
 	function render(&$document, &$view)
@@ -64,8 +64,8 @@ class idg_view_html_renderer_phpscript extends idg_tree_node_implementation
 			require_once($file);
 			$data = false;
 			$obj = new $class($data);
-			$obj->parent = $this->parent;
-			$obj->idg_id = $this->parent->idg_id;
+			$obj->set_parent($this->parent);
+			$obj->idg_id = $this->get_idg_id();
 			$obj->set_properties($token->data);
 			$obj->render($document, $view);
 		}

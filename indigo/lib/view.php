@@ -5,7 +5,6 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-
 abstract class idg_view_type extends idg_tree_node_type {
 	function __construct()	{
 		parent::__construct();
@@ -83,6 +82,10 @@ class idg_view_node_param_obj extends idg_tree_node_implementation {
 	{
 		if (!($text = $this->get_text()))
 			return;
+
+		$cn = get_class($this);
+
+		echo "<!-- param obj: $cn: $text -->\n";
 
 		$lines = explode(";", trim($text));
 		foreach ($lines as $line) {

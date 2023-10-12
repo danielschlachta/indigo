@@ -36,7 +36,7 @@ class idg_view_html_type extends idg_view_type
 
 class idg_view_html extends idg_view
 {
-	protected $idg_translation = array(
+	protected $idg_xml_translation = array(
 		'view' => 'idg_view_html',
 		'part' => 'idg_view_html_part',
 		'container' => 'idg_view_html_container',
@@ -436,7 +436,6 @@ class idg_view_html_slot extends idg_tree_node {
 
 		foreach ($renderers as $renderer) {
 			$name = get_class($renderer);
-			echo "<!-- rendering for: $name -->\n";
 
 			if (($anchor = $renderer->anchor)) {
 				$anchor_count++;

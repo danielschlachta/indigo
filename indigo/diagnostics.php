@@ -18,8 +18,7 @@ function diag($obj, $msg) {
 	echo '</pre>';
 	echo '<br />';
 	echo '<pre>';
-	unset($obj->parent);
-	unset($obj->children);
+	$obj->clear();
 	print_r($obj);
 	echo '</pre>';
 	die();

@@ -10,6 +10,8 @@
 
 require_once($idg_path . '/lib/object.php');
 
+/*! @todo make this private member */
+
 $idg_xml_indent = '  ';
 
 class idg_tree_node_type extends idg_object_type
@@ -27,17 +29,29 @@ class idg_tree_node extends idg_object
 	private $parent;
 	protected $children; // accessed in view_html
 
-	protected $idg_translation; // array (idg_type => php type) for instance creation
+	/*! @todo nicer mech.? */
 
-	private $_xml_stack;
+	protected $idg_xml_translation;
 
-	function __construct()
-	{
+	private $_xml_current_object;
+
+	function __construct(&$parent = NULL) {
 		parent::__construct();
+		$this->parent = $parent;
 	}
 
 	function get_parent() {
 		return $this->parent;
+	}
+
+	/*! Set the parent object manually.
+	 *
+	 * This is necessary when programmatically constructing
+	 * site elements.
+	 */
+
+	function set_parent($parent) {
+		$this->parent = $parent;
 	}
 
 	function get_children() {
@@ -47,7 +61,8 @@ class idg_tree_node extends idg_object
 	/*!
 	 * Finds a child whose property \c $key_name is set to \c $key_value.
 	 *
-	 * This function is recursive. Returns NULL if nothing was found.
+	 * Returns NULL if nothing was found.
+	 * This function is recursive.
 	 */
 
 	function get_child_by_key($key_name, $key_value,
@@ -56,7 +71,8 @@ class idg_tree_node extends idg_object
 		if ($this->children)
 			foreach ($this->children as $child) {
 				if (($child->get_property($key_name) == $key_value)
-					&& (!$child_type || (get_class($child) == $child_type)))
+					&& (!$child_type
+						|| (get_class($child) == $child_type)))
 					return $child;
 
 				if ($childchild = $child->get_child_by_key(
@@ -66,22 +82,26 @@ class idg_tree_node extends idg_object
 	}
 
 	/*!
-	 * Returns an array of all children whose property $key_name is set to $key_value.
+	 * Returns an array of all children whose property \c $key_name is
+	 * set to \c $key_value and have type \c $child_type if specified.
 	 *
+	 * Returns NULL if nothing was found.
 	 * This function is not recursive!
 	 */
 
-	function get_children_by_key($key_name, $key_value, $child_type = false)
-	{
+	function get_children_by_key($key_name, $key_value,
+		$child_type = NULL) {
+
 		$retval = array();
 		foreach ($this->children as $child) {
 			if (($child->get_property($key_name) == $key_value)
-				&& (!$child_type || (get_class($child) == $child_type)))
+				&& (!$child_type
+					|| (get_class($child) == $child_type)))
 				$retval[] = $child;
 		}
 
 		if (count($retval) == 0)
-			$retval = false;
+			return;
 
 		return $retval;
 	}
@@ -96,39 +116,25 @@ class idg_tree_node extends idg_object
 		$this->children[] =& $child;
 	}
 
-	function write_xml($file_name)
-	{
-		global $idg_program_name;
-
-		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-		$xml .= '<!-- generated on ' . date('r', time())
-			. " by $idg_program_name  -->\n";
-
-		if (@!$fp = fopen($file_name, 'w'))
-			diag($this, 'xml: could not write ' . $file_name);
-
-		$this->traverse($xml,
-			'$this->_xml_write_start', '$this->_xml_write_end');
-		fwrite($fp, $xml);
-		fclose($fp);
-	}
-
 	/*!
 	 * Checks the whole subtree.
+	 *
+	 * @todo Currently only checks for the presence of mandatory
+	 * options. Could use some more thorough probing.
 	 */
 
-	function check()
-	{
+	function check() {
 		$dummy = false;
 		$this->traverse($dummy, '$this->_check');
 	}
 
 	/*!
 	 * Prints an ASCII representation of a subtree.
+	 *
+	 * @todo This does not currently work. Add support for attributes.
 	 */
 
-	function print_debug()
-	{
+	function print_debug() {
 		$dummy = false;
 		$this->traverse($dummy, '$this->_print_debug');
 	}
@@ -162,8 +168,25 @@ class idg_tree_node extends idg_object
 		return $retval;
 	}
 
-	function read_xml($file_name)
-	{
+	function write_xml($file_name) {
+		global $idg_program_name;
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+		$xml .= '<!-- generated on ' . date('r', time())
+			. " by $idg_program_name  -->\n";
+
+		if (@!$fp = fopen($file_name, 'w'))
+			diag($this, 'xml: could not write ' . $file_name);
+
+		$this->traverse($xml,
+			'$this->_xml_write_start', '$this->_xml_write_end');
+		fwrite($fp, $xml);
+		fclose($fp);
+	}
+
+	function read_xml($file_name, $parent = NULL) {
+		$this->_xml_current_object = $parent;
+
 		$xml_version = false;
 		$encoding = 'utf-8';
 
@@ -193,8 +216,6 @@ class idg_tree_node extends idg_object
 		xml_set_character_data_handler($parser, "_xml_character_data");
 		xml_set_default_handler($parser, "_xml_default_handler");
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-
-		$this->_xml_stack = false;
 
 		if (!xml_parse($parser, $xml)) {
 			$err_code = xml_get_error_code($parser);
@@ -234,8 +255,7 @@ class idg_tree_node extends idg_object
 		return true;
 	}
 
-	private function _xml_write_end(&$xml, &$depth, &$path)
-	{
+	private function _xml_write_end(&$xml, &$depth, &$path)	{
 		global $idg_xml_indent;
 
 		if (!$this->children && !$this->text)
@@ -250,51 +270,48 @@ class idg_tree_node extends idg_object
 		return true;
 	}
 
-	private function _xml_read_start($parser, $name, $properties)
-	{
-		$class_name = $name;
+	private function _xml_read_start($parser, $name, $properties) {
+		if ($name == 'xi:include') {
+			if (!$href = @$properties['href'])
+				diag($this,
+					"xml: xi:include: must specify property 'href'");
 
-		if ($name == 'attribute') {
-			$this->_xml_stack[] = new idg_tree_node();
+			$this->read_xml($href, $this->_xml_current_object);
 			return;
 		}
 
-		if ($this->idg_translation
-			&& @($trans = $this->idg_translation[$class_name]))
-			$class_name = $trans;
+		if ($this->idg_xml_translation
+			&& ($trans = @$this->idg_xml_translation[$name]))
+			$name = $trans;
 		else
-			diag($this, "read_xml: unknown tag '$class_name'");
+			diag($this, "xml: unknown tag '$name'");
 
-		if (!$this->_xml_stack) {
-			if ($class_name != get_class($this))
-				diag($this, get_class($this)
-				. ': read_xml: no parent class of this type');
+		if (!$this->_xml_current_object) {
 			$this->set_properties($properties);
-			$this->_xml_stack = array();
-			$obj =& $this;
+			$this->_xml_current_object = $this;
 		} else {
-			if (!class_exists($class_name))
-				diag($this, "xml: while trying to instantiate "
-					. "'$class_name'" . ": class does not exist");
-
-			$obj = new $class_name;
-
-			$obj->set_properties($properties);
-			$pos = count($this->_xml_stack) - 1;
-			$this->_xml_stack[$pos]->add_child($obj);
+			$new_object = new $name;
+			$new_object->set_properties($properties);
+			$this->_xml_current_object->add_child($new_object);
+			$this->_xml_current_object = $new_object;
 		}
-		$this->_xml_stack[] =& $obj;
 	}
 
-	private function _xml_read_end($parser, $name)
-	{
-		array_pop($this->_xml_stack);
+	private function _xml_read_end($parser, $name) {
+		if ($this->_xml_current_object)
+			$this->_xml_current_object =
+				$this->_xml_current_object->get_parent();
 	}
 
-	private function _xml_character_data($parser, $character_data)
-	{
-		$pos = count($this->_xml_stack) - 1;
-		$this->_xml_stack[$pos]->text .= $character_data;
+	private function _xml_character_data($parser, $character_data) {
+		if (trim($character_data) == '')
+			return;
+
+		if (!$this->_xml_current_object)
+			diag($this,
+				"xml: spurious character data: '$character_data'");
+
+		$this->_xml_current_object->text .= $character_data;
 	}
 
 	private function _xml_default_handler($parser, $data) {
@@ -359,5 +376,43 @@ class idg_tree_node_implementation {
 		return $this->parent->get_text();
 	}
 }
+
+class idg_attribute_type extends idg_object_type {
+	public $child_types = array('idg_option');
+
+	function __construct() {
+		parent::__construct();
+		$this->set_known('name');
+	}
+}
+
+class idg_attribute {
+	private $name;
+	private $scope;
+	private $options = array();
+
+	function __construct($name) {
+		if (($pos = strpos($name, '::')) > 0) {
+			$this->name = substr($name, 0, $pos);
+			$this->scope = substr($name, $pos + 2);
+		}
+		else
+			$this->name = $name;
+
+		echo "<!-- constructed attr. $this->name scope $this->scope -->\n";
+	}
+
+
+}
+
+class idg_option_type extends idg_object_type {
+
+	function __construct() {
+		parent::__construct();
+		$this->set_known('name');
+	}
+}
+
+class idg_option extends idg_tree_node {}
 
 ?>
