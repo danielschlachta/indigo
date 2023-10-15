@@ -9,18 +9,18 @@ $view->set_properties(array(
 		. ' Daniel Schlachta&lt;/a&gt;'
 ));
 
-$part = new idg_view_html_part;
-$part->set_properties(array(
+$template = new idg_view_html_template;
+$template->set_properties(array(
 	'class' => 'minimal'
 ));
-$view->add_child($part);
+$view->add_child($template);
 
 $body = new idg_view_html_container;
 $body->set_properties(array(
 	'name' => 'body'
 ));
 
-$part->add_child($body);
+$template->add_child($body);
 
 $navi = new idg_view_html_renderer;
 $navi->set_properties(array(

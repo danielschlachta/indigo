@@ -16,7 +16,7 @@
  * it will occupy the content area behind the second one.
  */
 
-class idg_view_html_part_fixedbar extends idg_tree_node_instance
+class idg_view_html_template_fixedbar extends idg_tree_node_instance
 {
 
 	function __construct(&$parent)
@@ -93,7 +93,7 @@ class idg_view_html_part_fixedbar extends idg_tree_node_instance
  * A simple one with the scroll bar always visible
  */
 
-class idg_view_html_part_fixedcontent
+class idg_view_html_template_fixedcontent
 	extends idg_tree_node_instance
 {
 

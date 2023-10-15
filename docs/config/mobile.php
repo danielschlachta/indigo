@@ -8,11 +8,11 @@ $view->set_properties(array(
 	'icon' => 'favicon.png'
 ));
 
-$part = new idg_view_html_part;
-$part->set_properties(array('class' => 'fixedcontent',
+$template = new idg_view_html_template;
+$template->set_properties(array('class' => 'fixedcontent',
     'style' => $font . ' background: #b4d2b0;'));
 
-$view->add_child($part);
+$view->add_child($template);
 
 $text_box = new idg_view_html_container;
 $text_box->set_properties(array('name' => 'background', 
@@ -35,6 +35,6 @@ $main_text->set_properties(array('name' => 'main-text',
     'filter' => 'mobile_filter_preformat'));
 $text_box->add_child($main_text);
 
-$part->add_child($text_box);
+$template->add_child($text_box);
 
 ?>

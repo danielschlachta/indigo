@@ -17,7 +17,7 @@ require_once('minimal/footer.php');
  */
 
 
-class idg_view_html_part_minimal extends idg_view_node_param_obj
+class idg_view_html_template_minimal extends idg_view_node_param_obj
 {
 	function __construct(&$parent)
 	{

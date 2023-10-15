@@ -22,7 +22,7 @@
 
 class idg_view_html_type extends idg_view_type
 {
-	var $child_types = array('idg_view_html_part');
+	var $child_types = array('idg_view_html_template');
 
 	function __construct()
 	{
@@ -38,7 +38,7 @@ class idg_view_html extends idg_view
 {
 	protected $idg_xml_translation = array(
 		'view' => 'idg_view_html',
-		'part' => 'idg_view_html_part',
+		'part' => 'idg_view_html_template',
 		'container' => 'idg_view_html_container',
 		'renderer' => 'idg_view_html_renderer',
 		'item' => 'idg_view_html_item',
@@ -200,7 +200,7 @@ class idg_view_html_element extends idg_tree_node
 
 /** @todo give this a better name */
 
-class idg_view_html_part_type extends idg_view_html_element_type
+class idg_view_html_template_type extends idg_view_html_element_type
 {
 
 	var $child_types = array(
@@ -215,7 +215,7 @@ class idg_view_html_part_type extends idg_view_html_element_type
 	}
 }
 
-class idg_view_html_part extends idg_view_html_element
+class idg_view_html_template extends idg_view_html_element
 {
 	function __construct()
 	{

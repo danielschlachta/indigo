@@ -18,7 +18,7 @@ if (@$font_blocks == null)
 
 $elements = '../designs/blocks/elements';
 
-class idg_view_html_part_blocks extends idg_view_html_part_fixedcontent {
+class idg_view_html_template_blocks extends idg_view_html_template_fixedcontent {
 
     function __construct(&$parent) {
         parent::__construct($parent);
@@ -26,29 +26,29 @@ class idg_view_html_part_blocks extends idg_view_html_part_fixedcontent {
 }
 
 function idg_view_blocks_make_testcard(&$document, &$view, $text) {
-    $part = new idg_view_html_part;
-    $part->set_properties(array(
+    $template = new idg_view_html_template;
+    $template->set_properties(array(
         'class' => 'blocks',
         'style' => 'background: #a8bdff; margin-top: 70px;'
     ));
-    $view->add_child($part);
+    $view->add_child($template);
 
     $imageframe = new idg_view_html_renderer;
     $imageframe->set_properties(array(
         'class' => 'blocks_imageframe'
     ));
-    $part->add_child($imageframe);
+    $template->add_child($imageframe);
 
     $centercol = new idg_view_html_container;
     $centercol->set_properties(array(
         'name' => 'center',
         'style' => 'margin: 2em;'
     ));
-    $part->add_child($centercol);
+    $template->add_child($centercol);
 
     $tabs = new idg_view_html_renderer;
     $tabs->set_properties(array(
-        'class' => 'tabs',
+        'class' => 'blocks_tabs',
         'source' => '_site',
         'tag' => 'folder-1'
     ));
@@ -81,13 +81,13 @@ function idg_view_blocks_make_testcard(&$document, &$view, $text) {
     $attr->set_parameter('src', 'https://thispersondoesnotexist.com/');
     $attr->set_parameter('top', 15);
     $attr->set_parameter('left', 15);
-    $part->add_child($imageframe);
+    $template->add_child($imageframe);
 
     $infobox = new idg_view_html_renderer;
     $infobox->set_properties(array(
         'class' => 'blocks_infobox'
     ));
-    $part->add_child($infobox);
+    $template->add_child($infobox);
 
     $dropdown = new idg_view_html_renderer;
     $dropdown->set_properties(array(
@@ -96,7 +96,7 @@ function idg_view_blocks_make_testcard(&$document, &$view, $text) {
         'tag' => 'folder-2',
         'style' => 'position: fixed; top: 20px; right: 20px;'
     ));
-    $part->add_child($dropdown);
+    $template->add_child($dropdown);
 }
 
 ?>

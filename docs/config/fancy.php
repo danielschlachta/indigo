@@ -9,8 +9,8 @@ $view->set_properties(array(
 
 // Create the layout and add it to the view
 
-$part = new idg_view_html_part;
-$part->set_properties(array(
+$template = new idg_view_html_template;
+$template->set_properties(array(
 	'class' => 'fancy',
 ));
 
@@ -22,7 +22,7 @@ $part_opts = array(
 
 //$part->set_options($part_opts);
 
-$view->add_child($part);
+$view->add_child($template);
 
 /*
  *  Add the navigation first as it normally appears like that on
@@ -42,7 +42,7 @@ $navigation_opts = array(
 );
 //$navigation->set_options($navigation_opts);
 
-$part->add_child($navigation);
+$template->add_child($navigation);
 
 // Insert the caption
 
@@ -59,7 +59,7 @@ $caption_opts = array(
 );
 //$caption->set_options($caption_opts);
 
-$part->add_child($caption);
+$template->add_child($caption);
 
 // Add a container for the sidebar
 
@@ -71,7 +71,7 @@ $sidebar->set_properties(array(
 	'source' => '_site'
 ));
 
-$part->add_child($sidebar);
+$template->add_child($sidebar);
 
 // Add a container for the content
 
@@ -91,7 +91,7 @@ $main_text->set_properties(array(
 ));
 $content->add_child($main_text);
 
-$part->add_child($content);
+$template->add_child($content);
 
 // Create a footer programmatically
 
@@ -108,6 +108,6 @@ $footer_opts = array(
 );
 //$footer->set_options($footer_opts);
 
-$part->add_child($footer);
+$template->add_child($footer);
 
 ?>

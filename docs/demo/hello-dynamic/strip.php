@@ -8,12 +8,12 @@ $view->set_properties(array(
 	'style' => $font . ' background: #53538a;'
 ));
 
-$part = new idg_view_html_part;
-$part->set_properties(array(
+$template = new idg_view_html_part;
+$template->set_properties(array(
 	'class' => 'fixedcontent'
 ));
 
-$view->add_child($part);
+$view->add_child($template);
 
 $body = new idg_view_html_container;
 $body->set_properties(array(
@@ -23,7 +23,7 @@ $body->set_properties(array(
 	    . 'border-width: 0px 1px 1px 1px; padding: 30px;'
 ));
 
-$part->add_child($body);
+$template->add_child($body);
 
 $main_text = new idg_view_html_slot;
 $main_text->set_properties(array(

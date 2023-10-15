@@ -9,11 +9,11 @@ $view->set_properties(array(
 	'style' => $font . ' background: #53538a ' . 'url(elements/blocks/bg_grad.png) ' . 'fixed repeat-x;'
 ));
 
-$part = new idg_view_html_part;
-$part->set_properties(array(
+$template = new idg_view_html_template;
+$template->set_properties(array(
 	'class' => 'fixedcontent'
 ));
-$view->add_child($part);
+$view->add_child($template);
 
 $centercol = new idg_view_html_container;
 $centercol->set_properties(array(
@@ -22,11 +22,11 @@ $centercol->set_properties(array(
 	'style-print' => 'margin: 0;'
 ));
 
-$part->add_child($centercol);
+$template->add_child($centercol);
 
 $tabs = new idg_view_html_renderer;
 $tabs->set_properties(array(
-	'class' => 'tabs',
+	'class' => 'blocks_tabs',
 	'source' => '_site',
     'tag' => 'main'
 ));
@@ -108,7 +108,7 @@ $image->set_parameter('src', 'elements/blocks/indigo.png');
 
 $logo->add_child($logo_image);
 
-$part->add_child($logo);
+$template->add_child($logo);
 
 $imageframe = new idg_view_html_renderer;
 $imageframe->set_properties(array(
@@ -119,13 +119,13 @@ $attr = $imageframe->create_attribute('image');
 $attr->set_parameter('top', 30);
 $attr->set_parameter('left', 30);
 
-$part->add_child($imageframe);
+$template->add_child($imageframe);
 
 $infobox = new idg_view_html_renderer;
 $infobox->set_properties(array(
 	'class' => 'blocks_infobox'
 ));
-$part->add_child($infobox);
+$template->add_child($infobox);
 
 $dropdown = new idg_view_html_renderer;
 $dropdown->set_properties(array(
@@ -137,27 +137,27 @@ $dropdown->set_properties(array(
 $attr = $dropdown->create_attribute('dropdown');
 $attr->set_parameter('bg-url', 'elements/blocks/compass.png');
 
-$part->add_child($dropdown);
+$template->add_child($dropdown);
 
 $searchbox = new idg_view_html_item;
 $searchbox->set_properties(array(
 	'class' => 'searchbox'
 ));
 
-$part->add_child($searchbox);
+$template->add_child($searchbox);
 
 $toolbox = new idg_view_html_item;
 $toolbox->set_properties(array(
 	'class' => 'toolbox'
 ));
 
-$part->add_child($toolbox);
+$template->add_child($toolbox);
 
 $background_img = new idg_view_html_container;
 $background_img->set_properties(array(
 	'name' => 'image-bg'
 ));
-$part->add_child($background_img);
+$template->add_child($background_img);
 
 $bg_sky_container = new idg_view_html_container;
 $bg_sky_container->set_properties(array(

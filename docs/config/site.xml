@@ -15,9 +15,14 @@
             </attribute> -->
 
             <datasource name="infobox"
-                        class="idg_datasource_blocks_infobox">
-                caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
-                <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
+                        class="idg_datasource_rss">
+                <param name="type">rss</param>
+                <attribute name="infobox">
+                    <option name="caption">Excuse of the day</option>
+                    <option name="feed">https://meyerweb.com/feeds/excuse/rss20.xml</option>
+                </attribute>
+                <!-- caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
+                caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
             </datasource>
 
             <datasource name="text1_src"

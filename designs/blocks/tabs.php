@@ -5,7 +5,7 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_tabs extends idg_tree_node_instance {
+class idg_view_html_renderer_blocks_tabs extends idg_tree_node_instance {
 
     function __construct(&$parent) {
         parent::__construct($parent);

@@ -5,15 +5,15 @@ $font = 'font-family: georgia,serif; font-size: 100%; line-height: 1.2;';
 $view = new idg_view_html;
 $view->set_properties(array('name' => 'gradient', 'icon' => 'favicon.png'));
 
-$part = new idg_view_html_part;
-$part->set_properties(array('class' => 'fixedbar',
+$template = new idg_view_html_template;
+$template->set_properties(array('class' => 'fixedbar',
     'style' => $font . 'background-color: #46467d'
     ));
 
 $fixed_pos = 'left';
-$part->set_text("fixed-width: 100px; fixed-position: $fixed_pos;");
+$template->set_text("fixed-width: 100px; fixed-position: $fixed_pos;");
 
-$view->add_child($part);
+$view->add_child($template);
 
 $fixed = new idg_view_html_container;
 
@@ -110,8 +110,8 @@ $text_box->add_child($bottom);
 
 $main->add_child($text_box);
 
-$part->add_child($fixed);
-$part->add_child($main);
-$part->add_child($logo);
+$template->add_child($fixed);
+$template->add_child($main);
+$template->add_child($logo);
 
 ?>

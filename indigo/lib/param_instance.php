@@ -10,7 +10,7 @@
  * @todo rename options to parameters
  */
 
-class idg_param_instance {
+abstract class idg_param_instance {
     private $options = [];
     
     function __construct($parameters = null) {
