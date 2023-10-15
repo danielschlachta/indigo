@@ -326,7 +326,6 @@ class idg_view_html_renderer_type extends idg_view_html_element_type
 
 		$this->set_known('source');
 		$this->set_known('tag');
-		$this->set_mandatory('source');
 	}
 }
 
@@ -357,7 +356,7 @@ class idg_view_html_renderer extends idg_view_html_element
 	{
 		$source_name = $this->get_property('source');
 
-		if ($source_name != 'null') {
+		if ($source_name) {
 				$this->datasource =
 					$document->get_datasource($source_name);
 
@@ -368,7 +367,6 @@ class idg_view_html_renderer extends idg_view_html_element
 
 		$instance = $this->get_instance();
 		$instance->datasource = $this->datasource;
-		$instance->tag = $this->get_property('tag');
 		$instance->render($document, $view);
 	}
 }

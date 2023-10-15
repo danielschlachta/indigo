@@ -49,8 +49,7 @@ $part->add_child($navigation);
 $caption = new idg_view_html_renderer;
 $caption->set_properties(array(
 	'name' => 'header',
-	'class' => 'fancy_caption',
-	'source' => 'null',
+	'class' => 'fancy_caption'
 	//'style' => 'font-style: italic;'
 ));
 
@@ -99,8 +98,7 @@ $part->add_child($content);
 $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
 	'name' => 'footer',
-    'class' => 'fancy_footer',
-    'source' => 'null' // gotta have one
+    'class' => 'fancy_footer'
 ));
 
 $footer_opts = array(

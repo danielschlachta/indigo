@@ -73,7 +73,6 @@ $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
 	'class' => 'blocks_footer',
 	'name' => 'footer',
-	'source' => 'null',
 	'tag' => 'Copyright &copy; 2023 Daniel Schlachta',
 	'style' => "background-image: url($elements/footer/metal.png); "
 		. " $font_blocks; font-size: 70%;  padding: 5px;",
@@ -113,8 +112,7 @@ $part->add_child($logo);
 
 $imageframe = new idg_view_html_renderer;
 $imageframe->set_properties(array(
-	'class' => 'blocks_imageframe',
-	'source' => 'null'
+	'class' => 'blocks_imageframe'
 ));
 
 $attr = $imageframe->create_attribute('image');
@@ -125,8 +123,7 @@ $part->add_child($imageframe);
 
 $infobox = new idg_view_html_renderer;
 $infobox->set_properties(array(
-	'class' => 'blocks_infobox',
-	'source' => 'null'
+	'class' => 'blocks_infobox'
 ));
 $part->add_child($infobox);
 

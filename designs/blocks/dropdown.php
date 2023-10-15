@@ -16,7 +16,7 @@ class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementat
         global $elements;
 
         $idg_id = $this->get_idg_id();
-        $tag = $this->get_property('tag');
+        $tag = $this->$tag;
 
         $doc_path = $document->get_path();
 
@@ -87,10 +87,12 @@ class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementat
 
         $css = "div#$idg_id-box { width: 248px; font-size: 63%;"
             . " $font_blocks color: $fg_col; z-index: 210; $style }\n"
-            . "div#$idg_id-top { width: 250px; height: 16px;"
-            . " background: url($elements/navigation/nav_top.png)"
-            . " no-repeat; background-position: bottom left; }\n"
-            . "div#$idg_id-body { width: 100%; background: $bg_col;"
+            . "div#$idg_id-top { width: 250px; height: 16px;";
+        
+        $css .= " background: url($elements/navigation/nav_top.png)"
+            . " no-repeat; background-position: bottom left; }\n";
+        
+        $css .=  "div#$idg_id-body { width: 100%; background: $bg_col;"
             . " border: 1px solid $fg_col; border-width: 0px 1px 0px 1px; }\n"
             . "div#$idg_id-content { width: 218px; padding: 1px 5px 1px 5px;"
             . " margin: 0 10px 0 10px; background: $ct_col "
