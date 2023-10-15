@@ -8,7 +8,7 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
-/*!
+/**
  * Parent class of all views
  *
  * Defines the following properties:
@@ -82,7 +82,7 @@ class idg_view_html extends idg_view
 		);
 	}
 
-	/*! @todo helper/visibility/name  */
+	/** @todo helper/visibility/name  */
 
 	private function _milliseconds() {
 		$mt = explode(' ', microtime());
@@ -198,7 +198,7 @@ class idg_view_html_element extends idg_tree_node
 	}
 }
 
-/*! @todo give this a better name */
+/** @todo give this a better name */
 
 class idg_view_html_part_type extends idg_view_html_element_type
 {
@@ -330,7 +330,7 @@ class idg_view_html_renderer_type extends idg_view_html_element_type
 	}
 }
 
-/*!
+/**
  * The parent class of all renderers.
  *
  * Has one single function, _render, which does the basic work
@@ -348,7 +348,7 @@ class idg_view_html_renderer extends idg_view_html_element
 		$this->set_idg_type('renderer');
 	}
 
-	/*!
+	/**
 	 * See class description.
 	 *
 	 */
@@ -437,7 +437,9 @@ class idg_view_html_slot extends idg_tree_node {
 			} else
 				$body = '';
 
-			$body .= "<div class=\"TRARA $idg_id\">\n";
+			/* @todo is this div necessary ? */
+
+			$body .= "<div class=\"$idg_id\">\n";
 			$view->stream_append('html-body', $body);
 			$renderer->render($document, $view);
 			$body = "</div>\n";
@@ -477,7 +479,7 @@ class idg_view_html_slot extends idg_tree_node {
 			$css .= "	}\n\n";
 		}
 
-		/*! @todo css-print? */
+		/** @todo css-print? */
 
 
 		if ($anchor_count > 0)

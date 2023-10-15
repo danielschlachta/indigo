@@ -34,7 +34,7 @@ abstract class idg_view extends idg_tree_node {
 		$this->filters[$name] = false;
 	}
 
-	/*! @todo HTML specific stream selection! */
+	/** @todo HTML specific stream selection! */
 
 	function stream_append($stream_name, $content)	{
 		if (array_key_exists($stream_name, $this->streams)) {

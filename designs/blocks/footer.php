@@ -1,76 +1,62 @@
 <?php
-class idg_view_html_renderer_blocks_footer extends idg_tree_node_implementation
-{
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-	}
 
-	function render(&$document, &$view)
-	{
-		global $font_blocks;
-		global $elements;
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
 
-		$idg_id = $this->get_idg_id();
-		$style = $this->get_property('style');
-		$last_change = substr($document->get_property('last-change'), 0, 10);
-		$style_heading = $this->get_property('style-heading');
-		$style_link = $this->get_property('style-link');
-		$style_link_hover = $this->get_property('style-link-hover');
-		$style_image = $this->get_property('style-image');
+class idg_view_html_renderer_blocks_footer extends idg_tree_node_implementation {
 
-		$bg_col = '#b4d2b0';
-		$bo_col = '#1e3723';
-		$fr_col = '#b4d2b0';
-		$co_col = '#b4d2b0';
-		$fo_col = '#222';
+    function __construct(&$parent) {
+        parent::__construct($parent);
+    }
 
-		$css = "div#$idg_id-box { margin: 5px 0 0 0; background: $bg_col;"
-			. " border: solid $bo_col; border-width: 1px 1px 0px 1px;"
-			. " $font_blocks font-size: 70%; }\n"
-			. "div#$idg_id-frame { padding: 15px 25px 0px 35px;"
-			. " background: $fr_col url($elements/footer/line_red.png)"
-			. " repeat-y; }\n"
-			. "div#$idg_id-content { background: $co_col"
-			. " url($elements/footer/metal.png);"
-			. " padding: 5px; color: $fo_col; text-align: right; $style }\n"
-			. "div#$idg_id-content p { margin: 0.3em 0 0 0; }\n"
-			. "span#$idg_id-top { float: left; position: relative;"
-			. " top: 0; left: 0; z-index: 220; }\n";
+    function render(&$document, &$view) {
+        global $font_blocks;
+        global $elements;
 
-		if ($style_heading)
-			$css .= "div#$idg_id-content h1 { $style_heading }\n";
-		if ($style_link)
-			$css .= "div#$idg_id-content a { $style_link }\n";
-		if ($style_link_hover)
-			$css .= "div#$idg_id-content a:hover { $style_link_hover }\n";
-		if ($style_image)
-			$css .= "div#$idg_id-content img { $style_image }\n";
+        $idg_id = $this->get_idg_id();
+        $tag = $this->get_property('tag');
+        $style = $this->get_property('style');
+        $last_change = substr($document->get_property('last-change'), 0, 10);
+        $style_heading = $this->get_property('style-heading');
+        $style_link = $this->get_property('style-link');
+        $style_link_hover = $this->get_property('style-link-hover');
+        $style_image = $this->get_property('style-image');
 
-		$url = $document->get_site()->get_site_url();
+        $css = "div#$idg_id-content { background: #b4d2b0; "
+            . "text-align: right; $style }\n"
+            . "div#$idg_id-content p { margin: 0.3em 0 0 0; }\n"
+            . "span#$idg_id-top { float: left; position: relative;"
+            . " top: 0; left: 0; z-index: 220; }\n";
 
-		$body = "<div id=\"$idg_id-box\">\n"
-			. "<div id=\"$idg_id-frame\">\n"
-			. "<div id=\"$idg_id-content\">\n"
-			. "Last change: $last_change\n"
-			. "<p>\n<span id=\"$idg_id-top\"><a href=\"#top\">"
-			. "<img src=\"$elements/footer/link.png\""
-			. " width=\"11\" height=\"10\" alt=\"\">top</a></span>\n"
-			. " &copy;2023 <i>daniel@schlachta.info</i><span> |"
-			. " <a href=\"https://validator.w3.org/nu/?doc=$url\">"
-			. "<img src=\"$elements/footer/link.png\""
-			. " width=\"11\" height=\"10\" alt=\"\">HTML5</a></span>\n"
-			. "</p>\n</div>\n</div>\n</div>\n";
+        if ($style_heading)
+            $css .= "div#$idg_id-content h1 { $style_heading }\n";
+        if ($style_link)
+            $css .= "div#$idg_id-content a { $style_link }\n";
+        if ($style_link_hover)
+            $css .= "div#$idg_id-content a:hover { $style_link_hover }\n";
+        if ($style_image)
+            $css .= "div#$idg_id-content img { $style_image }\n";
 
-		$css_print = "div#$idg_id-box { margin: 0; border: 0; }\n"
-			. "div#$idg_id-frame { margin: 0; border: 0; }\n"
-			. "div#$idg_id-content { padding: 0; }\n"
-			. "div#$idg_id-content span { display: none; }\n";
+        $url = $document->get_site()->get_site_url();
 
-		$view->stream_append('css', $css);
-		$view->stream_append('css-print', $css_print);
-		$view->stream_append('html-body', $body);
-	}
+        $body = "<div id=\"$idg_id-content\">\n"
+            . "Last change: $last_change\n"
+            . "<p>\n<span id=\"$idg_id-top\"><a href=\"#top\">"
+			. "top</a></span>\n"
+            . " $tag |"
+            . " <a href=\"https://validator.w3.org/nu/?doc=$url\">"
+			. "HTML5</a>\n"
+            . "</p>\n</div>\n";
+
+        $css_print =  "div#$idg_id-content { padding: 0; }\n"
+            . "div#$idg_id-content span { display: none; }\n";
+
+        $view->stream_append('css', $css);
+        $view->stream_append('css-print', $css_print);
+        $view->stream_append('html-body', $body);
+    }
 }
 
 ?>

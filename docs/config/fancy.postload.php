@@ -2,7 +2,7 @@
 
 require_once($idg_path . '/../designs/fancy.php');
 
-function fancy_filter_get_footer_tag() {
+function fancy_hook_get_footer_tag() {
 	global $document;
 
 	$date = new DateTimeImmutable($document->get_property('last-change'));
@@ -15,6 +15,6 @@ function fancy_filter_get_footer_tag() {
 
 
 $footer = $view->get_child_by_key('name', 'footer');
-$footer->set_hook('tag', 'fancy_filter_get_footer_tag');
+$footer->set_hook('tag', 'fancy_hook_get_footer_tag');
 
 ?>

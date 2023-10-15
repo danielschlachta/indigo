@@ -2,10 +2,8 @@
 <document id="tutorial" name="Tutorial"
     description="Indigo - the tutorial">
 	
-    <attribute name="image">
+    <attribute name="blocks::image">
         <option name="src">resources/tutorial/images/sneakers.jpg</option>
-        <option name="width">90px</option>
-        <option name="height">90px</option>
     </attribute>		    	
 
     <datasource name="text1_src"

@@ -8,7 +8,7 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
-/*!
+/**
  * A fixed div to the left or right.
  *
  * Takes at least two containers: one is the fixed sidebar (either left or
@@ -49,11 +49,12 @@ class idg_view_html_part_fixedbar extends idg_tree_node_implementation
 
 		$style = $this->get_property('style');
 
-		$css = "body { padding: 0; margin: 0; width: 100%; "
+		$css = "	body { padding: 0; margin: 0; width: 100%; "
 			. "overflow-x: hidden; $style; }\n"
-			. "div#$fixed_id { overflow: hidden; position: fixed; top: 0;"
-			. " $fixed_position: 0; height: 100%; width: $fixed_width;"
-			. " overflow: hidden; $style_fixed }\n"
+			. "div#$fixed_id { overflow: hidden; "
+			. "position: fixed; top: 0; $fixed_position: 0; "
+			. "height: 100%; width: $fixed_width; "
+			. "overflow: hidden; $style_fixed }\n"
 			. "div#$main_id { overflow-y: hidden;"
 			. " margin-$fixed_position: $fixed_width; $style_main }\n";
 
@@ -88,11 +89,12 @@ class idg_view_html_part_fixedbar extends idg_tree_node_implementation
 	}
 }
 
-/*!
+/**
  * A simple one with the scroll bar always visible
  */
 
-class idg_view_html_part_fixedcontent extends idg_tree_node_implementation
+class idg_view_html_part_fixedcontent
+	extends idg_tree_node_implementation
 {
 
 	function __construct(&$parent)
@@ -106,17 +108,20 @@ class idg_view_html_part_fixedcontent extends idg_tree_node_implementation
    	    $style_print = $this->get_property('style-print');
 
 	    if ($this->get_child_count() == 0)
-			diag($this, get_class($this) . ' must have at least one child');
+			diag($this,
+				get_class($this) . ' must have at least one child');
 
 		$idg_id = $this->get_idg_id();
 		$fixed = $this->get_child(0);
 
-		$css = "body { padding: 0; margin: 0; " . "width: 100%; height: 100%; "
+		$css = "	body { padding: 0; margin: 0; "
+			. "width: 100%; height: 100%; "
 			. "overflow-x: hidden; $style }\n"
 			. "div#$idg_id { position: relative; top: 0; left: 0; "
 			. "z-index: 130; }\n";
 
-		$css_print = "div#$idg_id { overflow-y: hidden; $style_print }\n";
+		$css_print =
+			"div#$idg_id { overflow-y: hidden; $style_print }\n";
 
 		$view->stream_append('css', $css);
 		$view->stream_append('css-print', $css_print);

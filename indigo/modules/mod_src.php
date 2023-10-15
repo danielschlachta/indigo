@@ -19,8 +19,7 @@ class idg_datasource_sourcefile extends idg_datasource
 
 		parent::__construct($parameters);
 
-		$tok = new idg_token($parameters);
-		$this->tokens[] = $tok;
+		$this->tokens[] = $parameters;
 
 	    $file = @$this->parameters['filename'];
 
@@ -41,13 +40,10 @@ class idg_datasource_sourcefile extends idg_datasource
 			    . ': could not open text file "' . $file . '"');
 
 		$tok = fread($fp, $max_size);
-		$content = new idg_token($tok);
 		fclose($fp);
-		$this->tokens[] = $content;
+		$this->tokens[] = $tok;
 
-		$mtime = filemtime($file);
-		$filetime = new idg_token($mtime);
-		$this->tokens[] = $filetime;$file = @$this->parameters['filename'];
+		$this->tokens[] = filemtime($file);
 
 		if (!$file)
 			diag($this, get_class($this)
@@ -66,9 +62,8 @@ class idg_datasource_sourcefile extends idg_datasource
 			    . ': could not open source file "' . $file . '"');
 
 		$tok = fread($fp, $max_size);
-		$content = new idg_token($tok);
 		fclose($fp);
-		$this->tokens[] = $content;
+		$this->tokens[] = $tok;
 	}
 }
 
@@ -82,9 +77,7 @@ class idg_view_html_renderer_sourcefile extends idg_tree_node_implementation
 	function render(&$document, &$view)
 	{
     	$this->datasource->rewind();
-		$token = $this->datasource->get_token();
-		$parameters = $token->get_data();
-
+		$parameters = $this->datasource->get_token();
 
         $language = $parameters['language'];
         @$bgcolor = $parameters['bgcolor'];
@@ -96,7 +89,7 @@ class idg_view_html_renderer_sourcefile extends idg_tree_node_implementation
 		if (!$height)
     	    $height = '100%';
 
-        $text = $this->datasource->get_token()->get_data();
+        $text = $this->datasource->get_token();
 
 		$geshi = new GeSHi($text, $language);
 		$geshi->enable_keyword_links(false);

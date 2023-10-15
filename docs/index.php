@@ -31,12 +31,18 @@ function complain_cache($dir, $file) {
 		. "The directory <blockquote><code>$dir"
 		. "</blockquote></code> seems not to be writable by the web server. ";
 
-	exec("ls -ld $dir 2>&1", $output);
+	exec("ls -ld $dir 2>&1", $ls);
+	$perm = $ls[0];
 
-	$perm = $output[0];
+	exec("id -nru", $userarr);
+	$user = $userarr[0];
+
+	exec("id -gn", $grouparr);
+	$group = $grouparr[0];
+
 	die("Current owner and permissions:<blockquote><code>$perm</code></blockquote>"
 		. "You should probably do:"
-		. "<blockquote><b><code>sudo chown www-data $dir"
+		. "<blockquote><b><code>sudo chown $user:$group -data $dir"
 		. "</b></blockquote></code> from any directory."
 		. "<ul><li>Trying to create file: <code>$file</code></li></ul>"
 		. "</body></html>");
@@ -90,7 +96,7 @@ $view_php = "config/$design.php";
 
 $view_xml = "$cache_dir/$design.xml";
 
-if (!file_exists($view_xml)
+/*if (!file_exists($view_xml)
 	|| filemtime($view_php) > filemtime($view_xml)) {
 	if (!$fc = @fopen($view_xml, "w")) {
 			complain_cache($cache_dir, $view_xml);
@@ -107,7 +113,7 @@ if (!file_exists($view_xml)
 }
 
 $view = new idg_view_html;
-$view->read_xml($view_xml);
+$view->read_xml($view_xml); */
 
 require_once($view_php);
 

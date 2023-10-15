@@ -16,8 +16,9 @@ class idg_site_element_type extends idg_tree_node_type
 	{
 		parent::__construct();
 		$this->set_known('id');
-		$this->set_known('name');
+		$this->set_mandatory('id');
 
+		$this->set_known('name');
 		$this->set_known('title');
 		$this->set_known('content-language');
 		$this->set_known('title-separator');
@@ -26,9 +27,6 @@ class idg_site_element_type extends idg_tree_node_type
 		$this->set_known('navigation-comment');
 		$this->set_known('index-document');
 		$this->set_known('show-name');
-
-		$this->set_mandatory('id');
-		$this->set_mandatory('name');
 	}
 }
 
@@ -56,7 +54,7 @@ class idg_folder_type extends idg_site_element_type
 	function __construct()
 	{
 		parent::__construct();
-		$this->set_mandatory('name', false);
+		$this->set_mandatory('name');
 	}
 }
 
@@ -72,26 +70,17 @@ class idg_folder extends idg_site_element
 	{
 		$prop = $this->get_properties();
 		$prop['type'] = 'folder';
-		$tree->add_node($depth, $prop, false);
+		$prop['depth'] = $depth;
+		$tree->tokens[] = $prop;
 
 		return true;
 	}
 }
 
-class idg_site_type extends idg_site_element_type
-{
-	function __construct()
-	{
-		parent::__construct();
-		$this->child_types[] = 'idg_datasource_declaration';
-		$this->set_mandatory('id', false);
-	}
-}
-
-
 class idg_document_type extends idg_site_element_type {
 	function __construct()	{
 		parent::__construct();
+		$this->set_mandatory('name');
 		$this->set_hook('title', '$this->get_default_title');
 		$this->set_hook('last-change', '$this->get_last_change');
 		$this->child_types[] = 'idg_datasource_declaration';
@@ -124,6 +113,15 @@ class idg_document extends idg_site_element {
 		return $url;
 	}
 
+	function get_folder() {
+		$folder = $this;
+
+		while ($folder && (get_class($folder) != 'idg_folder'))
+			$folder = $folder->get_parent();
+
+		return $folder;
+	}
+
 	function set_variable($name, $value = false)
 	{
 		$this->variables[$name] = $value;
@@ -145,7 +143,7 @@ class idg_document extends idg_site_element {
 			return $this->get_site()->get_datasource();
 		}
 
-		/*! @todo Tell where */
+		/** @todo Tell where */
 
 		if (!$source_name)
 			diag($this,  "idg_renderer_declaration: no datasource");
@@ -235,8 +233,15 @@ class idg_document extends idg_site_element {
 		$prop['path'] = $this->get_path();
 		$prop['url'] = '?display=' . $prop['path'];
 		$prop['type'] = 'document';
+		$prop['depth'] = $depth;
 
-		$tree->add_node($depth, $prop, false);
+		if (($parent = $this->get_parent())
+			&& get_class($parent) == 'idg_folder') {
+			$prop['parent-folder-id'] = $parent->get_property('id');
+			$prop['parent-folder-name'] = $parent->get_property('name');
+		}
+
+		$tree->tokens[] = $prop;
 
 		return true;
 	}

@@ -9,6 +9,16 @@ require_once($idg_path . '/lib/tree.php');
 require_once($idg_path . '/lib/declaration.php');
 require_once($idg_path . '/lib/site_element.php');
 
+class idg_site_type extends idg_site_element_type
+{
+	function __construct()
+	{
+		parent::__construct();
+		$this->child_types[] = 'idg_datasource_declaration';
+		$this->set_mandatory('id', false);
+	}
+}
+
 class idg_site extends idg_site_element {
 
 	protected $idg_xml_translation = array(
@@ -62,7 +72,7 @@ class idg_site extends idg_site_element {
 
 	function get_datasource() {
 		$dummy = false;
-		$tree = new idg_datasource_tree($dummy);
+		$tree = new idg_datasource($dummy);
 
 		if ($this->children) {
 			foreach ($this->children as $child) {
@@ -115,7 +125,7 @@ class idg_site extends idg_site_element {
         return $this->_sitemap . "</urlset>\n";
 	}
 
-	/*! @todo currently no way to set changefreq */
+	/** @todo currently no way to set changefreq */
 
 	private function _scan_object(&$object, $prefix = '') {
         if ($object->get_idg_type() == 'site')

@@ -1,5 +1,8 @@
+Doxyfile
+Makefile
+phpdoc.xml
 TODO
 /docs/cache/*
-/docs/resources/reference/html
-/doxygen
+/docs/resources/reference/*/*
+/gen
 

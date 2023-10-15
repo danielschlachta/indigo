@@ -31,9 +31,9 @@ class idg_view_html_renderer_textfile extends idg_tree_node_implementation
 	function render(&$document, &$view)
 	{
 		$this->datasource->rewind();
-		$content = $this->datasource->get_token()->get_data();
+		$content = $this->datasource->get_token();
 		$view->stream_append('html-body', $content);
-		$last_change = $this->datasource->get_token()->get_data();
+		$last_change = $this->datasource->get_token();
 		$document->set_last_change($last_change);
 	}
 }
@@ -49,8 +49,8 @@ class idg_view_html_renderer_phpscript extends idg_tree_node_implementation
 	{
 		$this->datasource->rewind();
 		$token = $this->datasource->get_token();
-		$class = $token->get_property('class');
-		$file = $token->get_property('script');
+		$class = $token['class'];
+		$file = $token['script'];
 
 		if (@stat($file) === false) {
 			$body = get_class($this)
@@ -66,13 +66,13 @@ class idg_view_html_renderer_phpscript extends idg_tree_node_implementation
 			$obj = new $class($data);
 			$obj->set_parent($this->parent);
 			$obj->idg_id = $this->get_idg_id();
-			$obj->set_properties($token->data);
+			$obj->set_properties($token);
 			$obj->render($document, $view);
 		}
 	}
 }
 
-class idg_view_html_renderer_phpscript_obj extends idg_token
+class idg_view_html_renderer_phpscript_obj
 {
 
 	var $idg_id;

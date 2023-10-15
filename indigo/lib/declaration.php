@@ -32,7 +32,7 @@ class idg_datasource_declaration extends idg_tree_node {
 		$this->set_idg_type('datasource');
 	}
 
-	/*! @todo: make this an object's functionality */
+	/** @todo: make this an object's functionality */
 
 	function get_instance(&$datasource = null)	{
 		if (!$class_name = $this->get_property('class'))
@@ -114,7 +114,7 @@ class idg_renderer_declaration extends idg_tree_node {
 			$prop['anchor'] = $anchor;
 			$prop['name'] = $this->get_property('name');
 
-			$tree->add_node($depth, $prop, false);
+			$tree->tokens[] = $prop;
 		}
 
 		return true;

@@ -8,36 +8,7 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
-class idg_token_tree_node extends idg_token
-{
-	// public functions
-
-	function __construct($depth, $is_leaf)
-	{
-		parent::__construct($depth);
-		$this->is_leaf = $is_leaf;
-	}
-}
-
-class idg_datasource_tree extends idg_datasource
-{
-	var $node_count = 0, $leaf_count = 0;
-
-	function add_node($depth, &$properties, $is_leaf = true)
-	{
-		$tok = new idg_token_tree_node($depth, $is_leaf);
-		$tok->properties = $properties;
-
-		if ($is_leaf)
-			$this->leaf_count++;
-		else
-			$this->node_count++;
-
-		$this->tokens[] = $tok;
-	}
-}
-
-/*!
+/**
  * Returns the content of a (normally text) file.
  *
  * Accepts parameters:
@@ -77,13 +48,9 @@ class idg_datasource_textfile extends idg_datasource
 			    . ': could not open text file "' . $file . '"');
 
 		$tok = fread($fp, $max_size);
-		$content = new idg_token($tok);
 		fclose($fp);
-		$this->tokens[] = $content;
-
-		$mtime = filemtime($file);
-		$filetime = new idg_token($mtime);
-		$this->tokens[] = $filetime;
+		$this->tokens[] = $tok;
+		$this->tokens[] = filemtime($file);
 	}
 }
 
@@ -101,13 +68,10 @@ class idg_datasource_phpscript extends idg_datasource
 			diag($this, get_class($this)
 			    . ': mandatory parameter(class) not found');
 
-		$token = new idg_token($this->parameters);
-		$properties = array(
+		$this->tokens[] = array(
 			'script' => $script,
 			'class' => $class
 		);
-		$token->set_properties($properties);
-		$this->tokens[] = $token;
 	}
 }
 

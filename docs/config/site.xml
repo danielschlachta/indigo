@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <site name="indigo"	content-language="en" index-document="main/home">
+	<attribute name="blocks::image">
+            <option name="src">main/home/images/randomsymbols.jpg</option>
+    </attribute>
 
 	<folder id="main" name="Main" show-name="no">
 		<document id="home"
@@ -7,12 +10,10 @@
 			description="Welcome to indigo"
 			navigation-comment="The page of pages">
 
-            <attribute name="image">
+            <!-- default <attribute name="blocks::image">
                 <option name="src">main/home/images/randomsymbols.jpg</option>
-                <option name="width">90px</option>
-                <option name="height">90px</option>
-            </attribute>
-            
+            </attribute> -->
+
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
@@ -39,12 +40,10 @@
 			name="About"
 			description="What it's about">
 
-            <attribute name="image">
+            <attribute name="blocks::image">
                 <option name="src">main/about/images/fractal.jpg</option>
-                <option name="width">90px</option>
-                <option name="height">90px</option>
-            </attribute>		    
-            
+            </attribute>
+
             <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: main/about/about.html
@@ -63,11 +62,9 @@
 			name="Designs"
 			description="The old switcheroo">
 
-            <attribute name="image">
+            <!-- <attribute name="blocks::image">
                 <option name="src">main/desings/images/none.jpg</option>
-                <option name="width">90px</option>
-                <option name="height">90px</option>
-            </attribute>		    
+            </attribute> -->
 
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
@@ -85,19 +82,21 @@
     </folder>
 
 	<folder id="resources" name="Resources" show-name="no">
-	    <xi:include 
+		<attribute name="image">
+            <option name="src">resources/tutorial/images/sneakers.jpg</option>
+		</attribute>
+
+	    <xi:include
 	        href="http://cortes.schlachta.local/~daniel/indigo/docs/resources/tutorial/tutorial.xml"
 	        xmlns:xi="http://www.w3.org/2003/XInclude" />
 
-   	    <document id="reference" 
-   	        name="Reference" 
+   	    <document id="reference"
+   	        name="Reference"
    	        description="Further Reading">
-   	        
-            <attribute name="image">
+
+            <attribute name="blocks::image">
                 <option name="src">resources/reference/images/telescope.jpg</option>
-                <option name="width">90px</option>
-                <option name="height">90px</option>
-            </attribute>		    
+            </attribute>
 
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
@@ -113,16 +112,14 @@
 			    source="text1_src" />
         </document>
 
-        <document id="examples" 
-            name="Examples" 
+        <document id="examples"
+            name="Examples"
             description="Stuff you can use">
-            
-            <attribute name="image">
+
+            <!--<attribute name="blocks::image">
                 <option name="src">resources/examples/images/none.jpg</option>
-                <option name="width">90px</option>
-                <option name="height">90px</option>
-            </attribute>		    		    
-            
+            </attribute>-->
+
             <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html
@@ -137,16 +134,14 @@
 			    source="text1_src" />
         </document>
 
-   	    <document id="license" 
-   	        name="License" 
+   	    <document id="license"
+   	        name="License"
    	        description="Legalese">
-   	        
-		    <attribute name="image">
+
+		    <!--<attribute name="blocks::image">
                 <option name="src">resources/reference/images/none.jpg</option>
-                <option name="width">90px</option>
-                <option name="height">90px</option>
-            </attribute>		    
-            
+            </attribute>-->
+
 		    <datasource name="infobox"
 			    class="idg_datasource_blocks_infobox">
 			    caption: Quick Links; links: resources/license/license.html

@@ -27,7 +27,8 @@ $part->add_child($centercol);
 $tabs = new idg_view_html_renderer;
 $tabs->set_properties(array(
 	'class' => 'tabs',
-	'source' => '_site'
+	'source' => '_site',
+    'tag' => 'main'
 ));
 $centercol->add_child($tabs);
 
@@ -38,8 +39,8 @@ $centercol_body = new idg_view_html_container;
 $centercol_body->set_properties(array(
 	'name' => 'center_body',
 	'style' => 'height: 100%; border: solid #1e3723; border-width: 0px 1px 1px 1px; padding: 0 30px 30px 23px; background: #b4d2b0 url(elements/blocks//line_red.png) repeat-y; text-align: justify;',
-	'style-head' => 'padding: 0.35em 0.5em 0.35em 0; border: solid #729e8d; border-width: 2px 0 2px 0; background: url(elements/blocks/randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: normal; font-style: italic; font-size: 150%;',
-	'style-subhead' => 'padding: 0.1em 1em 0.3em 0; border: solid #729e8d; border-width: 1px 0 1px 0; background: url(elements/blocks/randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: bold; font-size: 100%;',
+	'style-head' => 'padding: 0.35em 0.5em 0.35em 0; border: solid #729e8d; border-width: 2px 0 2px 0; background: url(elements/blocks/randomsymbols_bg.jpg); margin: 0 0 0.5em 0; text-align: right; font-weight: bold; font-style: italic; font-size: 150%;',
+	'style-subhead' => 'padding: 0.1em 1em 0 0; border: solid #729e8d; border-width: 1px 0 1px 0; background: url(elements/blocks/randomsymbols_bg.jpg); margin: 0; text-align: right; font-weight: normal; font-style: italic; font-size: 120%;',
 	'style-image' => 'border: 0;',
 	'style-print' => 'border: 0; padding: 1em; margin: 100px 0 0 0;',
 	'filter' => 'blocks_filter_linkimg'
@@ -58,20 +59,34 @@ $main_text->set_properties(array(
 ));
 $centercol_body->add_child($main_text);
 
+$footer_container = new idg_view_html_container;
+$footer_container->set_properties(array(
+	'name' => 'footer-container',
+	'style' => "background: #b4d2b0 "
+		. "url($elements/footer/line_red.png) repeat-y;"
+		. "padding: 15px 25px 0 35px; margin: 6px 1px  1px;",
+	'filter' => 'blocks_filter_linkimg'
+));
+$centercol->add_child($footer_container);
+
 $footer = new idg_view_html_renderer;
 $footer->set_properties(array(
 	'class' => 'blocks_footer',
-	'source' => '_site',
+	'name' => 'footer',
+	'source' => 'null',
+	'tag' => 'Copyright &copy; 2023 Daniel Schlachta',
+	'style' => "background-image: url($elements/footer/metal.png); "
+		. " $font_blocks; font-size: 70%;  padding: 5px;",
 	'style-link' => $style_link . ' height: 1.2em;',
 	'style-image' => 'margin-bottom: -1px; border: 0;',
-	'style-link-hover' => $style_link_hover
+	'style-link-hover' => $style_link_hover,
 ));
-$centercol->add_child($footer);
+$footer_container->add_child($footer);
 
 $logo = new idg_view_html_container;
 $logo->set_properties(array(
 	'name' => 'logo',
-	'style' => 'position: fixed; text-align: right; top: 20px;' . ' right: 20px; z-index: 120;',
+	'style' => 'position: fixed; text-align: right; top: 20px; right: 20px; z-index: 120;',
 	'style-print' => 'position: absolute; top: 0; right: 0;'
 ));
 
@@ -102,6 +117,10 @@ $imageframe->set_properties(array(
 	'source' => 'null'
 ));
 
+$attr = $imageframe->create_attribute('image');
+$attr->set_option('top', 30);
+$attr->set_option('left', 30);
+
 $part->add_child($imageframe);
 
 $infobox = new idg_view_html_renderer;
@@ -115,7 +134,8 @@ $navig = new idg_view_html_renderer;
 $navig->set_properties(array(
 	'class' => 'blocks_navigation',
 	'source' => '_site',
-	'tag' => 'resources'
+	'tag' => 'resources',
+	'style' => 'position: fixed; top: 160px; right: 30px;'
 ));
 $part->add_child($navig);
 
