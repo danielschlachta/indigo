@@ -68,7 +68,6 @@ function idg_view_blocks_make_testcard(&$document, &$view, $text) {
     $footer = new idg_view_html_renderer;
     $footer->set_properties(array(
         'class' => 'blocks_footer',
-        'source' => 'null',
         'tag' => 'footer tag',
         'style' => 'margin-top: 10px; padding: 10px;'
     ));
