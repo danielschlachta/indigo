@@ -10,7 +10,7 @@ if (file_exists($geshi_main)) {
 	exit;
 }
 
-class idg_datasource_sourcefile extends idg_datasource
+class idg_datasource_sourcefile extends idg_datasource_instance
 {
 
 	function __construct(&$parameters)
@@ -67,7 +67,7 @@ class idg_datasource_sourcefile extends idg_datasource
 	}
 }
 
-class idg_view_html_renderer_sourcefile extends idg_tree_node_implementation
+class idg_view_html_renderer_sourcefile extends idg_tree_node_instance
 {
 	function __construct(&$parent)
 	{

@@ -104,7 +104,7 @@ $logo_image->set_properties(array(
 ));
 
 $image = $logo_image->create_attribute('image');
-$image->set_option('src', 'elements/blocks/indigo.png');
+$image->set_parameter('src', 'elements/blocks/indigo.png');
 
 $logo->add_child($logo_image);
 
@@ -116,8 +116,8 @@ $imageframe->set_properties(array(
 ));
 
 $attr = $imageframe->create_attribute('image');
-$attr->set_option('top', 30);
-$attr->set_option('left', 30);
+$attr->set_parameter('top', 30);
+$attr->set_parameter('left', 30);
 
 $part->add_child($imageframe);
 
@@ -127,14 +127,17 @@ $infobox->set_properties(array(
 ));
 $part->add_child($infobox);
 
-$navig = new idg_view_html_renderer;
-$navig->set_properties(array(
-	'class' => 'blocks_navigation',
+$dropdown = new idg_view_html_renderer;
+$dropdown->set_properties(array(
+	'class' => 'blocks_dropdown',
 	'source' => '_site',
 	'tag' => 'resources',
 	'style' => 'position: fixed; top: 160px; right: 30px;'
 ));
-$part->add_child($navig);
+$attr = $dropdown->create_attribute('dropdown');
+$attr->set_parameter('bg-url', 'elements/blocks/compass.png');
+
+$part->add_child($dropdown);
 
 $searchbox = new idg_view_html_item;
 $searchbox->set_properties(array(

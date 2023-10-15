@@ -24,7 +24,7 @@ require_once('fancy/caption.php');
 require_once('fancy/sidebar.php');
 require_once('fancy/footer.php');
 
-class idg_view_html_part_fancy extends idg_tree_node_implementation
+class idg_view_html_part_fancy extends idg_tree_node_instance
 {
 	function __construct(&$parent, $parameters = null)
 	{

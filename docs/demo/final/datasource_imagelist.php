@@ -1,6 +1,6 @@
 <?php
 
-class idg_datasource_imagelist extends idg_datasource
+class idg_datasource_imagelist extends idg_datasource_instance
 {   
     function __construct(&$parameters)
     {

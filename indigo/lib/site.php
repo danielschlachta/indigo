@@ -70,18 +70,18 @@ class idg_site extends idg_site_element {
 		return $document_obj;
 	}
 
-	function get_datasource() {
-		$dummy = false;
-		$tree = new idg_datasource($dummy);
+	function get_datasource(array &$parameters = null) {
+		$datasource = new idg_datasource_instance;
+        $datasource->set_parameters($this->get_parameters());
 
 		if ($this->children) {
 			foreach ($this->children as $child) {
-				if (!$child->traverse($tree, '$this->add_token'))
+				if (!$child->traverse($datasource, '$this->add_token'))
 					diag($this, 'traverse failed for $this->add_token');
 			}
 		}
 
-		return $tree;
+		return $datasource;
 	}
 
 	function get_site_url($include_fragment = true)	{

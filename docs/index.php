@@ -4,8 +4,7 @@
  * indigo documentation
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
-
-
+  
 $idg_path = '../indigo';
 require_once("$idg_path/startup.php");
 

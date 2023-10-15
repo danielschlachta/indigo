@@ -17,7 +17,7 @@ if (file_exists($parsedown_main)) {
  * Use datasource_textfile as data source.
  */
 
-class idg_view_html_renderer_markdown extends idg_tree_node_implementation
+class idg_view_html_renderer_markdown extends idg_tree_node_instance
 {
 	function __construct(&$parent)
 	{

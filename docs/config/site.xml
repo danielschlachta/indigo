@@ -1,159 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <site name="indigo"	content-language="en" index-document="main/home">
-	<attribute name="blocks::image">
-            <option name="src">main/home/images/randomsymbols.jpg</option>
+    <attribute name="blocks::image">
+        <option name="src">main/home/images/randomsymbols.jpg</option>
     </attribute>
 
-	<folder id="main" name="Main" show-name="no">
-		<document id="home"
-			name="Home"
-			description="Welcome to indigo"
-			navigation-comment="The page of pages">
+    <folder id="main" name="Main" show-name="no">
+        <document id="home"
+                  name="Home"
+                  description="Welcome to indigo"
+                  navigation-comment="The page of pages">
 
             <!-- default <attribute name="blocks::image">
                 <option name="src">main/home/images/randomsymbols.jpg</option>
             </attribute> -->
 
-		    <datasource name="infobox"
-			    class="idg_datasource_blocks_infobox">
-			    caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
-			    <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
-		    </datasource>
+            <datasource name="infobox"
+                        class="idg_datasource_blocks_infobox">
+                caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
+                <!-- caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
+            </datasource>
 
-		    <datasource name="text1_src"
-			    class="idg_datasource_textfile">
-			    filename: main/home/home.html
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />
-   		    <datasource name="readme_src"
-			    class="idg_datasource_textfile">
-			    filename: ../README.md
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_markdown"
-			    source="readme_src" />
-	    </document>
+            <datasource name="text1_src"
+                        class="idg_datasource_textfile">
+                <param name="filename">main/home/home.html</param>
+            </datasource>
+            <renderer slot="main-text"
+                      class="idg_view_html_renderer_textfile"
+                      source="text1_src" />
+            <datasource name="readme_src"
+                        class="idg_datasource_textfile">
+                <param name="filename">../README.md</param>
+            </datasource>
+            <renderer slot="main-text"
+                      class="idg_view_html_renderer_markdown"
+                      source="readme_src" />
+        </document>
 
-	    <document id="about"
-			name="About"
-			description="What it's about">
+        <document id="about"
+                  name="About"
+                  description="What it's about">
 
             <attribute name="blocks::image">
                 <option name="src">main/about/images/fractal.jpg</option>
             </attribute>
 
             <datasource name="infobox"
-			    class="idg_datasource_blocks_infobox">
-			    caption: Quick Links; links: main/about/about.html
-		    </datasource>
+                        class="idg_datasource_blocks_infobox">
+                caption: Quick Links; links: main/about/about.html
+            </datasource>
 
-		    <datasource name="text1_src"
-			    class="idg_datasource_textfile">
-			    filename: main/about/about.html
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />
-	    </document>
+            <datasource name="text1_src"
+                        class="idg_datasource_textfile">
+                <param name="filename">main/about/about.html</param>
+            </datasource>
+            <renderer slot="main-text"
+                      class="idg_view_html_renderer_textfile"
+                      source="text1_src" />
+        </document>
 
-	    <document id="designs"
-			name="Designs"
-			description="The old switcheroo">
+        <document id="designs"
+                  name="Designs"
+                  description="The old switcheroo">
 
             <!-- <attribute name="blocks::image">
                 <option name="src">main/desings/images/none.jpg</option>
             </attribute> -->
 
-		    <datasource name="infobox"
-			    class="idg_datasource_blocks_infobox">
-			    caption: Choose your poison; file: infobox.html
-		    </datasource>
+            <datasource name="infobox"
+                        class="idg_datasource_blocks_infobox">
+                caption: Choose your poison; file: infobox.html
+            </datasource>
 
-		    <datasource name="text1_src"
-			    class="idg_datasource_textfile">
-			    filename: main/designs/designs.html
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />
-	    </document>
+            <datasource name="text1_src"
+                        class="idg_datasource_textfile">
+                <param name="filename">main/designs/designs.html</param>
+            </datasource>
+            <renderer slot="main-text"
+                      class="idg_view_html_renderer_textfile"
+                      source="text1_src" />
+        </document>
     </folder>
 
-	<folder id="resources" name="Resources" show-name="no">
-		<attribute name="image">
+    <folder id="resources" name="Resources" show-name="no">
+        <attribute name="image">
             <option name="src">resources/tutorial/images/sneakers.jpg</option>
-		</attribute>
+        </attribute>
 
-	    <xi:include
-	        href="http://cortes.schlachta.local/~daniel/indigo/docs/resources/tutorial/tutorial.xml"
-	        xmlns:xi="http://www.w3.org/2003/XInclude" />
+        <xi:include
+            href="http://cortes.schlachta.local/~daniel/indigo/docs/resources/tutorial/tutorial.xml"
+            xmlns:xi="http://www.w3.org/2003/XInclude" />
 
-   	    <document id="reference"
-   	        name="Reference"
-   	        description="Further Reading">
+        <document id="reference"
+                  name="Reference"
+                  description="Further Reading">
 
             <attribute name="blocks::image">
                 <option name="src">resources/reference/images/telescope.jpg</option>
             </attribute>
 
-		    <datasource name="infobox"
-			    class="idg_datasource_blocks_infobox">
-			    caption: Quick Links; links: resources/license/license.html
-		    </datasource>
+            <datasource name="infobox"
+                        class="idg_datasource_blocks_infobox">
+                caption: Quick Links; links: resources/license/license.html
+            </datasource>
 
-		    <datasource name="text1_src"
-			    class="idg_datasource_textfile">
-			    filename: resources/reference/reference.html
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />
+            <datasource name="text1_src"
+                        class="idg_datasource_textfile">
+                <param name="filename">resources/reference/reference.html</param>
+            </datasource>
+            <renderer slot="main-text"
+                      class="idg_view_html_renderer_textfile"
+                      source="text1_src" />
         </document>
 
         <document id="examples"
-            name="Examples"
-            description="Stuff you can use">
+                  name="Examples"
+                  description="Stuff you can use">
 
             <!--<attribute name="blocks::image">
                 <option name="src">resources/examples/images/none.jpg</option>
             </attribute>-->
 
             <datasource name="infobox"
-			    class="idg_datasource_blocks_infobox">
-			    caption: Quick Links; links: resources/license/license.html
-		    </datasource>
+                        class="idg_datasource_blocks_infobox">
+                caption: Quick Links; links: resources/license/license.html
+            </datasource>
 
-		    <datasource name="text1_src"
-			    class="idg_datasource_textfile">
-			    filename: resources/examples/examples.html
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />
+            <datasource name="text1_src"
+                        class="idg_datasource_textfile">
+                <param name="filename">resources/examples/examples.html</param>
+            </datasource>
+            <renderer slot="main-text"
+                      class="idg_view_html_renderer_textfile"
+                      source="text1_src" />
         </document>
 
-   	    <document id="license"
-   	        name="License"
-   	        description="Legalese">
+        <document id="license"
+                  name="License"
+                  description="Legalese">
 
-		    <!--<attribute name="blocks::image">
+            <!--<attribute name="blocks::image">
                 <option name="src">resources/reference/images/none.jpg</option>
             </attribute>-->
 
-		    <datasource name="infobox"
-			    class="idg_datasource_blocks_infobox">
-			    caption: Quick Links; links: resources/license/license.html
-		    </datasource>
+            <datasource name="infobox"
+                        class="idg_datasource_blocks_infobox">
+                caption: Quick Links; links: resources/license/license.html
+            </datasource>
 
-		    <datasource name="text1_src"
-			    class="idg_datasource_textfile">
-			    filename: resources/license/license.html
-		    </datasource>
-		    <renderer slot="main-text"
-			    class="idg_view_html_renderer_textfile"
-			    source="text1_src" />
+            <datasource name="text1_src"
+                        class="idg_datasource_textfile">
+                <param name="filename">resources/license/license.html</param>
+            </datasource>
+            <renderer slot="main-text"
+                      class="idg_view_html_renderer_textfile"
+                      source="text1_src" />
         </document>
     </folder>
 </site>

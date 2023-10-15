@@ -32,7 +32,7 @@ function blocks_filter_blockquote(&$text) {
     return $output;
 }
 
-class idg_view_html_item_searchbox extends idg_tree_node_implementation {
+class idg_view_html_item_searchbox extends idg_tree_node_instance {
 
     function __construct(&$parent) {
         parent::__construct($parent);
@@ -78,7 +78,7 @@ class idg_view_html_item_searchbox extends idg_tree_node_implementation {
     }
 }
 
-class idg_view_html_item_toolbox extends idg_tree_node_implementation {
+class idg_view_html_item_toolbox extends idg_tree_node_instance {
 
     function __construct(&$parent) {
         parent::__construct($parent);

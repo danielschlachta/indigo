@@ -1,11 +1,12 @@
 <?php
 
 /*
- *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  Copyright (c) 2023 
+ *  Daniel Schlachta <daniel.schlachta@gmail.com>
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementation {
+class idg_view_html_renderer_blocks_dropdown extends idg_tree_node_instance {
 
     function __construct(&$parent) {
         parent::__construct($parent);
@@ -16,8 +17,13 @@ class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementat
         global $elements;
 
         $idg_id = $this->get_idg_id();
-        $tag = $this->$tag;
+        $tag = $this->get_property('tag');
 
+        $attr = new idg_attribute('dropdown');  
+        $attr->add_options($this, 'blocks');
+        $attr->add_options($document, 'blocks');
+        $bg_url = $attr->get_parameter('bg-url');
+        
         $doc_path = $document->get_path();
 
         $this->datasource->rewind();
@@ -25,13 +31,13 @@ class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementat
         $body = '';
 
         while ($node = $this->datasource->get_token()) {
-            if (($node['type'] == 'folder') && (@$node['id'] == $this->tag)) {
+            if (($node['type'] == 'folder') && (@$node['id'] == $tag)) {
                 $name = @$node['name'];
                 $body .= "<div id=\"$idg_id-box\">\n"
                     . "<div id=\"$idg_id-top\"></div>\n"
                     . "<div id=\"$idg_id-body\">\n"
                     . "<div id=\"$idg_id-content\">\n"
-                    . "<h2>$name</h2>\n<ul id=\"$idg_id-navigation\">\n";
+                    . "<h2>$name</h2>\n<ul id=\"$idg_id-dropdown\">\n";
                 $is_first = true;
                 $close_doc = false;
                 while ($node = $this->datasource->get_token()) {
@@ -89,37 +95,43 @@ class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementat
             . " $font_blocks color: $fg_col; z-index: 210; $style }\n"
             . "div#$idg_id-top { width: 250px; height: 16px;";
         
-        $css .= " background: url($elements/navigation/nav_top.png)"
+        $css .= " background: url($elements/dropdown/nav_top.png)"
             . " no-repeat; background-position: bottom left; }\n";
         
         $css .=  "div#$idg_id-body { width: 100%; background: $bg_col;"
             . " border: 1px solid $fg_col; border-width: 0px 1px 0px 1px; }\n"
             . "div#$idg_id-content { width: 218px; padding: 1px 5px 1px 5px;"
-            . " margin: 0 10px 0 10px; background: $ct_col "
-            . " url($elements/navigation/compass.png) no-repeat;"
-            . " background-position: top right; }\n"
+            . " margin: 0 10px 0 10px; background: $ct_col";
+        
+        if ($bg_url)
+            $css .= " url($bg_url) no-repeat;"
+                . " background-position: top right;";
+        else
+            $css .= ';';
+                
+        $css .= " }\n"
             . "div#$idg_id-content h2 { font-size: 100%; font-weight: bold;"
             . " padding: 0 0 0 20px; margin: 0;"
-            . " background: url($elements/navigation/arrow_right.png)"
+            . " background: url($elements/dropdown/arrow_right.png)"
             . " left center no-repeat; opacity: 0.8; }\n"
             . "div#$idg_id-content ul { margin: 0.5em 0 0 0;"
             . " padding: 0 4px 0 2px; list-style: none; }\n"
             . "div#$idg_id-content li { width: 100%;"
             . " padding: 2px 0 1px 0; margin: 0; clear: left; }\n"
             . "div#$idg_id-content li div { font-size: 120%;"
-            . " background: url($elements/navigation/link.png) no-repeat;"
+            . " background: url($elements/dropdown/link.png) no-repeat;"
             . " background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content li:hover div,"
             . " div#$idg_id-content li.over div { padding: 1px 0 2px 1px;"
-            . " background: $bg_col url($elements/navigation/link_h.png)"
+            . " background: $bg_col url($elements/dropdown/link_h.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content li#current div {"
-            . " background: url($elements/navigation/link_c.png)"
+            . " background: url($elements/dropdown/link_c.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content li#current:hover div,"
             . " div#$idg_id-content li#current.over div {"
             . " padding: 1px 0 2px 1px; "
-            . " background: $bg_col url($elements/navigation/link_h.png)"
+            . " background: $bg_col url($elements/dropdown/link_h.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content a { display: block; padding-left: 18px; "
             . "text-decoration: none; color: $fg_col; }\n"
@@ -137,10 +149,10 @@ class idg_view_html_renderer_blocks_navigation extends idg_tree_node_implementat
             . " padding-left: 19px; padding-bottom: 2px; }\n"
             . "div#$idg_id-content li:hover ul a:hover,"
             . " div#$idg_id-content li.over ul a:hover { color: $fg_col;"
-            . " background: $ac_col url($elements/navigation/link_b.png)"
+            . " background: $ac_col url($elements/dropdown/link_b.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-bottom { width: 250px; height: 16px;"
-            . " background: url($elements/navigation/nav_bottom.png)"
+            . " background: url($elements/dropdown/nav_bottom.png)"
             . " no-repeat; background-position: top right; }\n";
 
         $css_print = "div#$idg_id-box { display: none }\n";

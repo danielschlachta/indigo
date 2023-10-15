@@ -7,7 +7,7 @@
  *
  */
 
-class idg_view_html_renderer_minimal_navigation extends idg_tree_node_implementation
+class idg_view_html_renderer_minimal_navigation extends idg_tree_node_instance
 {
 
 	function __construct(&$parent)

@@ -26,9 +26,12 @@ Fusce scelerisque, sapien non ultrices consequat, tellus ante viverra nunc, non 
 ENDLIPSUM;
 
 $form = <<<ENDSTART
+    <div style="font-size: 200%; font-family: sans-serif; padding-right: 0.5em; float: left;">
+        Choose a design:</div>
 	<form method="get" action="" id="design">
 		
-		<select name="design" onchange="this.form.submit();" style="font-size: 200%;">
+		<select name="design" onchange="this.form.submit();" 
+            style="font-size: 200%; display:  background: #e0e0e0;">
 ENDSTART;
 
 $design = @$_GET['design'];
@@ -51,8 +54,6 @@ for ($i = 0; $i < count($directory); $i++) {
 $form .= <<<ENDEND
 		</select>
 	</form>
-    
-    
 ENDEND;
 
 $idg_path = '../indigo';
@@ -144,7 +145,7 @@ for ($i = 1; $i < 6; $i++) {
 
 $site->check();
 
-require_once("../designs/$design.php");
+require_once("$design.php");
 
 $view = new idg_view_html;
 $view->set_properties(['name' => $design]);

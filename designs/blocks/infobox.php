@@ -30,7 +30,7 @@ function blocks_filter_infobox(&$text) {
     return $output;
 }
 
-class idg_view_html_renderer_blocks_infobox extends idg_tree_node_implementation {
+class idg_view_html_renderer_blocks_infobox extends idg_tree_node_instance {
 
     var $text;
     var $is_item = false;

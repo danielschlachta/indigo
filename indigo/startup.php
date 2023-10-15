@@ -8,8 +8,22 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
+$path = explode('/', $_SERVER['DOCUMENT_ROOT']);
+$dir = array_pop($path);
+
+if (count($path) > 0 && array_pop($path) == 'indigo') {
+    $dir = "'indigo/$dir'";
+    if (strpos($_SERVER['SERVER_SOFTWARE'], 'Development') > 0)
+        die("<html><body><h1>Please do not run php -S" 
+            . " from a subdirectory ($dir).");
+    else
+        die("<html><body><h1>Please do not use a subdirectory ($dir) " 
+            . "as document root.</h1>");
+}
+
 if ($idg_path == null)
     die('Before using indigo you must set $idg_path.');
+
 
 $idg_short_name = 'indigo/web';
 $idg_version = '1.2';

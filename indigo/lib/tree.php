@@ -10,9 +10,8 @@
 
 require_once($idg_path . '/lib/object.php');
 
-/** @todo make this private member */
-
-$idg_xml_indent = '  ';
+// contains idg_attribute for now.
+require_once($idg_path . '/lib/param_instance.php');
 
 class idg_tree_node_type extends idg_object_type {
 
@@ -25,40 +24,42 @@ class idg_tree_node_type extends idg_object_type {
 
 class idg_tree_node extends idg_object {
 
+    static $idg_xml_indent = '  ';
     private $parent;
     private $attributes = [];
     private $current_attribute;
     private $current_option;
+    private $parameters = [];
+    private $current_parameter;
     protected $children; // accessed in view_html
 
     /** @todo nicer mech.? */
     protected $idg_xml_translation;
     private $_xml_current_object;
 
-    function __construct(&$parent = NULL) {
+    function __construct(&$parent = null) {
         parent::__construct();
         $this->parent = $parent;
     }
 
     function get_parent() {
-		return $this->parent;
-	}
+        return $this->parent;
+    }
 
     function create_attribute($name) {
         if (@$this->attributes[$name])
             diag($this, "duplicate attribute: $name");
 
-        return $this->attributes[$name] =
-			new idg_attribute($name, $this);
+        return $this->attributes[$name] = new idg_attribute($name, $this);
     }
 
-    function get_attribute($name, $scope = NULL) {
-		$full_name = "$scope::$name";
+    function get_attribute($name, $scope = null) {
+        $full_name = "$scope::$name";
 
-		if ($scope && array_key_exists($full_name, $this->attributes))
-			return $this->attributes[$full_name];
+        if ($scope && array_key_exists($full_name, $this->attributes))
+            return $this->attributes[$full_name];
 
-		return @$this->attributes[$name];
+        return @$this->attributes[$name];
     }
 
     /** Set the parent object manually.
@@ -66,7 +67,6 @@ class idg_tree_node extends idg_object {
      * This is necessary when programmatically constructing
      * site elements.
      */
-
     function set_parent($parent) {
         $this->parent = $parent;
     }
@@ -78,10 +78,9 @@ class idg_tree_node extends idg_object {
     /**
      * Finds a child whose property \c $key_name is set to \c $key_value.
      *
-     * Returns NULL if nothing was found.
+     * Returns null if nothing was found.
      * This function is recursive.
      */
-
     function get_child_by_key($key_name, $key_value,
         $child_type = false) {
 
@@ -100,12 +99,11 @@ class idg_tree_node extends idg_object {
      * Returns an array of all children whose property \c $key_name is
      * set to \c $key_value and have type \c $child_type if specified.
      *
-     * Returns NULL if nothing was found.
+     * Returns null if nothing was found.
      * This function is not recursive!
      */
-
     function get_children_by_key($key_name, $key_value,
-        $child_type = NULL) {
+        $child_type = null) {
 
         $retval = array();
         foreach ($this->children as $child) {
@@ -128,13 +126,24 @@ class idg_tree_node extends idg_object {
         $this->children[] = & $child;
     }
 
+    function get_parameter(string $name) {
+        return @$this->parameters[$name];
+    }
+    
+    function set_parameter(string $name, mixed $value) {
+        $this->parameters[$name] = $value;
+    }
+    
+   function get_parameters() {
+       return $this->parameters;
+   }
+   
     /**
      * Checks the whole subtree.
      *
      * @todo Currently only checks for the presence of mandatory
      * options. Could use some more thorough probing.
      */
-
     function check() {
         $dummy = false;
         $this->traverse($dummy, '$this->_check');
@@ -145,7 +154,6 @@ class idg_tree_node extends idg_object {
      *
      * @todo This does not currently work. Add support for attributes.
      */
-
     function print_debug() {
         $dummy = false;
         $this->traverse($dummy, '$this->_print_debug');
@@ -238,7 +246,7 @@ class idg_tree_node extends idg_object {
         return true;
     }
 
-    function read_xml($file_name, $parent = NULL) {
+    function read_xml($file_name, $parent = null) {
         $this->_xml_current_object = $parent;
 
         $xml_version = false;
@@ -295,13 +303,32 @@ class idg_tree_node extends idg_object {
             return;
         }
 
+        if ($name == 'param') {
+            if (!$this->_xml_current_object)
+                diag($this, 'xml: orphaned param tag');
+
+            $class_name = str_replace('declaration', 'instance',
+                get_class($this->_xml_current_object));
+
+            if (!is_subclass_of($class_name, 'idg_param_instance'))
+                diag($this, 'xml: parameters are not accepted here');
+
+            if (!($param_name = @$properties['name']))
+                diag($this,
+                    "xml: parameter '$name' needs a name");
+
+            $this->current_parameter = $param_name;
+
+            return;
+        }
+
         if ($name == 'attribute') {
             if (!$this->_xml_current_object)
                 diag($this, 'xml: attribute has no parent');
 
-            if (!$attr_name = @$properties['name'])
+            if (!($attr_name = @$properties['name']))
                 diag($this,
-                    "xml: attribute $name has no 'name' property'");
+                    "xml: attribute '$name' needs a name");
 
             $this->current_attribute = $this->_xml_current_object->create_attribute(
                 $attr_name);
@@ -338,11 +365,16 @@ class idg_tree_node extends idg_object {
     }
 
     private function _xml_read_end($parser, $name) {
-        if ($this->_xml_current_object && $name != 'xi:include' && $name != 'attribute' && $name != 'option')
+        if ($this->_xml_current_object &&
+            $name != 'xi:include' &&
+            !in_array($name, ['attribute', 'option', 'param']))
             $this->_xml_current_object = $this->_xml_current_object->get_parent();
 
         if ($name == 'attribute')
-            $this->current_attribute = NULL;
+            $this->current_attribute = null;
+
+        if ($name == 'param')
+            $this->current_parameter = null;
     }
 
     private function _xml_character_data($parser, $character_data) {
@@ -350,9 +382,16 @@ class idg_tree_node extends idg_object {
             return;
 
         if ($this->current_attribute) {
-            $this->current_attribute->set_option($this->current_option,
-                $this->current_attribute->get_option(
+            $this->current_attribute->set_parameter($this->current_option,
+                $this->current_attribute->get_parameter(
                     $this->current_option) . $character_data);
+            return;
+        }
+
+        if ($this->current_parameter) {
+            $this->_xml_current_object->set_parameter($this->current_parameter,
+                $this->_xml_current_object->get_parameter(
+                    $this->current_parameter) . $character_data);
             return;
         }
 
@@ -372,7 +411,6 @@ class idg_tree_node extends idg_object {
     }
 
     /** @todo get rid of this? */
-
     function print_debug_all(&$dummy, &$depth, &$path) {
         global $idg_xml_indent;
 
@@ -384,7 +422,16 @@ class idg_tree_node extends idg_object {
     }
 }
 
-class idg_tree_node_implementation {
+/**
+ * Base class for idg entities that are attached to a tree node and behave
+ * like one.
+ * 
+ * This class implements the most common tree node functionality by passing
+ * the function calls to its parent.
+ * 
+ * @todo Is there a general mechanism for this?
+ */
+class idg_tree_node_instance {
 
     protected $parent;
 
@@ -392,16 +439,15 @@ class idg_tree_node_implementation {
         $this->parent = $parent;
     }
 
-	function clear() {
-        $this->parent = NULL;
+    function clear() {
+        $this->parent = null;
     }
 
-	/** Returns the immediate parent, or if $class_name is given,
-	 * the nearest ancestor of that class, or NULL.
-	 */
-
+    /** Returns the immediate parent, or if $class_name is given,
+     * the nearest ancestor of that class, or null.
+     */
     function get_parent() {
-		return $this->parent;
+        return $this->parent;
     }
 
     function get_idg_id() {
@@ -423,8 +469,7 @@ class idg_tree_node_implementation {
         return $this->parent->get_property($name);
     }
 
-    /** Returns child by number or NULL, i.e. fails silently. */
-
+    /** Returns child by number or null, i.e. fails silently. */
     function get_child($index) {
         $children = $this->parent->get_children();
 
@@ -432,7 +477,7 @@ class idg_tree_node_implementation {
             return $children[$index];
     }
 
-    function get_attribute($name, $scope = NULL) {
+    function get_attribute($name, $scope = null) {
         return $this->parent->get_attribute($name, $scope);
     }
 
@@ -441,91 +486,4 @@ class idg_tree_node_implementation {
     }
 }
 
-class idg_attribute {
-	private $name;
-    private $scope;
-    private $options = array();
-
-    function __construct($name) {
-        if (($pos = strpos($name, '::')) > 0) {
-            $this->scope = substr($name, 0, $pos);
-            $this->name = substr($name, $pos + 2);
-        } else
-            $this->name = $name;
-    }
-
-	function get_scope() {
-		return $this->scope;
-	}
-
-    function get_option($name, $default = NULL) {
-        $opt = @$this->options[$name];
-        return $opt ? $opt : $default;
-    }
-
-    function get_options() {
-        return $this->options;
-    }
-
-    function set_option($name, $value) {
-        $this->options[$name] = $value;
-    }
-
-    function set_options($options = NULL) {
-		if (!$options)
-			return;
-
-		foreach ($options as $name => $value)
-			$this->set_option($name, $value);
-	}
-
-	function add_options(&$tree_node, $scope = NULL) {
-		if (!$tree_node)
-			diag($this, 'add_options called with NULL argument');
-
-		if (method_exists($tree_node, 'get_site')) {
-			$site = $tree_node->get_site();
-			if (($attr = $site->get_attribute($this->name)))
-				$this->set_options($attr->get_options());
-			if (($attr = $site->get_attribute($this->name, $scope)))
-				$this->set_options($attr->get_options());
-		}
-
-		$folders = [];
-		$folder = $tree_node;
-
-		do {
-			if (method_exists($folder, 'get_folder')) {
-				$folder = $folder->get_folder();
-				$folders[] = $folder;
-				$folder = $folder->get_parent();
-			} else
-				$folder = NULL;
-		} while ($folder);
-
-		while (($folder = array_pop($folders))) {
-			if (($attr = $folder->get_attribute($this->name)))
-				$this->set_options($attr->get_options());
-			if (($attr = $folder->get_attribute($this->name, $scope)))
-				$this->set_options($attr->get_options());
-		}
-
-		if (($attr = $tree_node->get_attribute($this->name)))
-			$this->set_options($attr->get_options());
-		if (($attr = $tree_node->get_attribute($this->name, $scope)))
-			$this->set_options($attr->get_options());
-	}
-
-    function get_xml($indent) {
-        $name = $this->name;
-
-        $xml = "$indent<attribute name=\"$name\">\n";
-
-        foreach ($this->options as $name => $value)
-            $xml .= "$indent	<option name=\"$name\">$value</option>\n";
-
-        $xml .= "$indent</attribute>\n";
-
-        return $xml;
-    }
-}
+?>

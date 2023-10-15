@@ -5,7 +5,7 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_blocks_imageframe extends idg_tree_node_implementation {
+class idg_view_html_renderer_blocks_imageframe extends idg_tree_node_instance {
 
     function __construct(&$parent) {
         parent::__construct($parent);
@@ -14,19 +14,18 @@ class idg_view_html_renderer_blocks_imageframe extends idg_tree_node_implementat
     function render(&$document, &$view) {
         $idg_id = $this->get_idg_id();
 
-        $attr = new idg_attribute('image');
-        
+        $attr = new idg_attribute('image');  
         $attr->add_options($this, 'blocks');
         $attr->add_options($document, 'blocks');
         
-        if (!$img = $attr->get_option('src'))
+        if (!$img = $attr->get_parameter('src'))
             diag($this, "imageframe: no 'src' option given");
 
-        $top = $attr->get_option('top', 0);
-        $left = $attr->get_option('left', 0);
+        $top = $attr->get_parameter('top', 0);
+        $left = $attr->get_parameter('left', 0);
         
-        $width = $attr->get_option('width', 90);
-        $height = $attr->get_option('height', 90);
+        $width = $attr->get_parameter('width', 90);
+        $height = $attr->get_parameter('height', 90);
         
         $imgtop = round((110 - $height) / 2) + 6 + $top;
         $imgleft = round((110 - $width) / 2) + 6 + $left;

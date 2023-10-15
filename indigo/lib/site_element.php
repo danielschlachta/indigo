@@ -140,7 +140,7 @@ class idg_document extends idg_site_element {
 	function get_datasource($source_name)
 	{
 		if ($source_name == '_site') {
-			return $this->get_site()->get_datasource();
+			return $this->get_site()->get_datasource($this->get_parameters);
 		}
 
 		/** @todo Tell where */
@@ -153,7 +153,7 @@ class idg_document extends idg_site_element {
 			diag($this, 'idg_renderer_declaration: get_datasource: '
 				. ' no datasource named ' . $source_name);
 
-		return $datasource_declaration->get_instance();
+		return $datasource_declaration->create_instance();
 	}
 
 	function get_renderers($slot_name)
@@ -169,7 +169,7 @@ class idg_document extends idg_site_element {
 		foreach ($renderer_declarations as $renderer_declaration) {
 			$source_name = $renderer_declaration->get_property('source');
 			$datasource = $this->get_datasource($source_name);;
-			$renderers[] = $renderer_declaration->get_instance($datasource);
+			$renderers[] = $renderer_declaration->create_instance($datasource);
 		}
 
 		if (count($renderers) == 0)

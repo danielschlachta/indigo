@@ -1,6 +1,6 @@
 <?php
 
-class idg_view_html_renderer_gradient_footer extends idg_tree_node_implementation
+class idg_view_html_renderer_gradient_footer extends idg_tree_node_instance
 {
 	function __construct(&$parent)
 	{

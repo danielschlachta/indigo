@@ -78,9 +78,9 @@ function idg_view_blocks_make_testcard(&$document, &$view, $text) {
         'class' => 'blocks_imageframe'
     ));
     $attr = $imageframe->create_attribute('image');
-    $attr->set_option('src', 'https://thispersondoesnotexist.com/');
-    $attr->set_option('top', 15);
-    $attr->set_option('left', 15);
+    $attr->set_parameter('src', 'https://thispersondoesnotexist.com/');
+    $attr->set_parameter('top', 15);
+    $attr->set_parameter('left', 15);
     $part->add_child($imageframe);
 
     $infobox = new idg_view_html_renderer;
@@ -89,14 +89,14 @@ function idg_view_blocks_make_testcard(&$document, &$view, $text) {
     ));
     $part->add_child($infobox);
 
-    $navig = new idg_view_html_renderer;
-    $navig->set_properties(array(
-        'class' => 'blocks_navigation',
+    $dropdown = new idg_view_html_renderer;
+    $dropdown->set_properties(array(
+        'class' => 'blocks_dropdown',
         'source' => '_site',
         'tag' => 'folder-2',
         'style' => 'position: fixed; top: 20px; right: 20px;'
     ));
-    $part->add_child($navig);
+    $part->add_child($dropdown);
 }
 
 ?>

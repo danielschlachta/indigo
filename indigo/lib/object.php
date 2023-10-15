@@ -138,7 +138,7 @@ class idg_object {
             } else if ($execute_hooks)
                 $prop_array[$name] = $this->execute($hook);
             else
-                $prop_array[$name] = NULL;
+                $prop_array[$name] = null;
         }
     }
 
