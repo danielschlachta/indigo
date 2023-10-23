@@ -71,5 +71,3 @@ abstract class idg_view extends idg_tree_node {
 	}
 }
 
-
-?>

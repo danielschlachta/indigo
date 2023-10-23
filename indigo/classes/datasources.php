@@ -66,7 +66,7 @@ class idg_datasource_phpscript extends idg_datasource_instance
 	function __construct(&$parameters)
 	{
 		parent::__construct($parameters);
-
+        
 		if (@!($script = $this->parameters['script']))
 			diag($this, get_class($this)
 			    . ': mandatory parameter(script) not found');

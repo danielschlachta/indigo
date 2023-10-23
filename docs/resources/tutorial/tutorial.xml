@@ -3,7 +3,7 @@
           description="Indigo - the tutorial">
 
     <attribute name="blocks::image">
-        <option name="src">resources/tutorial/images/sneakers.jpg</option>
+        <option name="src">resources/tutorial/sneakers.jpg</option>
     </attribute>
 
     <datasource name="text1_src"
@@ -25,7 +25,8 @@
               name="Getting started" />
     <datasource name="site_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/hello/site.xml; language: xml;</param>
+        <param name="filename">demo/hello/site.xml</param>
+        <param name="language">xml</param>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"

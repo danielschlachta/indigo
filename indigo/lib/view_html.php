@@ -119,6 +119,11 @@ class idg_view_html extends idg_view
 
 		$milli_time = $this->_milliseconds() - $start;
 
+        $date = new DateTimeImmutable($document->get_property('last-change'));
+        $last_mod = $date->getTimestamp();
+        
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_mod) . " GMT");
+        
 		$this->_print('<!-- document UUID=' . $document->uuid
 			. ' generated on ' . date('r', time())
 			. " by $idg_program_name, time: $milli_time ms  -->\n"

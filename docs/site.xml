@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <site name="indigo"	content-language="en" index-document="main/home">
     <attribute name="blocks::image">
-        <option name="src">main/home/images/randomsymbols.jpg</option>
+        <option name="src">main/home/randomsymbols.jpg</option>
     </attribute>
 
     <folder id="main" name="Main" show-name="no">
@@ -11,7 +11,7 @@
                   navigation-comment="The page of pages">
 
             <!-- default <attribute name="blocks::image">
-                <option name="src">main/home/images/randomsymbols.jpg</option>
+                <option name="src">main/home/randomsymbols.jpg</option>
             </attribute> -->
 
             <datasource name="infobox"
@@ -46,7 +46,7 @@
                   description="What it's about">
 
             <attribute name="blocks::image">
-                <option name="src">main/about/images/fractal.jpg</option>
+                <option name="src">main/about/fractal.jpg</option>
             </attribute>
 
             <datasource name="infobox"
@@ -68,7 +68,7 @@
                   description="The old switcheroo">
 
             <!-- <attribute name="blocks::image">
-                <option name="src">main/desings/images/none.jpg</option>
+                <option name="src">main/desings/none.jpg</option>
             </attribute> -->
 
             <datasource name="infobox"
@@ -88,11 +88,11 @@
 
     <folder id="resources" name="Resources" show-name="no">
         <attribute name="image">
-            <option name="src">resources/tutorial/images/sneakers.jpg</option>
+            <option name="src">resources/tutorial/sneakers.jpg</option>
         </attribute>
 
         <xi:include
-            href="http://cortes.schlachta.local/~daniel/indigo/docs/resources/tutorial/tutorial.xml"
+            href="resources/tutorial/tutorial.xml"
             xmlns:xi="http://www.w3.org/2003/XInclude" />
 
         <document id="reference"
@@ -100,7 +100,7 @@
                   description="Further Reading">
 
             <attribute name="blocks::image">
-                <option name="src">resources/reference/images/telescope.jpg</option>
+                <option name="src">resources/reference/telescope.jpg</option>
             </attribute>
 
             <datasource name="infobox"
@@ -122,7 +122,7 @@
                   description="Stuff you can use">
 
             <!--<attribute name="blocks::image">
-                <option name="src">resources/examples/images/none.jpg</option>
+                <option name="src">resources/examples/none.jpg</option>
             </attribute>-->
 
             <datasource name="infobox"
@@ -144,7 +144,7 @@
                   description="Legalese">
 
             <!--<attribute name="blocks::image">
-                <option name="src">resources/reference/images/none.jpg</option>
+                <option name="src">resources/reference/none.jpg</option>
             </attribute>-->
 
             <datasource name="infobox"

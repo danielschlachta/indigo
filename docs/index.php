@@ -50,7 +50,7 @@ function complain_cache($dir, $file) {
 // ---------------------------------------------------------------------
 
 $site = new idg_site;
-$site->read_xml('config/site.xml');
+$site->read_xml('site.xml');
 $site->check();
 
 /*! @todo this currently does not work */
@@ -86,8 +86,9 @@ if (file_exists($view_preload))
 
 require_once("../designs/$design.php");
 
-if (@!$document = $site->get_document()) {
-	require_once('error/error.php');
+if (!($document = $site->get_document())) {
+    die('operation broken error');
+    require_once('error/error.php');
 	$document = get_error_document();
 }
 

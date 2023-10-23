@@ -4,5 +4,5 @@ phpdoc.xml
 TODO
 /docs/cache/*
 /docs/resources/reference/*/*
-/gen
+/local
 

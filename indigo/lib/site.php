@@ -81,12 +81,13 @@ class idg_site extends idg_site_element {
     function get_document($document = false) {
         $document_name = $document;
         $document_obj = false;
+        $last_type = '';
 
         if (!$document_name) {
             if (@$display = $_GET['display']) {
                 $document_name = $display;
 
-                if (($pos = strpos($document_name, '#')) !== false) {
+                if (($pos = strpos($document_name, '#')) != false) {
                     $document_name = substr($display, $pos);
                 }
             }
@@ -99,12 +100,13 @@ class idg_site extends idg_site_element {
             if ($document_name[0] != '/')
                 $document_name = '/' . $document_name;
 
-            $path = explode('/', $document_name);
+            $path = explode(IDG_URL_FOLDER_SEPARATOR, $document_name);
             $count = count($path);
 
-            for ($i = 1, $tmp = & $this; $i < $count && $tmp; $i++) {
+            for ($i = 1, $tmp = $this; $i < $count && $tmp; $i++) {
                 $tmp = $tmp->get_child_by_key('id', $path[$i]);
             }
+        
             $document_obj = $tmp;
         }
 
@@ -175,7 +177,7 @@ class idg_site extends idg_site_element {
         if ($object->get_idg_type() == 'folder')
             foreach ($object->children as $child)
                 $this->_scan_object($child,
-                    $prefix . '/' . $object->get_property('id'));
+                    $prefix . IDG_URL_FOLDER_SEPARATOR . $object->get_property('id'));
 
         if ($object->get_idg_type() == 'document') {
             $prefix[0] = '=';
@@ -187,7 +189,7 @@ class idg_site extends idg_site_element {
                 $changefreq = 'daily';
 
             $this->_sitemap .= "  <url>\n     <loc>" .
-                $this->_url . urlencode('?display' . $prefix . '/'
+                $this->_url . urlencode('?display' . $prefix . IDG_URL_FOLDER_SEPARATOR
                     . $object->get_property('id'))
                 . "</loc>\n     <lastmod>$lastmod</lastmod>\n"
                 . "     <changefreq>$changefreq</changefreq>\n"
@@ -322,7 +324,7 @@ class idg_document extends idg_site_element {
         $tmp = $this->get_parent();
 
         while ($tmp && (get_class($tmp) != 'idg_site')) {
-            $path = $tmp->get_property('id') . '/' . $path;
+            $path = $tmp->get_property('id') . IDG_URL_FOLDER_SEPARATOR . $path;
             $tmp = $tmp->get_parent();
         }
 

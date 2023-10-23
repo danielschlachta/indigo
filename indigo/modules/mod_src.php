@@ -13,53 +13,45 @@ if (file_exists($geshi_main)) {
 class idg_datasource_sourcefile extends idg_datasource_instance
 {
 
-	function __construct(&$parameters)
+	function __construct($parameters = null)
 	{
-        global $idg_max_filesize;
+        parent::__construct($parameters);
 
-		parent::__construct($parameters);
-
-		$this->tokens[] = $parameters;
-
-	    $file = @$this->parameters['filename'];
-
-		if (!$file)
+        $filename = $this->get_parameter('filename');
+        
+        if (@stat($filename) === false)
 			diag($this, get_class($this)
-			    . ': mandatory parameter(filename) not set');
-
-		if (@stat($file) === false)
-			diag($this, get_class($this)
-			    . ': text file "' . $file . '" not found');
+			    . ': file "' . $filename . '" not found');
 
 		$max_size = @$this->parameters['max_size'];
 		if (!$max_size || $max_size < 0)
-			$max_size = $idg_max_filesize;
+			$max_size = 32 * 1024;
 
-		if (@!$fp = fopen($file, 'r'))
+		if (@!$fp = fopen($filename, 'r'))
 			diag($this, get_class($this)
-			    . ': could not open text file "' . $file . '"');
+			    . ': could not open text file "' . $filename . '"');
 
 		$tok = fread($fp, $max_size);
 		fclose($fp);
 		$this->tokens[] = $tok;
 
-		$this->tokens[] = filemtime($file);
+		$this->tokens[] = filemtime($filename);
 
-		if (!$file)
+		if (!$filename)
 			diag($this, get_class($this)
 			    . ': mandatory parameter(filename) not set');
 
-		if (@stat($file) === false)
+		if (@stat($filename) === false)
 			diag($this, get_class($this)
-			    . ': source file "' . $file . '" not found');
+			    . ': source file "' . $filename . '" not found');
 
 		$max_size = @$this->parameters['max_size'];
 		if (!$max_size || $max_size < 0)
-			$max_size = $idg_max_filesize;
+			$max_size = 32 * 1024; /** todo make this a parameter */
 
-		if (@!$fp = fopen($file, 'r'))
+		if (@!$fp = fopen($filename, 'r'))
 			diag($this, get_class($this)
-			    . ': could not open source file "' . $file . '"');
+			    . ': could not open source file "' . $filename . '"');
 
 		$tok = fread($fp, $max_size);
 		fclose($fp);
@@ -79,9 +71,10 @@ class idg_view_html_renderer_sourcefile extends idg_tree_node_instance
     	$this->datasource->rewind();
 		$parameters = $this->datasource->get_token();
 
-        $language = $parameters['language'];
-        @$bgcolor = $parameters['bgcolor'];
-        @$height = $parameters['height'];
+        $language = 'php';
+        //$language = $this->get_parameters('language');
+        //$bgcolor = $this->get_parameter('bgcolor');
+        //$height = $this->get_parameter('height');
 
 		if (!$bgcolor)
             $bgcolor = '#e8e8e8';
