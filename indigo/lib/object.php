@@ -120,7 +120,7 @@ class idg_object {
         else
             $id_count = ++idg_object::$object_counters[$type_name];
 
-        $this->idg_id = get_class($this) . '-' . $id_count;
+        $this->idg_id = str_replace('Indigo\\', '', get_class($this)) . '-' . $id_count;
     }
 
     /**

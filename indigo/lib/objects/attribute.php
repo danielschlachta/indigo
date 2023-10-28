@@ -5,11 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-require_once 'tree.php';
-
-/** Base class for idg entities with parameters. 
- * 
- * @todo rename options to parameters
+/** 
+ * Base class for idg entities with parameters. 
  */
 class idg_attribute implements idg_parameterized {
 

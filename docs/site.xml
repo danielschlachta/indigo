@@ -16,7 +16,7 @@
 
             <datasource name="infobox"
                         class="idg_datasource_rss">
-                <param name="type">rss</param>
+                <parameter name="type">rss</parameter>
                 <attribute name="infobox">
                     <option name="caption">Excuse of the day</option>
                     <option name="feed">https://meyerweb.com/feeds/excuse/rss20.xml</option>
@@ -27,14 +27,14 @@
 
             <datasource name="text1_src"
                         class="idg_datasource_textfile">
-                <param name="filename">main/home/home.html</param>
+                <parameter name="filename">main/home/home.html</parameter>
             </datasource>
             <renderer slot="main-text"
                       class="idg_view_html_renderer_textfile"
                       source="text1_src" />
             <datasource name="readme_src"
                         class="idg_datasource_textfile">
-                <param name="filename">../README.md</param>
+                <parameter name="filename">../README.md</parameter>
             </datasource>
             <renderer slot="main-text"
                       class="idg_view_html_renderer_markdown"
@@ -56,7 +56,7 @@
 
             <datasource name="text1_src"
                         class="idg_datasource_textfile">
-                <param name="filename">main/about/about.html</param>
+                <parameter name="filename">main/about/about.html</parameter>
             </datasource>
             <renderer slot="main-text"
                       class="idg_view_html_renderer_textfile"
@@ -78,7 +78,7 @@
 
             <datasource name="text1_src"
                         class="idg_datasource_textfile">
-                <param name="filename">main/designs/designs.html</param>
+                <parameter name="filename">main/designs/designs.html</parameter>
             </datasource>
             <renderer slot="main-text"
                       class="idg_view_html_renderer_textfile"
@@ -110,7 +110,7 @@
 
             <datasource name="text1_src"
                         class="idg_datasource_textfile">
-                <param name="filename">resources/reference/reference.html</param>
+                <parameter name="filename">resources/reference/reference.html</parameter>
             </datasource>
             <renderer slot="main-text"
                       class="idg_view_html_renderer_textfile"
@@ -132,7 +132,7 @@
 
             <datasource name="text1_src"
                         class="idg_datasource_textfile">
-                <param name="filename">resources/examples/examples.html</param>
+                <parameter name="filename">resources/examples/examples.html</parameter>
             </datasource>
             <renderer slot="main-text"
                       class="idg_view_html_renderer_textfile"
@@ -154,7 +154,7 @@
 
             <datasource name="text1_src"
                         class="idg_datasource_textfile">
-                <param name="filename">resources/license/license.html</param>
+                <parameter name="filename">resources/license/license.html</parameter>
             </datasource>
             <renderer slot="main-text"
                       class="idg_view_html_renderer_textfile"

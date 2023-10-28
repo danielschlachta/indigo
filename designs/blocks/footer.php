@@ -5,24 +5,24 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_blocks_footer extends idg_treenode {
+namespace Indigo\Design\Blocks;
 
-    function __construct(&$parent) {
-        parent::__construct($parent);
-    }
+class footer extends \idg_fragment_object {
 
-    function render(&$document, &$view) {
+    function _render(\idg_document $document, \idg_view $view): void {
         global $font_blocks;
         global $elements;
 
-        $idg_id = $this->get_idg_id();
-        $tag = $this->get_property('tag');
-        $style = $this->get_property('style');
+        $element = $this ->get_parent();
+        
+        $idg_id = $element->get_idg_id();
+        $tag = $element->get_property('tag');
+        $style = $element->get_property('style');
         $last_change = substr($document->get_property('last-change'), 0, 10);
-        $style_heading = $this->get_property('style-heading');
-        $style_link = $this->get_property('style-link');
-        $style_link_hover = $this->get_property('style-link-hover');
-        $style_image = $this->get_property('style-image');
+        $style_heading = $element->get_property('style-heading');
+        $style_link = $element->get_property('style-link');
+        $style_link_hover = $element->get_property('style-link-hover');
+        $style_image = $element->get_property('style-image');
 
         $css = "div#$idg_id-content { background: #b4d2b0; "
             . "text-align: right; $style }\n"

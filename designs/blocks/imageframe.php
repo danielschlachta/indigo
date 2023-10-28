@@ -5,9 +5,11 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_fragment_blocks_imageframe extends idg_fragment_object {
+namespace Indigo\Design\Blocks;
 
-    function _render(idg_document $document, idg_view $view): void {
+class imageframe extends \idg_fragment_object {
+
+    function _render(\idg_document $document, \idg_view $view): void {
         $element = $this->get_parent();
         
         $idg_id = $element->get_idg_id();

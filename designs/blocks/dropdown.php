@@ -5,9 +5,11 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_fragment_blocks_dropdown extends idg_fragment_object {
+namespace Indigo\Design\Blocks;
 
-    function _render(idg_document $document, idg_view $view): void {
+class dropdown extends \idg_fragment_object {
+
+    function _render(\idg_document $document, \idg_view $view): void {
         global $font_blocks;
         global $elements;
 

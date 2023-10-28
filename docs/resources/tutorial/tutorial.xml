@@ -8,7 +8,7 @@
 
     <datasource name="text1_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/what.html</param>
+        <parameter name="filename">resources/tutorial/what.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -16,7 +16,7 @@
 
     <datasource name="text2_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/how.html</param>
+        <parameter name="filename">resources/tutorial/how.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -25,45 +25,45 @@
               name="Getting started" />
     <datasource name="site_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/hello/site.xml</param>
-        <param name="language">xml</param>
+        <parameter name="filename">demo/hello/site.xml</parameter>
+        <parameter name="language">xml</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="site_src" />
     <datasource name="text3_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/how1.html</param>
+        <parameter name="filename">resources/tutorial/how1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
               source="text3_src" />
     <datasource name="scatter_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/hello/scatter.xml</param>
-        <param name="language">xml</param>
+        <parameter name="filename">demo/hello/scatter.xml</parameter>
+        <parameter name="language">xml</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="scatter_src" />
     <datasource name="text4_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/how2.html</param>
+        <parameter name="filename">resources/tutorial/how2.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
               source="text4_src" />
     <datasource name="index_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/hello/index.php</param>
-        <param name="language">php</param>
+        <parameter name="filename">demo/hello/index.php</parameter>
+        <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="index_src" />
     <datasource name="text5_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/how3.html</param>
+        <parameter name="filename">resources/tutorial/how3.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -71,7 +71,7 @@
 
     <datasource name="text6_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/dynamic.html</param>
+        <parameter name="filename">resources/tutorial/dynamic.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -80,15 +80,15 @@
               name="Creating dynamic content" />
     <datasource name="strip_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/hello-dynamic/strip.php</param>
-        <param name="language">php</param>
+        <parameter name="filename">demo/hello-dynamic/strip.php</parameter>
+        <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="strip_src" />
     <datasource name="text7_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/dynamic1.html</param>
+        <parameter name="filename">resources/tutorial/dynamic1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -96,7 +96,7 @@
 
     <datasource name="text8_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/phpscript.html</param>
+        <parameter name="filename">resources/tutorial/phpscript.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -105,30 +105,30 @@
               name="Embedding php code" />
     <datasource name="error_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/hello-dynamic/error.php</param>
-        <param name="language">php</param>
+        <parameter name="filename">demo/hello-dynamic/error.php</parameter>
+        <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="error_src" />
     <datasource name="text9_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/phpscript1.html</param>
+        <parameter name="filename">resources/tutorial/phpscript1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
               source="text9_src" />
     <datasource name="rend_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/hello-dynamic/display_error.php</param>
-        <param name="language">php</param>
+        <parameter name="filename">demo/hello-dynamic/display_error.php</parameter>
+        <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="rend_src" />
     <datasource name="text10_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/phpscript2.html</param>
+        <parameter name="filename">resources/tutorial/phpscript2.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -136,7 +136,7 @@
 
     <datasource name="text11_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/datasources.html</param>
+        <parameter name="filename">resources/tutorial/datasources.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -145,15 +145,15 @@
               name="Accessing data sources" />
     <datasource name="nav_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/navi/navigation.php</param>
-        <param name="language">php</param>
+        <parameter name="filename">demo/navi/navigation.php</parameter>
+        <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="nav_src" />
     <datasource name="text12_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/datasources1.html</param>
+        <parameter name="filename">resources/tutorial/datasources1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -161,7 +161,7 @@
 
     <datasource name="text13_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/newdatasources.html</param>
+        <parameter name="filename">resources/tutorial/newdatasources.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -170,15 +170,15 @@
               name="Creating data sources" />
     <datasource name="src_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">demo/final/datasource_imagelist.php</param>
-        <param name="language">php</param>
+        <parameter name="filename">demo/final/datasource_imagelist.php</parameter>
+        <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="src_src" />
     <datasource name="text14_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/newdatasources1.html</param>
+        <parameter name="filename">resources/tutorial/newdatasources1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -186,7 +186,7 @@
 
     <datasource name="text15_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/more.html</param>
+        <parameter name="filename">resources/tutorial/more.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"
@@ -195,15 +195,15 @@
               name="More features" />
     <datasource name="example_src"
                 class="idg_datasource_sourcefile">
-        <param name="filename">resources/tutorial/html_item.php</param>
-        <param name="language">php</param>
+        <parameter name="filename">resources/tutorial/html_item.php</parameter>
+        <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_sourcefile"
               source="example_src" />
     <datasource name="text16_src"
                 class="idg_datasource_textfile">
-        <param name="filename">resources/tutorial/more1.html</param>
+        <parameter name="filename">resources/tutorial/more1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="idg_view_html_renderer_textfile"

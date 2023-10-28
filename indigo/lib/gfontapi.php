@@ -8,7 +8,6 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
-
 class google_font_api 
 {
 	var $fonts = array();

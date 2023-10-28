@@ -48,5 +48,3 @@ function complain_module($name, $file, $repo) {
 		. "<li>Repository: <a href=\"$repo\"><code>$repo</code></a></li></ul>"
 		. "</body></html>");
 }
-
-?>

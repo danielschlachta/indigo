@@ -5,8 +5,6 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-require_once 'tree.php';
-
 /**
  * Type information for idg_renderer.
  */

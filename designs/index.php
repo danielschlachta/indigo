@@ -5,6 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+require_once '../indigo/startup.php';
+
 $lipsum = <<<ENDLIPSUM
 <div id="lipsum">
     <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et 
@@ -107,8 +109,6 @@ $form .= <<<ENDEND
     
 ENDEND;
 
-require_once '../indigo/startup.php';
-
 $site = new idg_site;
 
 $document = new idg_document;
@@ -200,16 +200,15 @@ $site->check();
 require_once "$design.php";
 
 $view = new idg_view;
-$view->set_properties(['class' => $design]);
 
 $text = new idg_fragment;
 $text->set_properties(array(
-    'class' => 'text',
+    'class' => '\Indigo\Fragment\text',
     'name' => 'content' // fancy needs this!
 ));
 $text->set_text($form . $lipsum);
 
-$func = "idg_view_${design}_make_testcard";
+$func = $idg_design_namespace[$design] . '\make_testcard';
 $func($document, $view, $text);
 
 $view->check();

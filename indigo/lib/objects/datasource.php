@@ -5,8 +5,9 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-require_once 'tree.php';
-
+/**
+ * Type information for idg_datasource.
+ */
 class idg_datasource_type extends idg_type {
 
     function __construct() {
@@ -18,6 +19,9 @@ class idg_datasource_type extends idg_type {
     }
 }
 
+/**
+ * The source of all data.
+ */
 class idg_datasource extends idg_leafnode implements idg_parameterized {
 
     use idg_parameters;
@@ -26,29 +30,11 @@ class idg_datasource extends idg_leafnode implements idg_parameterized {
         parent::__construct();
         $this->set_element_name('datasource');
     }
-
-    /** @todo: urgs!
-    function add_token(&$tree, &$depth, &$path) {
-        if (($anchor = $this->get_property('anchor'))) {
-            $prop = array();
-            $prop['type'] = 'anchor';
-            $prop['anchor'] = $anchor;
-            $prop['name'] = $this->get_property('name');
-
-            $tree->tokens[] = $prop;
-        }
-
-        return true;
-    } */
 }
 
 /**
- * The source of all data.
- *
- * This is basically an iterator.
- * 
- * @todo Actually make this an iterator.
- * 
+ * An object instance of a data source.
+ * Actual classes need to derive from this one since they do not get type information.
  */
 class idg_datasource_object implements Iterator, idg_parameterized {
     use idg_parameters;

@@ -5,7 +5,9 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-function blocks_filter_infobox(string $text): string {
+namespace Indigo\Design\Blocks;
+
+function infobox(string $text): string {
    global $elements;
 
     $output = '';
@@ -30,7 +32,7 @@ function blocks_filter_infobox(string $text): string {
     return $output;
 }
 
-class idg_fragment_blocks_infobox extends idg_fragment_object {
+class infobox extends \idg_fragment_object {
 
     var $text;
     var $is_item = false;
@@ -39,7 +41,7 @@ class idg_fragment_blocks_infobox extends idg_fragment_object {
     var $itemcnt = 0;
     var $max_items = 0;
 
-    function _render(idg_document $document, idg_view $view): void {
+    function _render(\idg_document $document, \idg_view $view): void {
         global $font_blocks;
         global $elements;
 

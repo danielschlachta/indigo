@@ -1,43 +1,37 @@
 <?php
 
-require_once 'tree.php';
+namespace Indigo\Module\Markdown;
+
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
 
 $parsedown_main = __DIR__ . '/parsedown/Parsedown.php';
 
 if (file_exists($parsedown_main)) {
-	require_once($parsedown_main);
+    require_once($parsedown_main);
 } else {
-   	complain_module('parsedown', $parsedown_main,
-		'https://github.com/erusev/parsedown.git');
-	exit;
+    complain_module('parsedown', $parsedown_main,
+        'https://github.com/erusev/parsedown.git');
+    exit;
 }
 
 
-/*!
- * Support for .md files via parsedown
- *
+/**
+ * Support for .md files via parsedown.
  * Use datasource_textfile as data source.
  */
+class renderer extends \idg_renderer {
 
-class idg_view_html_renderer_markdown extends idg_view_html_renderer
-{
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-	}
+    function _render(idg_document $document, idg_view $view): void {
+        $this->datasource->rewind();
+        $content = $this->datasource->get_token();
 
-	function render(&$document, &$view)
-	{
-    	$this->datasource->rewind();
-    	$content = $this->datasource->get_token();
+        $Parsedown = new Parsedown();
 
-    	$Parsedown = new Parsedown();
-
-    	$view->stream_append('html-body', $Parsedown->text($content));
-		$last_change = $this->datasource->get_token();
-		$document->set_last_change($last_change);
-	}
+        $view->stream_append('html-body', $Parsedown->text($content));
+        $last_change = $this->datasource->get_token();
+        $document->set_last_change($last_change);
+    }
 }
-
-
-?>

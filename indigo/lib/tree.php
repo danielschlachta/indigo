@@ -5,9 +5,6 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-require_once 'object.php';
-require_once 'attribute.php';
-
 /**
  * Base class for objects organized in a tree structure. Nodes which can have
  * children are defined in idg_treenode.
@@ -152,7 +149,7 @@ abstract class idg_treenode_type extends idg_type {
     protected array $child_types = ['idg_tree_node'];
 
     function accepts_child($child_type): bool {
-        return in_array($child_type, $this->child_types);
+        return in_array(str_replace('Indigo\\', '', $child_type), $this->child_types);
     }
 }
 
@@ -434,7 +431,7 @@ abstract class idg_treenode extends idg_leafnode {
             return;
         }
 
-        if ($name == 'param') {
+        if ($name == 'parameter') {
             if (!$this->current_object)
                 diag($this, 'xml: orphaned param tag');
 
@@ -497,13 +494,13 @@ abstract class idg_treenode extends idg_leafnode {
     private function _xml_read_end($parser, $name): void {
         if ($this->current_object &&
             $name != 'xi:include' &&
-            !in_array($name, ['attribute', 'option', 'param']))
+            !in_array($name, ['attribute', 'option', 'parameter']))
             $this->current_object = $this->current_object->get_parent();
 
         if ($name == 'attribute')
             $this->current_attribute = null;
 
-        if ($name == 'param')
+        if ($name == 'parameter')
             $this->current_parameter = null;
     }
 
@@ -545,64 +542,4 @@ abstract class idg_treenode extends idg_leafnode {
 
         return true;
     } */
-}
-
-/**
- * Interface for parameterized objects, i.e. entities that have a declaration
- * and an implementation part.
- */
-interface idg_parameterized {
-
-    /**
-     * Sets a parameter by name.
-     * @param string $name The name of the parameter
-     * @param string $value The value of the parameter
-     */
-    function set_parameter(string $name, string $value): void;
-
-    /**
-     * Sets the parameters all at once to the contents of the given array.
-     * @param array|null $parameters The parameters as key/value pairs
-     */
-    function set_parameters(?array $parameters = null): void;
-
-    /**
-     * Get a parameter optionally providing a default value if not set.
-     * @param string $name The name of the parameter
-     * @param string|null $default The default value of the parameter
-     * @return string|null The value of the parameter
-     */
-    function get_parameter(string $name, ?string $default = null): ?string;
-
-    /**
-     * Gets the parameters all at once in an array using key/value pairs.
-     * @return array|null The perameters
-     */
-    function get_parameters(): ?array;
-}
-
-trait idg_parameters {
-
-    private $parameters;
-
-    function set_parameter(string $name, string $value): void {
-        if (!$this->parameters)
-            $this->parameters = [];
-        $this->parameters[$name] = $value;
-    }
-
-    function set_parameters(?array $parameters = null): void {
-        $this->parameters = $parameters;
-    }
-
-    function get_parameter(string $name, ?string $default = null): ?string {
-        if (($value = @$this->parameters[$name]))
-            return $value;
-
-        return $default;
-    }
-
-    function get_parameters(): ?array {
-        return $this->parameters;
-    }
 }
