@@ -5,217 +5,296 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_object_type {
+/**
+ * Type information for idg_object. 
+ */
+abstract class idg_type {
 
-    protected $properties = [];
-    protected $hooks = [];
+    private array $properties = [];
+    private array $hooks = [];
 
+    /** The constructor. Register properties here. */
     function __construct() {
-        $this->set_known('options');
+        $this->register_property('name');
     }
 
-    function get_known($name) {
+    /**
+     * Returns <code>true</code> if the object has a property with the given name.
+     * @param string $name The name of the property
+     * @return bool Whether the property exists
+     */
+    function has_property(string $name): bool {
         return array_key_exists($name, $this->properties);
     }
 
-    function set_known($name) {
+    /**
+     * Adds a name to the list of known properties.
+     * @param string $name The name of the property
+     */
+    protected function register_property(string $name): void {
         if (!array_key_exists($name, $this->properties))
             $this->properties[$name] = false;
     }
 
-    function get_properties() {
+    /**
+     * Returns an array with the names of all known properties as keys,
+     * <code>true</code> or <code>false</code> depending on whether the property 
+     * is mandatory.
+     * Values can be added with <code>idg_object\get_property_values()</code>.
+     * @return array Properties and their values as key/value pairs
+     */
+    function get_properties(): array {
         return $this->properties;
     }
 
-    function set_mandatory($name, $is_mandatory = true) {
+    /**
+     * Sets whether an existing property is mandatory.
+     * @param string $name The name of the property
+     * @param bool $is_mandatory Whether the property can be omitted in a declaration
+     */
+    protected function set_property_mandatory(string $name,
+        bool $is_mandatory = true): void {
+
         if (!array_key_exists($name, $this->properties))
-            diag($this, "set_mandatory: unknown property '$name'");
+            diag($this, "unknown property '$name'");
 
         $this->properties[$name] = $is_mandatory;
     }
 
-    function is_mandatory($name) {
+    /**
+     * Returns <code>true</code> if a property of the given name exists and is mandatory.
+     * @param string $name The name of the property
+     * @return bool Whether a mandatory property of the given name exists
+     */
+    function property_is_mandatory(string $name): bool {
         return array_key_exists($name, $this->properties) && $this->properties[$name];
     }
 
-    function get_hook($name) {
-        return @$this->hooks[$name];
+    /**
+     * Attach a hook function to a property that is called when the property value 
+     * is <code>null</code>. The function can be global or a property of this object.
+     * @see get_property(), execute()
+     * @param string $name The name of the property
+     * @param string $function The function to execute, gets passed the
+     *        $name and may return null
+     */
+    protected function set_property_hook(string $name, string $function): void {
+        $this->hooks[$name] = $function;
     }
-
-    function set_hook($name, $function_name) {
-        $this->hooks[$name] = $function_name;
+    
+    function get_property_hook(string $name) {
+        return @$this->hooks[$name];
     }
 }
 
+/**
+ * Base class for all objects.
+ */
 class idg_object {
 
-    private $idg_id;
-    private $idg_type;
-    protected $type_obj;
-    private $properties = [];
-    private $hooks = [];
-    protected $text;
-    private static $idg_object_counters = array();
-    private static $idg_type_objects = array();
+    private string $idg_id;
+    private object $type_object;
+    private array $properties = [];
+    private array $hooks = [];
+    private static array $object_counters = [];
+    private static array $type_objects = [];
+
+    function __construct() {
+        $type_name = $this->get_type_name();
+
+        if (!class_exists($type_name))
+            diag($this, "no corresponding idg_type '$type_name'");
+
+        if (!is_subclass_of($type_name, 'idg_type'))
+            diag($this, "class '$this->type_name' is not a subclass of idg_type");
+
+        if (!($this->type_obj = @idg_object::$type_objects[$type_name])) {
+
+
+            $this->type_object = new $type_name;
+            idg_object::$type_objects[$type_name] = & $this->type_obj;
+        }
+
+        if (!@idg_object::$object_counters[$type_name])
+            $id_count = idg_object::$object_counters[$type_name] = 1;
+        else
+            $id_count = ++idg_object::$object_counters[$type_name];
+
+        $this->idg_id = get_class($this) . '-' . $id_count;
+    }
 
     /**
-     * Constructs an idg object and assigns the corresponding idg type.
-     *
-     * The idg_object_type is created if necessary, otherwise
-     * taken from a list.
-     *
-     * $idg_id is assigned a unique id based on the (php) object type
-     * and the number of objects constructed so far.
-     *
+     * Returns a unique readable identifier for the object, based on the type and 
+     * the number of the object instance.
+     * <i>Note: This assumes that objects are never destroyed.</i>
+     * @return string The identifier
      */
-    function __construct() {
-        $type = get_class($this);
-        $type_obj_name = $type . '_type';
-
-        if (!class_exists($type_obj_name))
-            diag($this,
-                "constructing $type: no corresponding idg_object_type");
-
-        if (@!idg_object::$idg_type_objects[$type]) {
-            $this->type_obj = new $type_obj_name();
-            idg_object::$idg_type_objects[$type] = & $this->type_obj;
-        } else
-            $this->type_obj = & idg_object::$idg_type_objects[$type];
-
-        if (@!idg_object::$idg_object_counters[$type])
-            $id_count = idg_object::$idg_object_counters[$type] = 1;
-        else
-            $id_count = ++idg_object::$idg_object_counters[$type];
-
-        $this->idg_id = $type . '-' . $id_count;
-    }
-
-    function clear() {
-        unset($this->parent);
-        unset($this->children);
-    }
-
-    function get_idg_id() {
+    function get_idg_id(): string {
         return $this->idg_id;
     }
 
-    function get_text() {
-        return $this->text;
+    /**
+     * Returns the name of the corresponding type object. 
+     * @return string The name of the object
+     */
+    function get_type_name(): string {
+        return get_class($this) . '_type';
     }
 
-    function set_text($text) {
-        $this->text = $text;
+    /**
+     * Returns an instance of the corresponding type object.
+     * @return idg_type The type object
+     */
+    function get_type(): idg_type {
+        return $this->type_object;
     }
 
-    function get_idg_type() {
-        return $this->idg_type;
-    }
-
-    protected function set_idg_type($idg_type) {
-        $this->idg_type = $idg_type;
-    }
-
-    function get_property($name, $execute_hooks = true) {
-        if ($prop = @$this->properties[$name])
+    /**
+     * Returns the value of a property, possibly generated by a hook function
+     * if it is not explicitly set, or <code>null</code>.
+     * 
+     * If <code>$execute_hooks</code> is <code>true</code> and a hook function is set, 
+     * the return value of the hook function is returned. If this fails, the same is 
+     * tried with the associated idg_type's hook function.
+     * 
+     * @param string $name The name of the property
+     * @param bool $execute_hooks Whether to execute hooks at all
+     * @return string|null The value of the property
+     */
+    function get_property($name, $execute_hooks = true): ?string {
+        if (($prop = @$this->properties[$name]))
             return $prop;
-
-        if ($hook = $this->get_hook($name))
-            return $this->execute($hook);
-
-        if ($hook = $this->type_obj->get_hook($name))
-            return $this->execute($hook);
+        if (($hook = @$this->hooks[$name]))
+            return $this->execute($hook, $dummy);
+        if (($hook = $this->get_type()->get_property_hook($name)))
+            return $this->execute($hook, $dummy);
+        
+        return null;
     }
 
-    function get_properties() {
+    /**
+     * Returns an array of all properties without executing any hooks. 
+     * @return array An array of the properties and their values as key/value pairs 
+     */
+    function get_properties(): array {
         return $this->properties;
     }
 
-    function get_property_values(&$prop_array,
-        $execute_hooks = false) {
-        foreach ($prop_array as $name => $value) {
-            if ($value = $this->get_property($name, $execute_hooks)) {
-                $prop_array[$name] = $value;
-            } else if ($execute_hooks)
-                $prop_array[$name] = $this->execute($hook);
+    /**
+     * Decorates an array containing property names with the corresponding values.
+     * Overwrites the values in the array with <code>null</code> if it is not 
+     * set in the object.
+     * @see get_property(), idg_type\get_properties()
+     * @param $properties The array to process
+     * @param boolean $execute_hooks Whether to execute hooks
+     */
+    function get_property_values(array &$properties, bool $execute_hooks = false): void {
+        foreach ($properties as $name => $value) {
+            if (($value = $this->get_property($name, $execute_hooks)))
+                $properties[$name] = $value;
             else
-                $prop_array[$name] = null;
+                $properties[$name] = null;
         }
     }
 
-    function set_property($name, $value) {
-        if (!$this->type_obj)
-            diag($this, 'set_property: idg object has no type');
+    /**
+     * Sets the property <code>$name</code> to <code>$value</code>.
+     * @param string $name The name of the property
+     * @param string $value The new value
+     */
+    function set_property(string $name, string $value): void {
+        if (!($type_object = $this->get_type()))
+            diag($this, "object has no type");
 
-        if (!$this->type_obj->get_known($name))
-            diag($this, 'set_property: unknown property: ' . $name);
+        if (!$type_object->has_property($name))
+            diag($this, "unknown property '$name'");
 
         $this->properties[$name] = $value;
     }
 
-    function set_properties($prop_array) {
-        if (!$this->type_obj)
-            diag($this, 'set_properties: idg object has no type');
+    /**
+     * Sets properties based on the key/value pairs in an array.
+     * Properties not contained in the array will remain unchanged.
+     * @param array $properties
+     */
+    function set_properties(array $properties): void {
+        if (!($type_obj = $this->get_type())) {
+            diag($this, "object has no type");
+        }
 
-        foreach ($prop_array as $name => $value) {
-            if ($this->type_obj->get_known($name))
+        foreach ($properties as $name => $value) {
+            if ($this->get_type()->has_property($name))
                 $this->properties[$name] = $value;
             else
-                diag($this, "set_properties: unknown property '$name'");
+                diag($this, "unknown property '$name'");
         }
     }
 
-    function get_hook($name) {
-        return @$this->hooks[$name];
-    }
-
-    function set_hook($name, $function_name) {
-        $this->hooks[$name] = $function_name;
-    }
-
-    /**   Executes members of this object and global functions. */
-    function execute($function_name) {
+    /**
+     * Executes a function which can be global or a a member of this object,
+     * if <code>$function_name</code> starts with <code>$this-></code>.
+     * 
+     * @param string $function_name The name of the function or member
+     * @param &$param An arbitrary parameter passed to the function
+     * @return The return value of the function
+     */
+    function execute(string $function_name, &$param) {
         if (strpos($function_name, '$this->') === 0) {
             $do_func = substr($function_name, strlen('$this->'));
-            $retval = $this->$do_func();
-        } else
-            $retval = $function_name();
+            
+            if (!method_exists($this, $do_func)) 
+                diag($this, "unknown method '$do_func'");
+            
+            $retval = $this->$do_func($param);
+        } else {
+            if (!function_exists($function_name))
+                diag($this, "unknown function '$function_name'");
+
+            $retval = $function_name($param);
+        }
 
         return $retval;
     }
 
-    function get_instance() {
-        $object_name = get_class($this)
-            . '_' . $this->get_property('class');
+    /**
+     * Performs a basic consistency check.
+     * @todo This currently only checks whether all mandatory properties have
+     *       values. Objects should implement their own checks.
+     * @parameter $parameter Unused
+     * @return <code>true</code>
+     */
+    protected function _check(&$parameter): bool {
+        if (!($type_obj = $this->get_type()))
+            diag($this, 'object has no type');
 
-        if (!class_exists($object_name))
-            diag($this, "object: class does not exist: $object_name");
+        $properties = $type_obj->get_properties();
+        
+        foreach ($properties as $name => $value) {
+            if (!$this->get_type()->property_is_mandatory($name))
+                continue;
+            if (!($value = $this->get_property($name))) {
+                if (($object_name = $this->get_property('name')))
+                    $object_name .= ': ';
+                else
+                    $object_name = '';
+                
+                diag($this, "${object_name}missing property '$name '");
+            }
+        }
 
-        return new $object_name($this);
+        return true;
     }
 
     /**
-     * Performs consistency checks, dies when an error is encountered.
+     * Print blablac
      *
-     * This currently only checks whether all mandatory properties have
-     * values.
+     * @todo does not work!
      */
-    protected function _check() {
-        $properties = $this->type_obj->get_properties();
-
-        foreach ($properties as $name => $value) {
-            if (!$this->type_obj->is_mandatory($name))
-                continue;
-
-            if (!@$this->get_property($name))
-                diag($this, "check: missing property '$name '");
-        }
-    }
-
-    protected function _print_debug($indent = '') {
+    protected function _print_debug(): bool {
         $lines = array(
             "ID       $this->idg_id"
         );
-        $lines[] = 'XML_TYPE ' . $this->get_idg_type();
+        $lines[] = 'XML_TYPE ' . $this->get_type_name();
         $lines[] = '(break)';
 
         $max_header = 0;
@@ -285,78 +364,56 @@ class idg_object {
         return $retstr;
     }
 
-    protected function get_xml_tag($tag_type, $tag_id = '') {
-        if ($tag_id == '')
-            $use_id = $this->get_idg_type();
-        else
-            $use_id = $tag_id;
+    /**
+     * Returns (part of) an <code>xml</code> element representing the object.
+     * The properties of the object are represented as attributes.
+     * @param string $tag_type <code>start</code>, <code>end</code>, <code>single</code>
+     * @param string $indent Optional prefix for output lines
+     * @return string The tag
+     */
+    protected function get_xml_tag(string $tag_type, string $indent = ''): string {
 
-        if ($tag_type == 'end') {
-            $text = '</' . $use_id . '>';
-            return array(
-                array(
-                    'indent' => 0,
-                    'line' => $text
-                )
-            );
-        }
+        $element = $this->get_element_name();
 
-        $prop_xml = array();
+        if ($tag_type == 'end')
+            return '</' . $element . '>';
 
-        foreach ($this->properties as $name => $value) {
+        $xml = '';
+        $prop_xml = [];
+        $properties = $this->get_properties();
+
+        foreach ($properties as $name => $value) {
             $prop_xml[] = "$name=\"$value\"";
         }
 
         $tagend = $tag_type == 'single' ? ' /' : '';
-        $xml = array();
 
         if (($prop_count = count($this->properties)) > 0) {
-            $first = & $prop_xml[0];
+            $first = $prop_xml[0];
             $last = '';
 
             if ($prop_count < 2)
-                $xml[] = array(
-                    'indent' => 0,
-                    'line' => "<$use_id $first$tagend>"
-                );
+                $xml .= "$indent<$element $first$tagend>";
             else {
                 $last = & $prop_xml[$prop_count - 1];
-                $xml[] = array(
-                    'indent' => 0,
-                    'line' => "<$use_id $first"
-                );
+                $xml .= "$indent<$element $first\n";
 
                 for ($i = 1; $i < count($prop_xml) - 1; $i++)
-                    $xml[] = array(
-                        'indent' => 1,
-                        'line' => &$prop_xml[$i]
-                    );
+                    $xml .= IDG_XML_INDENT . "$prop_xml[$i]\n";
 
                 if ($tag_type == 'start')
-                    $xml[] = array(
-                        'indent' => 1,
-                        'line' => "$last>"
-                    );
+                    $xml .= IDG_XML_INDENT . "$indent$last>\n";
                 else
-                    $xml[] = array(
-                        'indent' => 1,
-                        'line' => "$last />"
-                    );
+                    $xml .= IDG_XML_INDENT . "$indent$last />\n";
             }
         } else
-            $xml[] = array(
-                'indent' => 0,
-                'line' => "<$use_id$tagend>"
-            );
+            $xml .= "$indent<$element$tagend>\n";
 
         if ($this->text) {
             $text_lines = explode("\n", htmlentities($this->text));
 
             foreach ($text_lines as $line)
-                $xml[] = array(
-                    'indent' => 1,
-                    'line' => $line
-                );
+                $xml .= IDG_XML_INDENT . "$indent$line\n";
         }
 
         return $xml;

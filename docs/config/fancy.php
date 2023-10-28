@@ -9,7 +9,7 @@ $view->set_properties(array(
 
 // Create the layout and add it to the view
 
-$template = new idg_view_html_template;
+$template = new idg_template;
 $template->set_properties(array(
 	'class' => 'fancy',
 ));
@@ -30,7 +30,7 @@ $view->add_child($template);
  *  the html part will take care of that.
  */
 
-$navigation = new idg_view_html_renderer;
+$navigation = new idg_sink;
 $navigation->set_properties(array(
 	'name' => 'navigation',
 	'class' => 'fancy_navigation',
@@ -46,7 +46,7 @@ $template->add_child($navigation);
 
 // Insert the caption
 
-$caption = new idg_view_html_renderer;
+$caption = new idg_sink;
 $caption->set_properties(array(
 	'name' => 'header',
 	'class' => 'fancy_caption'
@@ -63,7 +63,7 @@ $template->add_child($caption);
 
 // Add a container for the sidebar
 
-$sidebar = new idg_view_html_renderer;
+$sidebar = new idg_sink;
 
 $sidebar->set_properties(array(
 	'name' => 'sidebar',
@@ -75,7 +75,7 @@ $template->add_child($sidebar);
 
 // Add a container for the content
 
-$content = new idg_view_html_container;
+$content = new idg_container;
 $content->set_properties(array(
 	'name' => 'content'
 ));
@@ -84,7 +84,7 @@ $content->set_properties(array(
 
 // Insert the actual page text into the container
 
-$main_text = new idg_view_html_slot;
+$main_text = new idg_source;
 $main_text->set_properties(array(
 	'name' => 'main-text',
 	'list-style-image' => 'elements/fancy/list-image.png'
@@ -95,7 +95,7 @@ $template->add_child($content);
 
 // Create a footer programmatically
 
-$footer = new idg_view_html_renderer;
+$footer = new idg_sink;
 $footer->set_properties(array(
 	'name' => 'footer',
     'class' => 'fancy_footer'

@@ -5,35 +5,37 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-require_once($idg_path . '/lib/tree.php');
-require_once($idg_path . '/lib/declaration.php');
+include_once 'tree.php';
 
-/** Type class for `idg_site_element` */
-
-class idg_site_element_type extends idg_tree_node_type {
-
-    var $child_types = array('idg_folder', 'idg_document');
+/**
+ * Type class for `idg_site_element`
+ */
+abstract class idg_site_element_type extends idg_treenode_type {
 
     function __construct() {
         parent::__construct();
-        $this->set_known('id');
-        $this->set_mandatory('id');
 
-        $this->set_known('name');
-        $this->set_known('title');
-        $this->set_known('content-language');
-        $this->set_known('title-separator');
-        $this->set_known('title-reverse-order');
-        $this->set_known('description');
-        $this->set_known('navigation-comment');
-        $this->set_known('index-document');
-        $this->set_known('show-name');
+        $this->child_types = ['idg_folder', 'idg_document'];
+
+        $this->register_property('id');
+        $this->set_property_mandatory('id');
+
+        $this->register_property('name');
+        $this->register_property('title');
+        $this->register_property('content-language');
+        $this->register_property('title-separator');
+        $this->register_property('title-reverse-order');
+        $this->register_property('description');
+        $this->register_property('navigation-comment');
+        $this->register_property('index-document');
+        $this->register_property('show-name');
     }
 }
 
-/** Base class for elements of a site definition. */
-
-class idg_site_element extends idg_tree_node {
+/**
+ * Base class for elements of a site definition. 
+ */
+abstract class idg_site_element extends idg_treenode {
 
     function __construct() {
         parent::__construct();
@@ -50,37 +52,78 @@ class idg_site_element extends idg_tree_node {
 
         return $site;
     }
+
+    /**
+     * Loads up a token for the site's built-in datasource.
+     * @param array $token The token 
+     */   
+    protected function _get_sitemap_token(array &$token) {
+        $token['type'] = $this->get_element_name();
+        $token['name'] = $this->get_property('name');
+        $token['id'] = $this->get_property('id');
+    }
+    
+    /**
+     * Produces a token meant for the site's built-in datasource.
+     * @param idg_datasource $datasource An arbitrary datasource
+     */
+    protected function _get_sitemap(idg_datasource_object $datasource): bool {
+        $token = [];
+        $this->_get_sitemap_token($token);
+        $datasource->add_token($token);
+        
+        return true;
+    }
 }
 
+/** 
+ * Type information of idg_site.
+ */
 class idg_site_type extends idg_site_element_type {
 
     function __construct() {
         parent::__construct();
-        $this->child_types[] = 'idg_datasource_declaration';
-        $this->set_mandatory('id', false);
+
+        $this->child_types[] = 'idg_datasource';
+
+        $this->set_property_mandatory('id', false);
     }
 }
 
+/**
+ * The object that defines a whole site, i.e. the root of the folder structure.
+ */
 class idg_site extends idg_site_element {
 
-    protected $idg_xml_translation = array(
-        'site' => 'idg_site',
-        'folder' => 'idg_folder',
-        'document' => 'idg_document',
-        'datasource' => 'idg_datasource_declaration',
-        'renderer' => 'idg_renderer_declaration'
-    );
     private $document;
     private $view;
 
     function __construct() {
         parent::__construct();
-        $this->set_idg_type('site');
+
+        /** @todo this has become rather redundant */
+        
+        $this->idg_xml_translation = [
+            'site' => 'idg_site',
+            'folder' => 'idg_folder',
+            'document' => 'idg_document',
+            'datasource' => 'idg_datasource',
+            'renderer' => 'idg_renderer'
+        ];
+
+        $this->set_element_name('site');
     }
 
-    function get_document($document = false) {
-        $document_name = $document;
-        $document_obj = false;
+    /**
+     * Returns an instance of the document with the given name, or the index document
+     * if the parameter is left out.
+     * The index document is defined in the site's <code>index-document</code>
+     * property. If no document could be found, <code>null</code> is returned.
+     * @param string $document_name The name of the document
+     * @return idg_document|null The object instance
+     */
+    function get_document(?string $document_name = null): ?idg_document {
+        $document_obj = null;
         $last_type = '';
 
         if (!$document_name) {
@@ -93,6 +136,8 @@ class idg_site extends idg_site_element {
             }
         }
 
+        /** @todo wget */
+        
         if (!$document_name)
             $document_name = $this->get_property('index-document');
 
@@ -103,32 +148,36 @@ class idg_site extends idg_site_element {
             $path = explode(IDG_URL_FOLDER_SEPARATOR, $document_name);
             $count = count($path);
 
-            for ($i = 1, $tmp = $this; $i < $count && $tmp; $i++) {
+            for ($i = 1, $tmp = $this;
+                $i < $count && $tmp;
+                $i++) {
                 $tmp = $tmp->get_child_by_key('id', $path[$i]);
             }
-        
+
             $document_obj = $tmp;
         }
 
         return $document_obj;
     }
 
-    function get_datasource(array &$parameters = null) {
-        $datasource = new idg_datasource_instance;
-        $datasource->set_parameters($this->get_parameters());
+    /**
+     * Returns an instance of a datasource containing the folder structure.
+     * The datasource tokens are arrays with key/value pairs.
+     * See the individual classes' _get_token() functions for the actual content.
+     * @return idg_datasource_object The datasource
+     */
+    function get_datasource(): idg_datasource_object {
+        $datasource = new idg_datasource_object($this);
 
-        if ($this->children) {
-            foreach ($this->children as $child) {
-                if (!$child->traverse($datasource, '$this->add_token'))
-                    diag($this, 'traverse failed for $this->add_token');
-            }
-        }
-
+        if (!$this->traverse($datasource, '$this->_get_sitemap'))
+            diag($this, 'internal error: traverse(_get_sitemap) failed');
+            
         return $datasource;
     }
 
-    function get_site_url($include_fragment = true) {
-        $parsed_url = parse_url(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"
+    function get_absolute_url($include_fragment = true) {
+        $parsed_url = parse_url(isset($_SERVER['HTTPS']) && 
+            $_SERVER['HTTPS'] === 'on' ? "https" : "http"
             . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
         $scheme = isset($parsed_url['scheme']) ?
@@ -156,30 +205,34 @@ class idg_site extends idg_site_element {
         return "$scheme$user$pass$host$port$path$query$fragment";
     }
 
-    function get_sitemap() {
+    /**
+     * Returns an <code>xml</code> representation of the sitemap.
+     * @see https://www.sitemaps.org/protocol.html
+     * @return string The sitemap
+     */
+    function get_sitemap(): string {
         $this->_sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
             . "\n"
             . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
             . "\n";
-        $this->_url = $this->get_site_url();
+        $this->_url = $this->get_absolute_url();
         $this->_scan_object($this);
 
         return $this->_sitemap . "</urlset>\n";
     }
 
-    /** @todo currently no way to set changefreq */
+    /** @todo currently no way to set changefreq, should we make use of traverse? */
     private function _scan_object(&$object, $prefix = '') {
-        if ($object->get_idg_type() == 'site')
+        if ($object->get_type_name() == 'site')
             foreach ($object->children as $child)
                 $this->_scan_object($child, '');
 
-
-        if ($object->get_idg_type() == 'folder')
+        if ($object->get_type_name() == 'folder')
             foreach ($object->children as $child)
                 $this->_scan_object($child,
                     $prefix . IDG_URL_FOLDER_SEPARATOR . $object->get_property('id'));
 
-        if ($object->get_idg_type() == 'document') {
+        if ($object->get_type_name() == 'document') {
             $prefix[0] = '=';
             $lastchg = $object->get_property('last-change');
             $lastmod = substr($lastchg, 6, 4) . '-' . substr($lastchg, 3, 2)
@@ -198,67 +251,81 @@ class idg_site extends idg_site_element {
     }
 }
 
+/**
+ * Type information for idg_folder.
+ */
 class idg_folder_type extends idg_site_element_type {
 
     function __construct() {
         parent::__construct();
-        $this->set_mandatory('name');
+        $this->set_property_mandatory('name');
     }
 }
 
+/**
+ * A folder. Can contain documents and folders.
+ */
 class idg_folder extends idg_site_element {
 
     function __construct() {
         parent::__construct();
-        $this->set_idg_type('folder');
-    }
-
-    function add_token(&$tree, &$depth, &$path) {
-        $prop = $this->get_properties();
-        $prop['type'] = 'folder';
-        $prop['depth'] = $depth;
-        $tree->tokens[] = $prop;
-
-        return true;
+        $this->set_element_name('folder');
     }
 }
 
+/**
+ * Type information for idg_document.
+ */
 class idg_document_type extends idg_site_element_type {
 
     function __construct() {
         parent::__construct();
-        $this->set_mandatory('name');
-        $this->set_hook('title', '$this->get_default_title');
-        $this->set_hook('last-change', '$this->get_last_change');
-        $this->child_types[] = 'idg_datasource_declaration';
-        $this->child_types[] = 'idg_renderer_declaration';
+
+        $this->child_types[] = 'idg_datasource';
+        $this->child_types[] = 'idg_renderer';
         $this->child_types[] = 'idg_attribute';
+
+        $this->set_property_mandatory('name');
+        $this->set_property_hook('title', '$this->get_default_title');
+        $this->set_property_hook('last-change', '$this->get_last_change');
     }
 }
 
+/**
+ * A document.
+ */
 class idg_document extends idg_site_element {
 
     var $last_change = false;
-    var $params = array();
+    var $params = [];
     var $variables;
 
     function __construct() {
         parent::__construct();
-        $this->set_idg_type('document');
+        $this->set_element_name('document');
     }
 
-    function get_url() {
+    /**
+     * Returns the parameter part of the url that produces the document.
+     * @return string A partial url, starting with <code>?display=</code>
+     */
+    function get_url(): string {
         $url = '?display=' . $this->get_path();
-        if ($this->variables) {
-            foreach ($this->variables as $name => $value) {
+
+        if ($this->variables) 
+            foreach ($this->variables as $name => $value)
                 $url .= "&amp;$name=$value";
-            }
-        }
 
         return $url;
     }
 
-    function get_folder() {
+    /**
+     * Returns the containing folder for the document.
+     * <i>Note: This can indeed return <code>null</code> since a document
+     * can be a direct sibling of an idg_site object.</i>
+     * @return idg_folder|null The folder object
+     */
+    function get_folder(): ?idg_folder {
         $folder = $this;
 
         while ($folder && (get_class($folder) != 'idg_folder'))
@@ -267,59 +334,50 @@ class idg_document extends idg_site_element {
         return $folder;
     }
 
-    function set_variable($name, $value = false) {
-        $this->variables[$name] = $value;
+    /**
+     * Returns a datasource object for the given source name.
+     * @param string $name The name of the datasource
+     * @return idg_datasource The datasource
+     */
+    function get_datasource(string $name): idg_datasource_object {
+        if ($name == '_site') 
+            return $this->get_site()->get_datasource();
+
+        if (!($datasource = $this->get_child_by_key('name',
+            $name, 'idg_datasource')))
+            diag($this, "datasource '$name' not found");
+
+        return $datasource->create_instance();
     }
 
-    function get_variable($name) {
-        if (@($value = $this->variables[$name]))
-            return $value;
-        else {
-            $this->variables[$name] = @$_GET[$name];
-            return @$this->variables[$name];
-        }
-    }
+    /**
+     * Returns an array containing instances of all renderers for a given slot.
+     * @param type $slot_name The name of the slot
+     * @return array|null An array or idg_datasource_object or null if none found
+     */
+    function get_renderers($slot_name): ?array {
+        $renderers = [];
 
-    function get_datasource($source_name) {
-        if ($source_name == '_site') {
-            return $this->get_site()->get_datasource($this->get_parameters);
-        }
+        if (!($renderers = $this->get_children_by_key('slot', $slot_name, 
+            'idg_renderer')))
+            return null;
 
-        /** @todo Tell where */
-        if (!$source_name)
-            diag($this, "idg_renderer_declaration: no datasource");
-
-        if (!($datasource_declaration = $this->get_child_by_key('name',
-            $source_name, 'idg_datasource_declaration')))
-            diag($this, 'idg_renderer_declaration: get_datasource: '
-                . ' no datasource named ' . $source_name);
-
-        return $datasource_declaration->create_instance();
-    }
-
-    function get_renderers($slot_name) {
-        $renderers = array();
-
-        if (!$renderer_declarations = $this->get_children_by_key('slot',
-            $slot_name, 'idg_renderer_declaration'))
-            diag($this, get_class($this)
-                . '(' . $this->get_path()
-                . '): unknown renderer (' . $slot_name . ')');
-
-        foreach ($renderer_declarations as $renderer_declaration) {
-            $source_name = $renderer_declaration->get_property('source');
+        foreach ($renderess as $renderer) {
+            $source_name = $renderer->get_property('source');
             $datasource = $this->get_datasource($source_name);
-            ;
-            $renderers[] = $renderer_declaration->create_instance($datasource);
+            $renderers[] = $renderer->create_instance($datasource);
         }
-
-        if (count($renderers) == 0)
-            return false;
 
         return $renderers;
-    }
+    } 
 
-    function get_path() {
+    /**
+     * Returns a string representing the document and its location in the folder 
+     * structure.
+     * The path is constructed using the <code>id</code> property.
+     * @return string The path
+     */
+    function get_path(): string {
         $path = $this->get_property('id');
         $tmp = $this->get_parent();
 
@@ -331,7 +389,13 @@ class idg_document extends idg_site_element {
         return $path;
     }
 
-    function get_default_title() {
+    /**
+     * Returns a title for the document. 
+     * Used as a hook in case the <code>title</code> property is not set.
+     * @return string The title
+     */
+    function get_default_title(): string {
+        echo "<!-- entering get_default_title -->\n";
         $site = $this->get_site();
         $index = $site->get_document();
 
@@ -344,7 +408,8 @@ class idg_document extends idg_site_element {
             $separator = ' - ';
 
         while ($tmp) {
-            if (($tmp->get_property('show-name') != 'no') && (($p_title = $tmp->get_property('name')) != '')) {
+            if (($tmp->get_property('show-name') != 'no') && 
+                (($p_title = $tmp->get_property('name')) != '')) {
                 $path = ($reverse ? $path : $p_title)
                     . ($path != '' ? $separator : '')
                     . ($reverse ? $p_title : $path);
@@ -353,34 +418,40 @@ class idg_document extends idg_site_element {
             $tmp = $tmp->get_parent();
         }
 
+        echo "<!-- leaving get_default_title -->\n";
+        
         return $path;
     }
 
-    function set_last_change($time) {
+    /**
+     * Sets the document's last modification time as a timestamp.
+     * @param int $time The time
+     */
+    function set_last_change(int $time) {
         if (!$this->last_change || $this->last_change < $time)
             $this->last_change = $time;
     }
 
-    function get_last_change() {
+    /**
+     * Returns the time of the document's last change, or the result of 
+     * <code>time()</code> if none was set.
+     * @return string Human readable form of the timestamp
+     */
+    function get_last_change(): string {
         if (!($last_change = $this->last_change))
             $last_change = time();
         return date("d.m.Y h:i", $last_change);
     }
-
-    function add_token(&$tree, &$depth, &$path) {
-        $prop = $this->get_properties();
-        $prop['path'] = $this->get_path();
-        $prop['url'] = '?display=' . $prop['path'];
-        $prop['type'] = 'document';
-        $prop['depth'] = $depth;
-
-        if (($parent = $this->get_parent()) && get_class($parent) == 'idg_folder') {
-            $prop['parent-folder-id'] = $parent->get_property('id');
-            $prop['parent-folder-name'] = $parent->get_property('name');
-        }
-
-        $tree->tokens[] = $prop;
-
-        return true;
+    
+    /**
+     * Loads up a token for the site's built-in datasource.
+     * @param array $token The token 
+     */
+    protected function _get_sitemap_token(array &$token) {
+        parent::_get_sitemap_token($token);
+        
+        $token['path'] = $this->get_path();
+        $token['url'] = $this->get_url();
+        $token['parent-folder-id'] = $this->get_parent()->get_property('id');
     }
 }

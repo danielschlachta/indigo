@@ -15,7 +15,7 @@ $template->set_properties(array(
 
 $view->add_child($template);
 
-$body = new idg_view_html_container;
+$body = new idg_container;
 $body->set_properties(array(
 	'name' => 'body',
 	'style' => 'height: 80%; ' 
@@ -25,7 +25,7 @@ $body->set_properties(array(
 
 $template->add_child($body);
 
-$main_text = new idg_view_html_slot;
+$main_text = new idg_source;
 $main_text->set_properties(array(
 	'name' => 'main-text',
 	'style' => 'padding: 0 0 0 17px;'

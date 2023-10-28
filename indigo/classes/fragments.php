@@ -5,15 +5,9 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_item_image extends idg_tree_node_instance
+class idg_fragment_image extends idg_fragment_object
 {
-
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-	}
-
-	function render(&$document, &$view)
+	function _render(idg_document $document, idg_view $view)
 	{
 		if (!$image = $this->get_attribute('image'))
 			return;
@@ -48,29 +42,25 @@ class idg_view_html_item_image extends idg_tree_node_instance
 	}
 }
 
-class idg_view_html_item_text extends idg_tree_node_instance
+class idg_fragment_text extends idg_fragment_object
 {
-	function __construct(&$parent)
+	
+	function _render(idg_document $document, idg_view $view)
 	{
-		parent::__construct($parent);
-	}
+		$idg_id = $this->get_parent()->get_idg_id();
 
-	function render(&$document, &$view)
-	{
-		$idg_id = $this->get_idg_id();
-
-		if (!$text = $this->get_text())
+		if (!$text = $this->get_parent()->get_text())
 			return;
 
     	$css = '';
 
-    	if ($style = $this->get_property('style'))
+    	if ($style = $this->get_parent()->get_property('style'))
 			$css .= "	span#$idg_id {\n		$style\n	}\n\n";
 
-	    if ($style_link = $this->get_property('style-link'))
+	    if ($style_link = $this->get_parent()->get_property('style-link'))
 			$css .= "	span#$idg_id a {\n		$style_link\n	}\n\n";
 
-		if ($style_link_hover = $this->get_property('style-link-hover'))
+		if ($style_link_hover = $this->get_parent()->get_property('style-link-hover'))
 			$css .= "	span#$idg_id a:hover {\n		$style_link_hover\n	}\n\n";
 
 		if ($css != '')
@@ -88,9 +78,9 @@ class idg_view_html_item_text extends idg_tree_node_instance
 
 		if ($css != '') {
 			$text = "<span id=\"$idg_id\">"
-				. $this->get_text() . "</span>";
+				. $this->get_parent()->get_text() . "</span>";
 		} else
-			$text = $this->get_text();
+			$text = $this->get_parent()->get_text();
 
 		foreach ($vars as $name => $value) {
 			$text = preg_replace("/\{$name\}/", $value, $text);

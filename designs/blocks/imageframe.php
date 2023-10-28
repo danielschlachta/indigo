@@ -5,21 +5,18 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_blocks_imageframe extends idg_tree_node_instance {
+class idg_fragment_blocks_imageframe extends idg_fragment_object {
 
-    function __construct(&$parent) {
-        parent::__construct($parent);
-    }
+    function _render(idg_document $document, idg_view $view): void {
+        $element = $this->get_parent();
+        
+        $idg_id = $element->get_idg_id();
 
-    function render(&$document, &$view) {
-        $idg_id = $this->get_idg_id();
-
-        $attr = new idg_attribute('image');  
-        $attr->add_options($this, 'blocks');
-        $attr->add_options($document, 'blocks');
+        $attr = $element->get_attribute('image', 'blocks');  
+        $attr->add_options($document);
         
         if (!$img = $attr->get_parameter('src'))
-            diag($this, "imageframe: no 'src' option given");
+            diag($this, "no 'src' option given");
 
         $top = $attr->get_parameter('top', 0);
         $left = $attr->get_parameter('left', 0);

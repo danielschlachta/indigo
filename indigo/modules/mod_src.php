@@ -1,5 +1,7 @@
 <?php
 
+require_once 'datasource.php';
+
 $geshi_main = $idg_path . '/modules/geshi-1.0/src/geshi.php';
 
 if (file_exists($geshi_main)) {
@@ -10,7 +12,7 @@ if (file_exists($geshi_main)) {
 	exit;
 }
 
-class idg_datasource_sourcefile extends idg_datasource_instance
+class idg_datasource_sourcefile extends idg_datasource_object
 {
 
 	function __construct($parameters = null)
@@ -59,7 +61,7 @@ class idg_datasource_sourcefile extends idg_datasource_instance
 	}
 }
 
-class idg_view_html_renderer_sourcefile extends idg_tree_node_instance
+class idg_view_html_renderer_sourcefile extends idg_leafnode
 {
 	function __construct(&$parent)
 	{

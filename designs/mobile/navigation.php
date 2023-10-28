@@ -1,6 +1,6 @@
 <?php
 
-class idg_view_html_renderer_mobile_navigation extends idg_tree_node_instance
+class idg_view_html_renderer_mobile_navigation extends idg_treenode
 {
 
     function __construct(&$parent)

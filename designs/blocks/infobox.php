@@ -5,8 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-function blocks_filter_infobox(&$text) {
-    global $elements;
+function blocks_filter_infobox(string $text): string {
+   global $elements;
 
     $output = '';
 
@@ -26,11 +26,11 @@ function blocks_filter_infobox(&$text) {
             '/(<a[^hH]+href=["\'][^h][^t][^t][^p][^>]*)>/', "\\1 $style>$image", 
             $output);
     }
-
+    
     return $output;
 }
 
-class idg_view_html_renderer_blocks_infobox extends idg_tree_node_instance {
+class idg_fragment_blocks_infobox extends idg_fragment_object {
 
     var $text;
     var $is_item = false;
@@ -39,26 +39,25 @@ class idg_view_html_renderer_blocks_infobox extends idg_tree_node_instance {
     var $itemcnt = 0;
     var $max_items = 0;
 
-    function __construct(&$parent) {
-        parent::__construct($parent);
-    }
-
-    function render(&$document, &$view) {
+    function _render(idg_document $document, idg_view $view): void {
         global $font_blocks;
         global $elements;
 
-        $view->set_filter('blocks_filter_infobox');
+        //$view->add_filter('blocks_filter_infobox');
+        
+        $element = $this->get_parent();
 
-        $idg_id = $this->get_idg_id();
-        //$this->datasource->rewind();
-        //$token = $this->datasource->get_token();
-        //$parameters = $token->get_data();
-
+        $idg_id = $element->get_idg_id();
+        //$parameters = $this->get_datasource()->current();
+        $parameters = [
+            'caption' => 'Test',
+            'file' => '/etc/resolv.conf'
+            ];
+        
         $caption = @$parameters['caption'];
-        if (@$parameters['file']) {
-            $file = $document->get_path() . '/' . $parameters['file'];
+        if (($file = @$parameters['file'])) {
             if (@!$fp = fopen($file, 'r'))
-                die(get_class($this) . ': file not found: ' . $file);
+                die(get_class($this) . "file not found: '$file'");
             $this->text = fread($fp, 10000);
             fclose($fp);
         } else if (@$parameters['text'])
@@ -68,7 +67,7 @@ class idg_view_html_renderer_blocks_infobox extends idg_tree_node_instance {
             $this->max_items = $parameters['maxitems'];
 
             if (@!$fp = fopen($file, 'rb')) {
-                $view->_unset_filter('blocks_filter_infobox');
+                $view->enable_filter('blocks_filter_infobox', false);
                 return;
             }
             $rss = stream_get_contents($fp);
@@ -77,8 +76,10 @@ class idg_view_html_renderer_blocks_infobox extends idg_tree_node_instance {
             $more_link = @$parameters['rss-extlink'];
             $more_text = @$parameters['rss-exttext'];
 
-            if (!$this->_parse_rss($rss, $more_link, $more_text))
+            if (!$this->_parse_rss($rss, $more_link, $more_text)) {
+                $view->enable_filter('blocks_filter_infobox', false);
                 return;
+            }
         } else if (@$parameters['image']) {
             $image = $document->get_path()
                 . '/images/' . $parameters['image'];
@@ -103,7 +104,7 @@ class idg_view_html_renderer_blocks_infobox extends idg_tree_node_instance {
                 $this->text = "File not found: $links";
             }
         } else {
-            $view->unset_filter('blocks_filter_infobox');
+            $view->enable_filter('blocks_filter_infobox', false);
             return;
         }
 
@@ -180,7 +181,7 @@ class idg_view_html_renderer_blocks_infobox extends idg_tree_node_instance {
         $view->stream_append('css', $css);
         $view->stream_append('css-print', $css_print);
 
-        $view->unset_filter('blocks_filter_infobox');
+        $view->enable_filter('blocks_filter_infobox', false);
     }
 
     function _parse_rss($text, $more_link, $more_text = false) {

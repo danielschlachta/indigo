@@ -25,7 +25,7 @@
  */
 
 class idg_view_html_renderer_fancy_footer
-	extends idg_tree_node_instance {
+	extends idg_treenode {
 	function __construct(&$parent)
 	{
 		parent::__construct($parent);

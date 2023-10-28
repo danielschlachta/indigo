@@ -5,35 +5,36 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_blocks_tabs extends idg_tree_node_instance {
+class idg_fragment_blocks_tabs extends idg_fragment_object {
 
-    function __construct(&$parent) {
-        parent::__construct($parent);
-    }
-
-    function render(&$document, &$view) {
+    function _render(idg_document $document, idg_view $view): void {
         global $font_blocks;
         global $elements;
+        
+        $element = $this->get_parent(); 
+        
+        if (!$source_name = $element->get_property('source'))
+            return;
 
-        $idg_id = $this->get_idg_id();
+        $datasource = $document->get_datasource($source_name);
+        $idg_id = $element->get_idg_id();
         
         $body = "<div id=\"$idg_id-tabbox\">\n<div id=\"$idg_id-tabs\">\n<ul>\n";
 
         $document_path = $document->get_path();
-        $tag = @$this->get_property('tag');
+        $tag = $element->get_property('tag');
         $has_current = false;
         $in_folder = false;
         $list = '';
-        $this->datasource->rewind();
         
-        while ($node = $this->datasource->get_token()) {
-            $type = $node['type'];
-            $name = @$node['name'];
-            $url = @$node['url'];
+        foreach ($datasource as $count => $token) {
+            $type = $token['type'];
+            $name = @$token['name'];
+            $url = @$token['url'];
             
             if ($type == 'document' && 
-                    (!$tag || $tag == $node['parent-folder-id'])) {              
-                if ($node['path'] == $document_path) {
+                    (!$tag || $tag == $token['parent-folder-id'])) {              
+                if ($token['path'] == $document_path) {
                     $list .= "<li id=\"current\">"
                         . "<div>$name</div></li>\n";
                     $has_current = true;
@@ -98,5 +99,3 @@ class idg_view_html_renderer_blocks_tabs extends idg_tree_node_instance {
         $view->stream_append('css-print', $css_print);
     }
 }
-
-?>

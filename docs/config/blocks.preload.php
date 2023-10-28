@@ -32,7 +32,7 @@ function blocks_filter_blockquote(&$text) {
     return $output;
 }
 
-class idg_view_html_item_searchbox extends idg_tree_node_instance {
+class idg_view_html_item_searchbox extends idg_treenode {
 
     function __construct(&$parent) {
         parent::__construct($parent);
@@ -78,14 +78,14 @@ class idg_view_html_item_searchbox extends idg_tree_node_instance {
     }
 }
 
-class idg_view_html_item_toolbox extends idg_tree_node_instance {
+class idg_view_html_item_toolbox extends idg_treenode {
 
     function __construct(&$parent) {
         parent::__construct($parent);
     }
 
     private function qr_link(&$document) {
-        $link = urlencode($document->get_site()->get_site_url());
+        $link = urlencode($document->get_site()->get_absolute_url());
 
         return "http://chart.googleapis.com/chart?chs=300x300&cht=qr&amp;" 
             . "chl=$link&amp;choe=UTF-8";

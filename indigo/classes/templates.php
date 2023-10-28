@@ -15,132 +15,114 @@
  * right), the other is the scrollable content. If a third container is present
  * it will occupy the content area behind the second one.
  */
+class idg_view_fixedbar extends idg_view {
 
-class idg_view_html_template_fixedbar extends idg_tree_node_instance
-{
+    function _render(idg_document $document): void {
+        if ($this->get_child_count() < 2 ||
+            $this->get_child_count() > 3)
+            diag($this, get_class($this) . ' must have two or three children');
 
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-	}
+        $fixed = $this->get_child(0);
+        $fixed_id = $fixed->get_idg_id() . '-part';
+        $style_fixed = $fixed->get_property('style');
 
-	function render(&$document, &$view)
-	{
-		if ($this->get_child_count() < 2 ||
-		    $this->get_child_count() > 3)
-			diag($this, get_class($this) . ' must have two or three children');
+        $main = $this->get_child(1);
+        $main_id = $main->get_idg_id() . '-part';
+        $style_main = $main->get_property('style');
 
-		$fixed = $this->get_child(0);
-		$fixed_id = $fixed->get_idg_id() . '-part';
-		$style_fixed = $fixed->get_property('style');
+        if ($bg = $this->get_child(2)) {
+            $bg_id = $bg->get_idg_id() . '-part';
+            $style_bg = $bg->get_property('style');
+        }
 
-		$main = $this->get_child(1);
-		$main_id = $main->get_idg_id() . '-part';
-		$style_main = $main->get_property('style');
+        $fixed_width = $this->parameters['fixed-width'];
+        $fixed_position = $this->parameters['fixed-position'];
+        $attach_right = ($fixed_position == 'right');
 
-	    if ($bg = $this->get_child(2)) {
-	    	$bg_id = $bg->get_idg_id() . '-part';
-    		$style_bg = $bg->get_property('style');
-    	}
+        $style = $this->get_property('style');
 
-		$fixed_width = $this->parameters['fixed-width'];
-		$fixed_position = $this->parameters['fixed-position'];
-		$attach_right = ($fixed_position == 'right');
+        $css = "	body { padding: 0; margin: 0; width: 100%; "
+            . "overflow-x: hidden; $style; }\n"
+            . "div#$fixed_id { overflow: hidden; "
+            . "position: fixed; top: 0; $fixed_position: 0; "
+            . "height: 100%; width: $fixed_width; "
+            . "overflow: hidden; $style_fixed }\n"
+            . "div#$main_id { overflow-y: hidden;"
+            . " margin-$fixed_position: $fixed_width; $style_main }\n";
 
-		$style = $this->get_property('style');
+        if (@$style_bg)
+            $css .= "div#$bg_id { $style_bg }\n";
 
-		$css = "	body { padding: 0; margin: 0; width: 100%; "
-			. "overflow-x: hidden; $style; }\n"
-			. "div#$fixed_id { overflow: hidden; "
-			. "position: fixed; top: 0; $fixed_position: 0; "
-			. "height: 100%; width: $fixed_width; "
-			. "overflow: hidden; $style_fixed }\n"
-			. "div#$main_id { overflow-y: hidden;"
-			. " margin-$fixed_position: $fixed_width; $style_main }\n";
+        $this->stream_append('css', $css);
 
-		if (@$style_bg)
-		    $css .= "div#$bg_id { $style_bg }\n";
+        if (@$bg) {
+            $body = "<div id=\"$bg_id\">\n";
 
-		$view->stream_append('css', $css);
+            $this->stream_append('html-body', $body);
+            $bg->_render($document, $view);
 
-		if (@$bg) {
-		    $body = "<div id=\"$bg_id\">\n";
+            $body = "</div>\n";
+        } else
+            $body = '';
 
-    		$view->stream_append('html-body', $body);
-    		$bg->_render($document, $view);
+        $body .= "<div id=\"$fixed_id\">\n";
 
-    		$body = "</div>\n";
-    	} else
-    	    $body = '';
+        $this->stream_append('html-body', $body);
+        $fixed->_render($document, $view);
 
-		$body .= "<div id=\"$fixed_id\">\n";
+        $body = "</div>\n";
+        $body .= "<div id=\"$main_id\">\n";
 
-		$view->stream_append('html-body', $body);
-		$fixed->_render($document, $view);
+        $this->stream_append('html-body', $body);
+        $main->_render($document, $view);
 
-		$body = "</div>\n";
-		$body .= "<div id=\"$main_id\">\n";
-
-		$view->stream_append('html-body', $body);
-		$main->_render($document, $view);
-
-		$body = "</div>\n";
-		$view->stream_append('html-body', $body);
-	}
+        $body = "</div>\n";
+        $this->stream_append('html-body', $body);
+    }
 }
 
 /**
  * A simple one with the scroll bar always visible
  */
+class idg_view_fixedcontent extends idg_view {
 
-class idg_view_html_template_fixedcontent
-	extends idg_tree_node_instance
-{
+    function _render(idg_document $document): void {
+        $style = $this->get_property('style');
+        $style_print = $this->get_property('style-print');
 
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-	}
+        print_r($this->get_children());
+        die('');
 
-	function render(&$document, &$view)
-	{
-	    $style = $this->get_property('style');
-   	    $style_print = $this->get_property('style-print');
+        $children = $this->get_children();
 
-	    if ($this->get_child_count() == 0)
-			diag($this,
-				get_class($this) . ' must have at least one child');
+        if (!$children || count($children) < 1)
+            diag($this, 'template must have at least one child');
 
-		$idg_id = $this->get_idg_id();
-		$fixed = $this->get_child(0);
+        $idg_id = $this->get_idg_id();
+        $fixed = $children[0];
 
-		$css = "	body { padding: 0; margin: 0; "
-			. "width: 100%; height: 100%; "
-			. "overflow-x: hidden; $style }\n"
-			. "div#$idg_id { position: relative; top: 0; left: 0; "
-			. "z-index: 130; }\n";
+        $css = "	body { padding: 0; margin: 0; "
+            . "width: 100%; height: 100%; "
+            . "overflow-x: hidden; $style }\n"
+            . "div#$idg_id { position: relative; top: 0; left: 0; "
+            . "z-index: 130; }\n";
 
-		$css_print =
-			"div#$idg_id { overflow-y: hidden; $style_print }\n";
+        $css_print = "div#$idg_id { overflow-y: hidden; $style_print }\n";
 
-		$view->stream_append('css', $css);
-		$view->stream_append('css-print', $css_print);
+        $this->stream_append('css', $css);
+        $this->stream_append('css-print', $css_print);
 
-		$body = "<div id=\"$idg_id\">\n";
-		$view->stream_append('html-body', $body);
+        $body = "<div id=\"$idg_id\">\n";
+        $this->stream_append('html-body', $body);
 
-		$fixed->_render($document, $view);
+        $fixed->_render($document, $view);
 
-		$body = "</div>\n";
-		$view->stream_append('html-body', $body);
+        $body = "</div>\n";
+        $this->stream_append('html-body', $body);
 
-		$childcount = $this->get_child_count();
-
-		for ($i = 1; $i < $childcount; $i++) {
-			$part = $this->get_child($i);
-			$part->_render($document, $view);
-		}
-	}
+        for ($i = 1; $i < count($children); $i++)
+            $children[$i]->_render($document, $view);
+    }
 }
 
 ?>

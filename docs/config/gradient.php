@@ -5,7 +5,7 @@ $font = 'font-family: georgia,serif; font-size: 100%; line-height: 1.2;';
 $view = new idg_view_html;
 $view->set_properties(array('name' => 'gradient', 'icon' => 'favicon.png'));
 
-$template = new idg_view_html_template;
+$template = new idg_template;
 $template->set_properties(array('class' => 'fixedbar',
     'style' => $font . 'background-color: #46467d'
     ));
@@ -15,25 +15,25 @@ $template->set_text("fixed-width: 100px; fixed-position: $fixed_pos;");
 
 $view->add_child($template);
 
-$fixed = new idg_view_html_container;
+$fixed = new idg_container;
 
 $fixed->set_properties(array('name' => 'lighthouse', 
     'style' => 'background: #53538a url(elements/gradient/lighthouse.jpg)'
 	    ." bottom $fixed_pos fixed no-repeat;"));
 
-$navig = new idg_view_html_renderer;
+$navig = new idg_sink;
 $navig->set_properties(array('class' => 'gradient_navigation',
     'source' => '_site'));
 $fixed->add_child($navig);
 
-$logo = new idg_view_html_container;
+$logo = new idg_container;
 $logo->set_properties(array(
 	'name' => 'logo',
 	'style' => 'position: fixed; text-align: right; top: 20px;' . ' right: 20px; z-index: 120;',
 	'style-print' => 'position: absolute; top: 0; right: 0;'
 ));
 
-$logo_text = new idg_view_html_item;
+$logo_text = new idg_snippet;
 $logo_text->set_properties(array(
 	'class' => 'text',
 	'style' => 'padding-right: 8px; ' 
@@ -43,7 +43,7 @@ $logo_text->set_text('&lt;b&gt;indigo&lt;/b&gt;&amp;nbsp;/ web');
 
 $logo->add_child($logo_text);
 
-$logo_image = new idg_view_html_item;
+$logo_image = new idg_snippet;
 $logo_image->set_properties(array(
 	'class' => 'image'
 ));
@@ -51,7 +51,7 @@ $logo_image->set_text('source: elements/gradient/indigo.png; width: 90; height: 
 
 $logo->add_child($logo_image);
 
-$main = new idg_view_html_container;
+$main = new idg_container;
 $main->set_properties(array('name' => 'content',
 	'style' =>  'width: 100%; height: 100%; margin-left: auto; ' 
 	    . 'margin-right: auto;' 
@@ -59,7 +59,7 @@ $main->set_properties(array('name' => 'content',
 	    . ' top left fixed repeat-x;'));
 
 
-$headline = new idg_view_html_item;
+$headline = new idg_snippet;
 $headline->set_properties(array('class' => 'text',
 	'style' =>  'width: 94%; position: relative; left: 140px; top: 15px;'
 	    . 'font-size: 130%; font-weight: bold; color: #3b456d'));
@@ -67,11 +67,11 @@ $headline->set_text('{description}');
 
 $main->add_child($headline);
 
-$text_box = new idg_view_html_container;
+$text_box = new idg_container;
 $text_box->set_properties(array('name' => 'background', 
     'style' => 'text-align: center; height: 100%;'));
 
-$fill_box = new idg_view_html_container;
+$fill_box = new idg_container;
 $fill_box->set_properties(array('name' => 'fillbox', 
     'style' => 'width: 56%; height: 100%;' 
         . 'margin-left: 160px; padding: 0 20px 0 20px;' 
@@ -83,7 +83,7 @@ $fill_box->set_properties(array('name' => 'fillbox',
      'style-head' => 'font-size: 130%;',
      'style-subhead' => 'font-size: 100%;'));
 
-$main_text = new idg_view_html_slot;
+$main_text = new idg_source;
 $main_text->set_properties(array(
 	'name' => 'main-text',
     'style-link' => 'text-decoration: underline; font-weight: bold; '
@@ -93,7 +93,7 @@ $main_text->set_properties(array(
 
 $fill_box->add_child($main_text);
 
-$footer = new idg_view_html_renderer;
+$footer = new idg_sink;
 $footer->set_properties(array(
 	'class' => 'gradient_footer',
 	'source' => '_site'));
@@ -102,7 +102,7 @@ $fill_box->add_child($footer);
 
 $text_box->add_child($fill_box);
 
-$bottom = new idg_view_html_container;
+$bottom = new idg_container;
 $bottom->set_properties(array('name' => 'bottom',
 	'style' =>  'height: 70px;'));
 

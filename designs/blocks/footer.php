@@ -5,7 +5,7 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_blocks_footer extends idg_tree_node_instance {
+class idg_view_html_renderer_blocks_footer extends idg_treenode {
 
     function __construct(&$parent) {
         parent::__construct($parent);
@@ -39,7 +39,7 @@ class idg_view_html_renderer_blocks_footer extends idg_tree_node_instance {
         if ($style_image)
             $css .= "div#$idg_id-content img { $style_image }\n";
 
-        $url = $document->get_site()->get_site_url();
+        $url = $document->get_site()->get_absolute_url();
 
         $body = "<div id=\"$idg_id-content\">\n"
             . "Last change: $last_change\n"

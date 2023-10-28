@@ -1,38 +1,41 @@
 <?php
 
 /*
- *  Copyright (c) 2023 
- *  Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-class idg_view_html_renderer_blocks_dropdown extends idg_tree_node_instance {
+class idg_fragment_blocks_dropdown extends idg_fragment_object {
 
-    function __construct(&$parent) {
-        parent::__construct($parent);
-    }
-
-    function render(&$document, &$view) {
+    function _render(idg_document $document, idg_view $view): void {
         global $font_blocks;
         global $elements;
 
-        $idg_id = $this->get_idg_id();
-        $tag = $this->get_property('tag');
-
-        $attr = new idg_attribute('dropdown');  
-        $attr->add_options($this, 'blocks');
-        $attr->add_options($document, 'blocks');
-        $bg_url = $attr->get_parameter('bg-url');
+        $element = $this->get_parent();
         
-        $doc_path = $document->get_path();
+        if (!$source_name = $element->get_property('source'))
+            return;
 
-        $this->datasource->rewind();
+        $datasource = $document->get_datasource($source_name);
+        $idg_id = $element->get_idg_id();
+        $tag = $element->get_property('tag');
+
+        $attr = $element->get_attribute('dropdown', 'blocks');
+        if ($attr)
+            $attr->add_options($document, 'blocks');
+        
+        $bg_url = $attr->get_parameter('bg-url');
+
+        $doc_path = $document->get_path();
 
         $body = '';
 
-        while ($node = $this->datasource->get_token()) {
-            if (($node['type'] == 'folder') && (@$node['id'] == $tag)) {
-                $name = @$node['name'];
+        while ($datasource->valid()) {
+            $token = $datasource->current();
+            $datasource->next();
+
+            if (($token['type'] == 'folder') && (@$token['id'] == $tag)) {
+                $name = @$token['name'];
                 $body .= "<div id=\"$idg_id-box\">\n"
                     . "<div id=\"$idg_id-top\"></div>\n"
                     . "<div id=\"$idg_id-body\">\n"
@@ -40,32 +43,36 @@ class idg_view_html_renderer_blocks_dropdown extends idg_tree_node_instance {
                     . "<h2>$name</h2>\n<ul id=\"$idg_id-dropdown\">\n";
                 $is_first = true;
                 $close_doc = false;
-                while ($node = $this->datasource->get_token()) {
-                    if ($node['type'] == 'folder')
+
+                while ($datasource->valid()) {
+                    $token = $datasource->current();
+                    $datasource->next();
+
+                    if ($token['type'] == 'folder')
                         break;
 
-                    if ($node['type'] == 'document') {
+                    if ($token['type'] == 'document') {
                         if (!$is_first)
                             $body .= "\n  </ul>\n";
                         if ($close_doc)
                             $body .= "  </li>\n";
                         $close_doc = true;
-                        $name = $node['name'];
-                        $path = $node['path'];
-                        $url = $node['url'];
+                        $name = $token['name'];
+                        $path = $token['path'];
+                        $url = $token['url'];
                         if ($path == $doc_path)
                             $body .= "  <li id=\"current\">"
                                 . "<div><a href=\"#top\">$name</a></div>";
                         else
                             $body .= "  <li><div><a href=\"$url\">$name</a></div>";
                         $is_first = true;
-                    } else if ($node['type'] == 'anchor') {
+                    } else if ($token['type'] == 'anchor') {
                         if ($is_first) {
                             $body .= "\n    <ul>\n";
                             $is_first = false;
                         }
-                        $anchor = $node['anchor'];
-                        $name = $node['name'];
+                        $anchor = $token['anchor'];
+                        $name = $token['name'];
                         $body .= "      <li><a href=\"$url#$anchor\">$name</a></li>\n";
                     }
                 }
@@ -89,26 +96,24 @@ class idg_view_html_renderer_blocks_dropdown extends idg_tree_node_instance {
         $ct_col = '#a7aac6';
         $ac_col = '#9ca0c6';
 
-        $style = @$this->get_property('style');
+        $style = @$element->get_property('style');
 
         $css = "div#$idg_id-box { width: 248px; font-size: 63%;"
             . " $font_blocks color: $fg_col; z-index: 210; $style }\n"
-            . "div#$idg_id-top { width: 250px; height: 16px;";
-        
-        $css .= " background: url($elements/dropdown/nav_top.png)"
-            . " no-repeat; background-position: bottom left; }\n";
-        
-        $css .=  "div#$idg_id-body { width: 100%; background: $bg_col;"
+            . "div#$idg_id-top { width: 250px; height: 16px;"
+            . " background: url($elements/dropdown/nav_top.png)"
+            . " no-repeat; background-position: bottom left; }\n"
+            . "div#$idg_id-body { width: 100%; background: $bg_col;"
             . " border: 1px solid $fg_col; border-width: 0px 1px 0px 1px; }\n"
             . "div#$idg_id-content { width: 218px; padding: 1px 5px 1px 5px;"
             . " margin: 0 10px 0 10px; background: $ct_col";
-        
+
         if ($bg_url)
             $css .= " url($bg_url) no-repeat;"
                 . " background-position: top right;";
         else
             $css .= ';';
-                
+
         $css .= " }\n"
             . "div#$idg_id-content h2 { font-size: 100%; font-weight: bold;"
             . " padding: 0 0 0 20px; margin: 0;"

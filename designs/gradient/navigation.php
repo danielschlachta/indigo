@@ -1,7 +1,7 @@
  <?php
 
 class idg_view_html_renderer_gradient_navigation
-	extends idg_tree_node_instance {
+	extends idg_treenode {
 
     function __construct(&$parent)
 	{

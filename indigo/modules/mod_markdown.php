@@ -1,6 +1,8 @@
 <?php
 
-$parsedown_main = $idg_path . '/modules/parsedown/Parsedown.php';
+require_once 'tree.php';
+
+$parsedown_main = __DIR__ . '/parsedown/Parsedown.php';
 
 if (file_exists($parsedown_main)) {
 	require_once($parsedown_main);
@@ -17,7 +19,7 @@ if (file_exists($parsedown_main)) {
  * Use datasource_textfile as data source.
  */
 
-class idg_view_html_renderer_markdown extends idg_tree_node_instance
+class idg_view_html_renderer_markdown extends idg_view_html_renderer
 {
 	function __construct(&$parent)
 	{

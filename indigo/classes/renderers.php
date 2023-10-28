@@ -8,27 +8,28 @@
  * (c) 2020 Daniel Schlachta
  * ======================================================================== */
 
-class idg_view_html_renderer_null extends idg_tree_node_instance
-{
-	function __construct(&$parent)
+class idg_view_html_renderer {
+    private $parent;
+    
+    function __construct($parent)
 	{
-		parent::__construct($parent);
+        $this->parent = $parent;
 	}
 
-	function render(&$document, &$view)
+}
+
+class idg_view_html_renderer_null extends idg_view_html_renderer
+{
+	
+	function _render(&$document, &$view)
 	{
 	}
 }
 
 
-class idg_view_html_renderer_textfile extends idg_tree_node_instance
+class idg_view_html_renderer_textfile extends idg_view_html_renderer
 {
-	function __construct(&$parent)
-	{
-		parent::__construct($parent);
-	}
-
-	function render(&$document, &$view)
+	function _render($document, $view)
 	{
 		$this->datasource->rewind();
 		$content = $this->datasource->get_token();
@@ -38,20 +39,15 @@ class idg_view_html_renderer_textfile extends idg_tree_node_instance
 	}
 }
 
-class idg_view_html_renderer_phpscript extends idg_tree_node_instance
+class idg_view_html_renderer_phpscript extends idg_view_html_renderer
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
-
-	function render(&$document, &$view)
+    function _render(&$document, &$view)
 	{
 		$this->datasource->rewind();
 		$token = $this->datasource->get_token();
 		$class = $token['class'];
 		$file = $token['script'];
-
+/*
 		if (@stat($file) === false) {
 			$body = get_class($this)
 				. '(' . $this->parent->idg_id . '): script file('
@@ -68,11 +64,11 @@ class idg_view_html_renderer_phpscript extends idg_tree_node_instance
 			$obj->idg_id = $this->get_idg_id();
 			$obj->set_properties($token);
 			$obj->render($document, $view);
-		}
-	}
+		} */
+	} 
 }
 
-class idg_view_html_renderer_phpscript_obj
+class idg_view_html_renderer_phpscript_obj 
 {
 
 	var $idg_id;

@@ -5,6 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+include_once 'datasource.php';
+
 /**
  * Returns the content of a (normally text) file.
  *   @param mixed filename the name of the file, obviously mandatory
@@ -19,7 +21,7 @@
  *
  */
 
-class idg_datasource_textfile extends idg_datasource_instance
+class idg_datasource_textfile extends idg_datasource_object
 {
     /** sdf
      * 
@@ -29,14 +31,16 @@ class idg_datasource_textfile extends idg_datasource_instance
      * @return string Description
      */
     
-    function __construct($parameters = null)
+    function __construct(idg_datasource $parent)
 	{
-	    parent::__construct($parameters);
+        parent::__construct($parent);
+        
+        $filename = $this->get_parameter('filename');
 
-		$filename = $this->get_parameter('filename');
-
-        if (!$filename)
-			diag($this, "option filename not specified");
+        if (!$filename) {
+            $name = $this->parent->get_property('name');
+			diag($this, "datasource_textfile($name): option filename not specified");
+        }
 
 		if (@stat($filename) === false)
 			diag($this, "filename not found: '$filename");
@@ -61,13 +65,13 @@ class idg_datasource_textfile extends idg_datasource_instance
 	}
 }
 
-class idg_datasource_phpscript extends idg_datasource_instance
+class idg_datasource_phpscript extends idg_datasource_object
 {
-	function __construct(&$parameters)
+	function __construct(idg_datasource $parent)
 	{
-		parent::__construct($parameters);
+		parent::_construct($parent);
         
-		if (@!($script = $this->parameters['script']))
+        if (@!($script = $this->parameters['script']))
 			diag($this, get_class($this)
 			    . ': mandatory parameter(script) not found');
 

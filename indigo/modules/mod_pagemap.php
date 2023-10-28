@@ -1,6 +1,6 @@
 <?php
 
-$pagemap_main = $idg_path . '/modules/pagemap/dist/pagemap.min.js';
+$pagemap_main = __DIR__ . '/pagemap/dist/pagemap.min.js';
 
 if (!file_exists($pagemap_main)) {
    	complain_module('pagemap', $pagemap_main,

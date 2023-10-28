@@ -15,6 +15,6 @@ function fancy_hook_get_footer_tag() {
 
 
 $footer = $view->get_child_by_key('name', 'footer');
-$footer->set_hook('tag', 'fancy_hook_get_footer_tag');
+$footer->set_property_hook('tag', 'fancy_hook_get_footer_tag');
 
 ?>

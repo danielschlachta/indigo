@@ -1,24 +1,28 @@
 <?php
-/* ========================================================================
- * Indigo/Web
- *
- * File: diagnostics.php - you can customize error reporting here
- *
- * (c) 2020 Daniel Schlachta
- * ======================================================================== */
 
-ini_set('display_errors',1);
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
+
+ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
 function diag($obj, $msg) {
-	$name = get_class($obj);
-	echo "<h1>$msg</h1>\n";
-	echo '<pre>';
-	debug_print_backtrace();
-	echo '</pre>';
-	echo '<br />';
-	echo '<pre>';
-	$obj->clear();
+    if (method_exists($obj, 'clear'))
+        $obj->clear();
+	
+    $name = get_class($obj);
+    
+    $backtrace = debug_backtrace();
+    $function = $backtrace[1]['function'];
+	echo "<h1>$name\\$function: $msg</h1>\n";
+	
+    echo "<pre>\n";
+    debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+	echo "\n";
+	foreach (array_reverse(class_parents($obj)) as $parent)
+        echo "$parent->";
 	print_r($obj);
 	echo '</pre>';
 	die();
@@ -35,7 +39,7 @@ function complain_version() {
 function complain_module($name, $file, $repo) {
 	$file = getcwd() . '/' . $file;
 
-	die("<html><body><h1>Submodule $name is missing</h1>"
+	die("<html><body><h1>Git Submodule $name is missing</h1>"
 		. "Please execute <blockquote><code>"
 		. "git submodule init<br>git submodule update</code></blockquote>"
 		. " in the main directory or use the <code>--recurse-submodules</code>"
