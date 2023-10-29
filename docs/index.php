@@ -5,6 +5,9 @@
  * (c) 2023 Daniel Schlachta
  * ======================================================================== */
 
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+
 require_once '../indigo/startup.php';
 
 $cache_dir = getcwd() . '/cache';

@@ -7,7 +7,7 @@
 
 namespace Indigo\Fragment;
 
-class image extends \idg_fragment_object
+class image extends \idg_fragment_implementation
 {
 	function _render(idg_document $document, idg_view $view)
 	{

@@ -15,7 +15,7 @@ spl_autoload_register(function ($class_name) {
     if ($name_arr[0] == 'idg') {
         $filename = __DIR__ . '/lib/objects/' . $name_arr[1];
 
-        if (count($name_arr) >= 3 && $name_arr[2] != 'object')
+        if (count($name_arr) >= 3 && $name_arr[2] != 'implementation')
             $filename .= '_' . $name_arr[2];
 
         $filename .= '.php';
@@ -67,7 +67,7 @@ define('IDG_MIN_PHP_VERSION', '7.4.33');
 define('IDG_XML_INDENT', "\t");
 
 if (version_compare(PHP_VERSION, IDG_MIN_PHP_VERSION, '<'))
-    complain_version();
+    idg_complain_version();
 
 $ua = explode('/', @$_SERVER['HTTP_USER_AGENT']);
 

@@ -22,7 +22,7 @@ class fixedcontent extends \idg_view {
         $children = $this->get_children();
 
         if (!$children || count($children) < 1)
-            diag($this, 'template must have at least one child');
+            idg_diag($this, 'template must have at least one child');
 
         $idg_id = $this->get_idg_id();
         $fixed = $children[0];

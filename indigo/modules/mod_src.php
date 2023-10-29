@@ -12,12 +12,12 @@ $geshi_main = __DIR__ . '/geshi-1.0/src/geshi.php';
 if (file_exists($geshi_main)) {
     require_once($geshi_main);
 } else {
-    complain_module('geshi-1.0', $geshi_main,
+    idg_complain_module('geshi-1.0', $geshi_main,
         'https://github.com/GeSHi/geshi-1.0.git');
     exit;
 }
 
-class datasource extends \idg_datasource_object {
+class datasource extends \idg_datasource_implementation {
 
     function __construct($parameters = null) {
         parent::__construct($parameters);
@@ -25,7 +25,7 @@ class datasource extends \idg_datasource_object {
         $filename = $this->get_parameter('filename');
 
         if (@stat($filename) === false)
-            diag($this, get_class($this)
+            idg_diag($this, get_class($this)
                 . ': file "' . $filename . '" not found');
 
         $max_size = @$this->parameters['max_size'];
@@ -33,7 +33,7 @@ class datasource extends \idg_datasource_object {
             $max_size = 32 * 1024;
 
         if (@!$fp = fopen($filename, 'r'))
-            diag($this, get_class($this)
+            idg_diag($this, get_class($this)
                 . ': could not open text file "' . $filename . '"');
 
         $tok = fread($fp, $max_size);
@@ -43,11 +43,11 @@ class datasource extends \idg_datasource_object {
         $this->tokens[] = filemtime($filename);
 
         if (!$filename)
-            diag($this, get_class($this)
+            idg_diag($this, get_class($this)
                 . ': mandatory parameter(filename) not set');
 
         if (@stat($filename) === false)
-            diag($this, get_class($this)
+            idg_diag($this, get_class($this)
                 . ': source file "' . $filename . '" not found');
 
         $max_size = @$this->parameters['max_size'];
@@ -55,7 +55,7 @@ class datasource extends \idg_datasource_object {
             $max_size = 32 * 1024;/** todo make this a parameter */
 
         if (@!$fp = fopen($filename, 'r'))
-            diag($this, get_class($this)
+            idg_diag($this, get_class($this)
                 . ': could not open source file "' . $filename . '"');
 
         $tok = fread($fp, $max_size);

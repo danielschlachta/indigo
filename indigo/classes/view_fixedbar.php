@@ -19,7 +19,7 @@ class fixedbar extends \idg_view {
     function _render(\idg_document $document): void {
         if ($this->get_child_count() < 2 ||
             $this->get_child_count() > 3)
-            diag($this, get_class($this) . ' must have two or three children');
+            idg_diag($this, get_class($this) . ' must have two or three children');
 
         $fixed = $this->get_child(0);
         $fixed_id = $fixed->get_idg_id() . '-part';

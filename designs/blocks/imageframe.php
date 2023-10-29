@@ -7,18 +7,16 @@
 
 namespace Indigo\Design\Blocks;
 
-class imageframe extends \idg_fragment_object {
+class imageframe extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        $element = $this->get_parent();
-        
-        $idg_id = $element->get_idg_id();
+        $idg_id = $this->get_idg_id();
 
-        $attr = $element->get_attribute('image', 'blocks');  
+        $attr = $this->get_attribute('image', 'blocks');  
         $attr->add_options($document);
         
         if (!$img = $attr->get_parameter('src'))
-            diag($this, "no 'src' option given");
+            idg_diag($this, "no 'src' option given");
 
         $top = $attr->get_parameter('top', 0);
         $left = $attr->get_parameter('left', 0);

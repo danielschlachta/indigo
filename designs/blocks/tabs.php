@@ -7,24 +7,19 @@
 
 namespace Indigo\Design\Blocks;
 
-class tabs extends \idg_fragment_object {
+class tabs extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        global $font_blocks;
-        global $elements;
-        
-        $element = $this->get_parent(); 
-        
-        if (!$source_name = $element->get_property('source'))
+        if (!$source_name = $this->get_property('source'))
             return;
 
         $datasource = $document->get_datasource($source_name);
-        $idg_id = $element->get_idg_id();
+        $idg_id = $this->get_idg_id();
         
         $body = "<div id=\"$idg_id-tabbox\">\n<div id=\"$idg_id-tabs\">\n<ul>\n";
 
         $document_path = $document->get_path();
-        $tag = $element->get_property('tag');
+        $tag = $this->get_property('tag');
         $has_current = false;
         $in_folder = false;
         $list = '';
@@ -67,27 +62,26 @@ class tabs extends \idg_fragment_object {
             . " top: 0; left: 30px; height: 130px; }\n"
             . "div#$idg_id-tabs { position: absolute;"
             . " left: 0; bottom: $bottom; width: 100%;"
-            . " font-size: 60%; $font_blocks"
-            . " line-height:normal; }\n"
+            . " font-size: 60%; line-height:normal; }\n"
             . "div#$idg_id-tabs ul { margin: 0; padding: 10px 10px 0 10px;"
             . " list-style: none; }\n"
             . "div#$idg_id-tabs li { float: left;"
-            . " background: url($elements/tabs/left.png) no-repeat"
+            . " background: url(blocks/elements/tabs/left.png) no-repeat"
             . " left top; padding-left: 9px; }\n"
             . "div#$idg_id-tabs a { float: left; display: block;"
-            . " background: url($elements/tabs/right.png) no-repeat"
+            . " background: url(blocks/elements/tabs/right.png) no-repeat"
             . " right top; padding: 5px 15px 4px 6px;"
             . " text-decoration:none; color: $tx_col; }\n"
             . "div#$idg_id-tabs a:hover { color: $li_col;"
-            . " background:url($elements/tabs/right_ro.png) no-repeat"
+            . " background:url(blocks/elements/tabs/right_ro.png) no-repeat"
             . " right top; }\n"
             . "div#$idg_id-tabs #current {"
-            . " background-image:url($elements/tabs/left_on.png); }\n"
+            . " background-image:url(blocks/elements/tabs/left_on.png); }\n"
             . "div#$idg_id-tabs #current div { color: $fg_col;"
-            . " background: url($elements/tabs/right_on.png)"
+            . " background: url(blocks/elements/tabs/right_on.png)"
             . " no-repeat right top; padding: 6px 15px 4px 6px; }\n"
             . "div#$idg_id-corner { height: 30px;"
-            . " background: url($elements/tabs/top.png) no-repeat;"
+            . " background: url(blocks/elements/tabs/top.png) no-repeat;"
             . " background-position: top right; }\n"
             . "div#$idg_id-top { padding: 0; margin-right: 20px; height: 30px;"
             . " background: $bg_col; border: solid $to_col;"

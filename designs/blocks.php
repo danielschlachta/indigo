@@ -15,27 +15,12 @@ require_once('blocks/dropdown.php');
 require_once('blocks/infobox.php');
 require_once('blocks/footer.php');
 
-/* @todo Get rid of this */
-
-if (@$font_blocks == null)
-    $font_blocks = 'font-family: verdana, sans-serif;';
-
-$elements = '../designs/blocks/elements';
-
 class view extends \Indigo\View\fixedcontent {
-
-    function __construct(&$parent) {
-        parent::__construct($parent);
-    }
+    
 }
 
-function make_testcard($document, $view, $text) {
-    $centercol = new \idg_container;
-    $centercol->set_properties(array(
-        'style' => 'margin: 15px; padding-top: 2em;'
-    ));
-    $view->add_child($centercol);
-
+function make_testcard(\idg_document $document, \idg_view $view, \idg_fragment $article)
+: void {
     $imageframe = new \idg_fragment;
     $imageframe->set_properties(array(
         'class' => 'Indigo\Design\Blocks\imageframe'
@@ -45,11 +30,11 @@ function make_testcard($document, $view, $text) {
     $attr->set_parameter('top', 15);
     $attr->set_parameter('left', 15);
     $view->add_child($imageframe);
-    
+
     $infobox = new \idg_fragment;
     $infobox->set_properties(array(
         'class' => 'Indigo\Design\Blocks\infobox',
-        'source' => '_site'
+        'source' => 'infobox'
     ));
     $view->add_child($infobox);
 
@@ -58,10 +43,16 @@ function make_testcard($document, $view, $text) {
         'class' => '\Indigo\Design\Blocks\dropdown',
         'source' => '_site',
         'tag' => 'folder-2',
-        'style' => 'position: fixed; top: 20px; right: 20px;'
+        'style' => 'position: fixed; top: 15px; right: 30px;'
     ));
-    $view->add_child($dropdown); 
-    
+    $view->add_child($dropdown);
+
+    $centercol = new \idg_container;
+    $centercol->set_properties(array(
+        'style' => 'margin-left: 7px; padding: 2em 300px 0 0'
+    ));
+    $view->add_child($centercol);
+
     $tabs = new \idg_fragment;
     $tabs->set_properties(array(
         'class' => '\Indigo\Design\Blocks\tabs',
@@ -72,22 +63,20 @@ function make_testcard($document, $view, $text) {
 
     $centercol_body = new \idg_container;
     $centercol_body->set_properties(array(
-        'style' => "background: #b4d2b0; padding: 15px;"
+        'style' => "background: #b4d2b0; padding: 0 1em 0 1em;"
         . 'border: solid black; border-width: 0 1px 1px 1px'
     ));
     $centercol->add_child($centercol_body);
 
-    $centercol_body->add_child($text);
+    $centercol_body->add_child($article);
 
     $footer = new \idg_fragment;
     $footer->set_properties(array(
         'class' => '\Indigo\Design\Blocks\footer',
         'tag' => 'footer tag',
-        'style' => 'margin-top: 10px; padding: 10px;'
+        'style' => 'margin-top: 10px; padding: 10px 1em 10px 1em;'
     ));
     $centercol->add_child($footer);
-
-   
 }
 
 ?>

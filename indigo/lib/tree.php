@@ -52,7 +52,7 @@ abstract class idg_leafnode extends idg_object {
     }
 
     /**
-     * Sets a free-format text string (mainly used for <code>xml</code> compatibility).
+     * Sets a free-format text string (mainly for <code>xml</code> compatibility).
      * @param string $text The text
      */
     function set_text(string $text): void {
@@ -60,7 +60,7 @@ abstract class idg_leafnode extends idg_object {
     }
 
     /**
-     * Gets the text previously set with <code>set_text()</code> or <code>null</code>.
+     * Gets the text previously set with <code>set_text()</code>.
      * @return string|null The text
      */
     function get_text(): ?string {
@@ -76,19 +76,21 @@ abstract class idg_leafnode extends idg_object {
      */
     function create_attribute(string $name): idg_attribute {
         if (@$this->attributes[$name])
-            diag($this, "duplicate attribute: $name");
+            idg_diag($this, "duplicate attribute: $name");
 
         return $this->attributes[$name] = new idg_attribute($name, $this);
     }
 
     /**
-     * Returns the attribute with the given name and possibly scope 
+     * Returns the idg_attribute with the given name and possibly scope 
      * or a freshly created one if otherwise <code>null</code> would be returned.
-     * Unscoped attributes supersede scoped ones, i.e. if <code>a::b</code>
-     * does not exist but <code>b</code> does, <code>get_attribute('a', 'b')</code>
-     * returns it. The returned value is meant to be further decorated with
-     * a call to its add_options() member.
-     * <i>Note: The name can be specified as <code>scope::name</code>.</i>
+     * Unscoped attributes supersede scoped ones, i.e. if <code>s::n</code>
+     * does not exist but <code>n</code> does, <code>get_attribute('n', 's')</code>
+     * returns <code>n</code>. The returned value is meant to be further decorated with
+     * a call to its <code>add_options()</code> member.
+     * <blockquote>
+     * Note: The name can be specified as <code>scope::name</code>.
+     * </blockquote>
      * @param string $name The name of the attribute
      * @param string $scope The scope of the attribute
      * @return idg_attribute The corresponding attribute object
@@ -99,27 +101,28 @@ abstract class idg_leafnode extends idg_object {
         if ($scope && array_key_exists($full_name, $this->attributes))
             return $this->attributes[$full_name];
 
-        $attribute =  @$this->attributes[$name];
-        
+        $attribute = @$this->attributes[$name];
+
         if (!$attribute)
             $attribute = new idg_attribute($name, $scope);
-        
+
         return $attribute;
     }
 
     /**
-     * Creates a instance of a subclass of the object with the class name constructed 
+     * Creates an instance of a subclass of the object with the class name constructed 
      * from the current class and its <code>class</code> property.
      * E.g. an <code>idg_datasource</code> of class <code>text</code> would
      * yield an <code>idg_datasource_text</code> object (if there such a class, or die).
-     * @return object The created object
+     * @return object|null The created object
+     * @todo Naming convention is broken, see also idg_fragment, idg_renderer
      */
-    function create_instance() {
-        $object_name = get_class($this)
-            . '_' . $this->get_property('class');
+    function create_instance(): ?object {
+        $object_name = //get_class($this) . '_' . 
+            $this->get_property('class');
 
         if (!class_exists($object_name))
-            diag($this, "object: class does not exist: $object_name");
+            idg_diag($this, "object: class does not exist: $object_name");
 
         return new $object_name($this);
     }
@@ -173,7 +176,7 @@ abstract class idg_treenode extends idg_leafnode {
         parent::__construct();
 
         if ($parent && !is_subclass_of($parent, 'idg_treenode'))
-            diag($this, "__construct: '" . get_class($parent)
+            idg_diag($this, "__construct: '" . get_class($parent)
                 . "' is not a subclass of idg_treenode");
 
         $this->parent = $parent;
@@ -201,15 +204,15 @@ abstract class idg_treenode extends idg_leafnode {
     /**
      * Recursively looks for a tree node with property <code>$property</code> set to 
      * <code>$value</code>, optionally limiting the search to members of class 
-     * <code>$class</code>, and returns the first one found or <code>null</code>.
+     * <code>$class</code>, and returns the first one found.
      * @param string $property The name of the property
      * @param string $value The value of the property
      * @param string $class The name of the class
-     * @return idg_treenode|null
+     * @return idg_leafnode|null
      * @see get_children_by_key()
      */
     function get_child_by_key(string $property, string $value, string $class = null)
-    : ?idg_treenode {
+    : ?idg_leafnode {
 
         if ($this->children)
             foreach ($this->children as $child) {
@@ -222,13 +225,17 @@ abstract class idg_treenode extends idg_leafnode {
                     $class_name)))
                     return $childchild;
             }
+
+        return null;
     }
 
     /**
      * Returns an array containing all immediate children with property 
      * <code>$property</code> set to <code>$value</code>, optionally limited to members 
-     * of class <code>$class</code>, or <code>null</code> if there aren't any.
-     * <i>Note: This function is not recursive.</i>
+     * of class <code>$class</code>
+     * <blockquote>
+     * Note: This function is not recursive.
+     * </blockquote>
      * @see get_child_by_key()
      * @param string $property The name of the property
      * @param string $value The value of the property
@@ -259,7 +266,7 @@ abstract class idg_treenode extends idg_leafnode {
         $child_type = get_class($child);
 
         if (!$this->get_type()->accepts_child($child_type))
-            diag($this, "add child: incompatible child type '$child_type'");
+            idg_diag($this, "add child: incompatible child type '$child_type'");
 
         $child->set_parent($this);
         $this->children[] = & $child;
@@ -333,7 +340,7 @@ abstract class idg_treenode extends idg_leafnode {
         $param = ['xml' => $xml, 'deph' => 0, 'path' => ''];
 
         if (@!$fp = fopen($file_name, 'w'))
-            diag($this, 'xml: could not write ' . $file_name);
+            idg_diag($this, 'xml: could not write ' . $file_name);
 
         $this->traverse($param,
             '$this->_xml_write_start', '$this->_xml_write_end');
@@ -381,7 +388,7 @@ abstract class idg_treenode extends idg_leafnode {
         $encoding = 'utf-8';
 
         if (@!$fp = fopen($file_name, 'r'))
-            diag($this, 'xml: could not read ' . $file_name);
+            idg_diag($this, 'xml: could not read ' . $file_name);
 
         $xml = '';
         while ($chunk = fread($fp, 8129))
@@ -397,7 +404,7 @@ abstract class idg_treenode extends idg_leafnode {
         }
 
         if ($xml_version != '1.0')
-            diag($this, "read_xml: wrong xml version ($xml_version)");
+            idg_diag($this, "read_xml: wrong xml version ($xml_version)");
 
         $parser = xml_parser_create($encoding);
         xml_set_object($parser, $this);
@@ -414,7 +421,7 @@ abstract class idg_treenode extends idg_leafnode {
             $err_line = xml_get_current_line_number($parser);
             $err_col = xml_get_current_column_number($parser);
 
-            diag($this, "xml error $err_code: $err_string, "
+            idg_diag($this, "xml error $err_code: $err_string, "
                 . "line $err_line, column $err_col");
         }
 
@@ -424,7 +431,7 @@ abstract class idg_treenode extends idg_leafnode {
     private function _xml_read_start($parser, $name, $properties): void {
         if ($name == 'xi:include') {
             if (!$href = @$properties['href'])
-                diag($this,
+                idg_diag($this,
                     "xml: xi:include: must specify property 'href'");
 
             $this->read_xml($href, $this->current_object);
@@ -433,16 +440,16 @@ abstract class idg_treenode extends idg_leafnode {
 
         if ($name == 'parameter') {
             if (!$this->current_object)
-                diag($this, 'xml: orphaned param tag');
+                idg_diag($this, 'xml: orphaned param tag');
 
             $class_name = str_replace('_declaration', '',
                 get_class($this->current_object));
 
             if (!is_subclass_of($class_name, 'idg_parameterized'))
-                diag($this, 'xml: parameters are not accepted here');
+                idg_diag($this, 'xml: parameters are not accepted here');
 
             if (!($param_name = @$properties['name']))
-                diag($this,
+                idg_diag($this,
                     "xml: parameter '$name' needs a name");
 
             $this->current_parameter = $param_name;
@@ -451,10 +458,10 @@ abstract class idg_treenode extends idg_leafnode {
 
         if ($name == 'attribute') {
             if (!$this->current_object)
-                diag($this, 'xml: attribute has no parent');
+                idg_diag($this, 'xml: attribute has no parent');
 
             if (!($attr_name = @$properties['name']))
-                diag($this,
+                idg_diag($this,
                     "xml: attribute '$name' needs a name");
 
             $this->current_attribute = $this->current_object->create_attribute(
@@ -464,10 +471,10 @@ abstract class idg_treenode extends idg_leafnode {
 
         if ($name == 'option') {
             if (!$opt_name = @$properties['name'])
-                diag($this, "xml: option has no 'name' property");
+                idg_diag($this, "xml: option has no 'name' property");
 
             if (!$this->current_attribute) {
-                diag($this,
+                idg_diag($this,
                     "xml: option '$opt_name' outside attribute");
             }
 
@@ -478,7 +485,7 @@ abstract class idg_treenode extends idg_leafnode {
         if ($this->idg_xml_translation && ($trans = @$this->idg_xml_translation[$name]))
             $name = $trans;
         else
-            diag($this, "xml: unknown tag '$name'");
+            idg_diag($this, "xml: unknown tag '$name'");
 
         if (!$this->current_object) {
             $this->set_properties($properties);
@@ -523,7 +530,7 @@ abstract class idg_treenode extends idg_leafnode {
         }
 
         if (!$this->current_object)
-            diag($this,
+            idg_diag($this,
                 "xml: spurious character data: '$character_data'");
 
         $this->current_object->set_text(
@@ -535,11 +542,11 @@ abstract class idg_treenode extends idg_leafnode {
     }
 
     /** @todo get rid of this?
-    function print_debug_all(&$dummy, &$depth, &$path): void {
-        for ($indent = '', $i = 0; $i < $depth; $i++)
-            $indent .= IDG_XML_INDENT;
-        echo $this->print_debug($indent);
+      function print_debug_all(&$dummy, &$depth, &$path): void {
+      for ($indent = '', $i = 0; $i < $depth; $i++)
+      $indent .= IDG_XML_INDENT;
+      echo $this->print_debug($indent);
 
-        return true;
-    } */
+      return true;
+      } */
 }

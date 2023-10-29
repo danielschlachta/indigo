@@ -56,7 +56,7 @@ abstract class idg_type {
         bool $is_mandatory = true): void {
 
         if (!array_key_exists($name, $this->properties))
-            diag($this, "unknown property '$name'");
+            idg_diag($this, "unknown property '$name'");
 
         $this->properties[$name] = $is_mandatory;
     }
@@ -81,7 +81,7 @@ abstract class idg_type {
     protected function set_property_hook(string $name, string $function): void {
         $this->hooks[$name] = $function;
     }
-    
+
     function get_property_hook(string $name) {
         return @$this->hooks[$name];
     }
@@ -103,10 +103,10 @@ class idg_object {
         $type_name = $this->get_type_name();
 
         if (!class_exists($type_name))
-            diag($this, "no corresponding idg_type '$type_name'");
+            idg_diag($this, "no corresponding idg_type '$type_name'");
 
         if (!is_subclass_of($type_name, 'idg_type'))
-            diag($this, "class '$this->type_name' is not a subclass of idg_type");
+            idg_diag($this, "class '$this->type_name' is not a subclass of idg_type");
 
         if (!($this->type_obj = @idg_object::$type_objects[$type_name])) {
 
@@ -126,7 +126,9 @@ class idg_object {
     /**
      * Returns a unique readable identifier for the object, based on the type and 
      * the number of the object instance.
-     * <i>Note: This assumes that objects are never destroyed.</i>
+     * <blockquote>
+     * Note: This assumes that objects are never destroyed.
+     * </blockquote>
      * @return string The identifier
      */
     function get_idg_id(): string {
@@ -161,14 +163,14 @@ class idg_object {
      * @param bool $execute_hooks Whether to execute hooks at all
      * @return string|null The value of the property
      */
-    function get_property($name, $execute_hooks = true): ?string {
+    function get_property(string $name, $execute_hooks = true): ?string {
         if (($prop = @$this->properties[$name]))
             return $prop;
         if (($hook = @$this->hooks[$name]))
             return $this->execute($hook, $dummy);
         if (($hook = $this->get_type()->get_property_hook($name)))
             return $this->execute($hook, $dummy);
-        
+
         return null;
     }
 
@@ -204,10 +206,10 @@ class idg_object {
      */
     function set_property(string $name, string $value): void {
         if (!($type_object = $this->get_type()))
-            diag($this, "object has no type");
+            idg_diag($this, "object has no type");
 
         if (!$type_object->has_property($name))
-            diag($this, "unknown property '$name'");
+            idg_diag($this, "unknown property '$name'");
 
         $this->properties[$name] = $value;
     }
@@ -219,14 +221,14 @@ class idg_object {
      */
     function set_properties(array $properties): void {
         if (!($type_obj = $this->get_type())) {
-            diag($this, "object has no type");
+            idg_diag($this, "object has no type");
         }
 
         foreach ($properties as $name => $value) {
             if ($this->get_type()->has_property($name))
                 $this->properties[$name] = $value;
             else
-                diag($this, "unknown property '$name'");
+                idg_diag($this, "unknown property '$name'");
         }
     }
 
@@ -241,14 +243,14 @@ class idg_object {
     function execute(string $function_name, &$param) {
         if (strpos($function_name, '$this->') === 0) {
             $do_func = substr($function_name, strlen('$this->'));
-            
-            if (!method_exists($this, $do_func)) 
-                diag($this, "unknown method '$do_func'");
-            
+
+            if (!method_exists($this, $do_func))
+                idg_diag($this, "unknown method '$do_func'");
+
             $retval = $this->$do_func($param);
         } else {
             if (!function_exists($function_name))
-                diag($this, "unknown function '$function_name'");
+                idg_diag($this, "unknown function '$function_name'");
 
             $retval = $function_name($param);
         }
@@ -260,15 +262,15 @@ class idg_object {
      * Performs a basic consistency check.
      * @todo This currently only checks whether all mandatory properties have
      *       values. Objects should implement their own checks.
-     * @parameter $parameter Unused
+     * @param $parameter Unused
      * @return <code>true</code>
      */
     protected function _check(&$parameter): bool {
         if (!($type_obj = $this->get_type()))
-            diag($this, 'object has no type');
+            idg_diag($this, 'object has no type');
 
         $properties = $type_obj->get_properties();
-        
+
         foreach ($properties as $name => $value) {
             if (!$this->get_type()->property_is_mandatory($name))
                 continue;
@@ -277,8 +279,8 @@ class idg_object {
                     $object_name .= ': ';
                 else
                     $object_name = '';
-                
-                diag($this, "${object_name}missing property '$name '");
+
+                idg_diag($this, "${object_name}missing property '$name '");
             }
         }
 

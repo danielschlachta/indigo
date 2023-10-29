@@ -9,7 +9,7 @@ class idg_datasource_imagelist extends idg_datasource_instance
         $path = @$this->parameters['path'];
         
         if (!$path)
-            diag($this, get_class($this) 
+            idg_diag($this, get_class($this) 
                 . ': mandatory parameter(path) not set');
 
         $directory = scandir($path);

@@ -52,7 +52,7 @@ class idg_view extends idg_treenode {
      */
     function add_filter(string $function): void {
         if (!function_exists($function))
-            diag($this, "function '$function' does not exist");
+            idg_diag($this, "function '$function' does not exist");
         $this->filters[$function] = true;
     }
 
@@ -83,7 +83,7 @@ class idg_view extends idg_treenode {
 
                 if (($filter = $this->get_property('filter'))) {
                     if (!function_exists($filter))
-                        diag($this, "filter function '$filter' does not exist");
+                        idg_diag($this, "filter function '$filter' does not exist");
 
                     $content = $filter($content);
                 }
@@ -91,7 +91,7 @@ class idg_view extends idg_treenode {
 
             $this->streams[$stream_name] .= $content;
         } else
-            diag($this, "stream  '$stream_name' does not exist");
+            idg_diag($this, "stream  '$stream_name' does not exist");
     }
 
     /**
@@ -99,7 +99,7 @@ class idg_view extends idg_treenode {
      */
     function print(): void {
         if ($this->output == '')
-            diag($this, "nothing to print, you probably didn't call render()");
+            idg_diag($this, "nothing to print, you probably didn't call render()");
         echo $this->output;
     }
 
@@ -131,7 +131,7 @@ class idg_view extends idg_treenode {
 
     function render(idg_document $document): void {
         if ($this->output != '')
-            diag($this, "don't call render more than once, create a new view instead");
+            idg_diag($this, "don't call render more than once, create a new view instead");
 
         $children = $this->get_children();
 

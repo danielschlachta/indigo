@@ -9,8 +9,8 @@ namespace Indigo\Datasource;
 
 /**
  * Returns the content of a (normally text) file.
- *   @param mixed filename the name of the file, obviously mandatory
- *   @param mixed max_size maximal file size, default is 32KiB
+ *   @param filename The name of the file
+ *   @param max-size The maximum number of bytes read, defaults to 32KiB
  *
  * @return The datasource produces the following tokens:
  * 
@@ -20,15 +20,8 @@ namespace Indigo\Datasource;
  * 2      | The time/date of last modification as returned by filemtime
  *
  */
-class textfile extends \idg_datasource_object {
+class textfile extends \idg_datasource_implementation {
 
-    /** sdf
-     * 
-     * @global type $idg_max_filesize
-     * @param string[] $parameters
-     * 
-     * @return string Description
-     */
     function __construct(idg_datasource $parent) {
         parent::__construct($parent);
 
@@ -36,28 +29,24 @@ class textfile extends \idg_datasource_object {
 
         if (!$filename) {
             $name = $this->parent->get_property('name');
-            diag($this, "datasource_textfile($name): option filename not specified");
+            idg_diag($this, "no 'filename' parameter given");
         }
 
         if (@stat($filename) === false)
-            diag($this, "filename not found: '$filename");
+            idg_diag($this, "file '$filename' not found");
 
         if (is_dir($filename))
-            diag($this, "'$filename' is a directory");
+            idg_diag($this, "'$filename' is a directory");
 
         $max_size = 0 + @$this->get_parameter('max-size');
         $max_size = $max_size <= 0 ? 32 * 1024 : $max_size;
 
-        if (!$max_size || $max_size < 0)
-            $max_size = $idg_max_filenamesize;
-
         if (@!$fp = fopen($filename, 'r'))
-            diag($this, get_class($this)
-                . ': could not open text filename "' . $filename . '"');
+            idg_diag($this, "could not open file '$filename'");
 
-        $tok = fread($fp, $max_size);
+        $this->tokens[] = fread($fp, $max_size);
         fclose($fp);
-        $this->tokens[] = $tok;
+        
         $this->tokens[] = filemtime($filename);
     }
 }

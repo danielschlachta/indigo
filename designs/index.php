@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+
 /*
  *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
  *  License: MIT License, see https://opensource.org/license/mit/
@@ -117,6 +120,19 @@ $document->set_properties([
     'name' => "Document 1",
     'title' => "indigo test card for design '$design'"
 ]);
+
+$datasource = new idg_datasource();
+$datasource->set_property('class', '\Indigo\Datasource\rss');
+$datasource->set_property('name', 'infobox');
+
+$datasource->set_parameter('url', 'http://rss.cnn.com/rss/cnn_latest.rss');
+$datasource->set_parameter('max-items', '4');
+
+//$datasource->set_parameter('url', 'https://meyerweb.com/feeds/excuse/rss20.xml');
+//$datasource->set_parameter('max-items', '1');
+//$datasource->set_parameter('reverse', 'yes');
+
+$document->add_child($datasource);
 
 $folder1 = new idg_folder;
 $folder1->set_properties(['id' => 'folder-1', 'name' => 'Folder 1']);

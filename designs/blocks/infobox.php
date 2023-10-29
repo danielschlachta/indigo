@@ -8,31 +8,29 @@
 namespace Indigo\Design\Blocks;
 
 function infobox(string $text): string {
-   global $elements;
-
     $output = '';
 
-    $ext_image = "<img src=\"$elements/infobox/link_ext.png\" width=\"11\""
+    $ext_image = "<img src=\"blocks/elements/infobox/link_ext.png\" width=\"11\""
         . ' height="10" style="margin-left: -11px;" alt="">';
 
-    $image = "<img src=\"$elements/infobox/link.png\" width=\"11\""
+    $image = "<img src=\"blocks/elements/infobox/link.png\" width=\"11\""
         . ' height="10" style="margin-left: -11px;" alt="">';
 
     $style = 'style="margin-left: 12px; font-weight: bold;"';
-    
+
     if (preg_match('/(<a[^hH]+href=["\']([^"]+)["\'][^>]*)>/', $text, $match)) {
         $output = preg_replace(
-            '/(<a[^hH]+href=["\']http[^>]*)>/', 
+            '/(<a[^hH]+href=["\']http[^>]*)>/',
             "\\1 $style>$ext_image", $text);
         $output = preg_replace(
-            '/(<a[^hH]+href=["\'][^h][^t][^t][^p][^>]*)>/', "\\1 $style>$image", 
+            '/(<a[^hH]+href=["\'][^h][^t][^t][^p][^>]*)>/', "\\1 $style>$image",
             $output);
     }
-    
+
     return $output;
 }
 
-class infobox extends \idg_fragment_object {
+class infobox extends \idg_fragment_implementation {
 
     var $text;
     var $is_item = false;
@@ -42,93 +40,79 @@ class infobox extends \idg_fragment_object {
     var $max_items = 0;
 
     function _render(\idg_document $document, \idg_view $view): void {
-        global $font_blocks;
-        global $elements;
-
         //$view->add_filter('blocks_filter_infobox');
-        
-        $element = $this->get_parent();
 
-        $idg_id = $element->get_idg_id();
-        //$parameters = $this->get_datasource()->current();
-        $parameters = [
-            'caption' => 'Test',
-            'file' => '/etc/resolv.conf'
-            ];
-        
-        $caption = @$parameters['caption'];
-        if (($file = @$parameters['file'])) {
-            if (@!$fp = fopen($file, 'r'))
-                die(get_class($this) . "file not found: '$file'");
-            $this->text = fread($fp, 10000);
-            fclose($fp);
-        } else if (@$parameters['text'])
-            $this->text = @$parameters['text'];
-        else if (@$parameters['rss']) {
-            $file = $parameters['rss'];
-            $this->max_items = $parameters['maxitems'];
+        $idg_id = $this->get_idg_id();
+        $datasource = $this->get_datasource();
+        $caption = 'Apology';
 
-            if (@!$fp = fopen($file, 'rb')) {
-                $view->enable_filter('blocks_filter_infobox', false);
-                return;
-            }
-            $rss = stream_get_contents($fp);
-            fclose($fp);
+        $text = "<ul>\n";
 
-            $more_link = @$parameters['rss-extlink'];
-            $more_text = @$parameters['rss-exttext'];
-
-            if (!$this->_parse_rss($rss, $more_link, $more_text)) {
-                $view->enable_filter('blocks_filter_infobox', false);
-                return;
-            }
-        } else if (@$parameters['image']) {
-            $image = $document->get_path()
-                . '/images/' . $parameters['image'];
-            $width = $parameters['width'];
-            $height = $parameters['height'];
-        } else if (@$parameters['links']) {
-            $links = $parameters['links'];
-            if (@$fc = file_get_contents($links)) {
-                $this->text = "<ol>\n";
-
-                preg_match_all('|(<a[^hH]+href=["\']http[^>]*)>.*</a>|', $fc, $out, 
-                    PREG_PATTERN_ORDER);
-
-                $arr = $out[0];
-
-                foreach ($arr as &$entry) {
-                    $this->text .= "<li>$entry</li>\n";
-                }
-
-                $this->text .= "\n</ol>\n";
-            } else {
-                $this->text = "File not found: $links";
-            }
-        } else {
-            $view->enable_filter('blocks_filter_infobox', false);
-            return;
+        foreach ($datasource as $key => $value) {
+            $link = @$value['link'];
+            $title = @$value['title'];
+            $description = @$value['description'];
+            $date = @$value['pubDate'];
+            
+            if ($link)
+                $text .= "<li>$date<br><a href=\"$link\">$title</a></li>\n";
+            else if ($datasource->get_parameter('max-items') == 1)
+                $text .= "<li>$title<br><strong>$description</strong></li>\n";
+            else
+                $text .= "<li style=\"font-size: 150%;\">For $date: &ldquo;"
+                    . "$description&rdquo;</li>\n";
         }
+
+        $text .= "</ul>\n";
+       
+        /*
+          if (($file = @$parameters['file'])) {
+          if (@!$fp = fopen($file, 'r'))
+          die(get_class($this) . "file not found: '$file'");
+          $this->text = fread($fp, 10000);
+          fclose($fp);
+          } else if (@$parameters['text'])
+          $this->text = @$parameters['text'];
+          else if (@$parameters['rss']) {
+          } else if (@$parameters['image']) {
+          $image = $document->get_path()
+          . '/images/' . $parameters['image'];
+          $width = $parameters['width'];
+          $height = $parameters['height'];
+          } else if (@$parameters['links']) {
+          $links = $parameters['links'];
+          if (@$fc = file_get_contents($links)) {
+          $this->text = "<ol>\n";
+
+          preg_match_all('|(<a[^hH]+href=["\']http[^>]*)>.*</a>|', $fc, $out,
+          PREG_PATTERN_ORDER);
+
+          $arr = $out[0];
+
+          foreach ($arr as &$entry) {
+          $this->text .= "<li>$entry</li>\n";
+          }
+
+          $this->text .= "\n</ol>\n";
+          } else {
+          $this->text = "File not found: $links";
+          }
+          } else {
+          $view->enable_filter('blocks_filter_infobox', false);
+          return;
+          } */
 
         $body = "<div id=\"$idg_id-box\">\n"
             . "<div id=\"$idg_id-top\"></div>\n"
             . "<div id=\"$idg_id-body\">\n"
             . "<div id=\"$idg_id-content\">\n";
 
-        if ($caption)
-            $body .= "<img src=\"$elements/infobox/info.png\""
+        $body .= "<img src=\"blocks/elements/infobox/info.png\""
                 . " id=\"$idg_id-info\""
                 . " width=\"14\" height=\"14\" alt=\"\">\n"
                 . "<div style=\"font-weight: bold; "
                 . "padding-top: 2px; margin-bottom: 10px\">$caption"
-                . "</div>\n$this->text\n";
-        else if (@$image) {
-            $body .= "<img src=\"$image\" id=\"$idg_id-image\""
-                . " width=\"$width\" height=\"$height\" alt=\"\">\n";
-            $height -= 5;
-        }
-
-        $body .= "</div>\n</div>\n</div>\n";
+                . "</div>\n$text\n</div>\n</div>\n</div>\n";
 
         $fg_col = '#42262c';
         $bg_col = '#9d6575';
@@ -138,9 +122,9 @@ class infobox extends \idg_fragment_object {
 
         $css = "div#$idg_id-box { position: fixed;"
             . " right: 30px; width: 248px; bottom: 0px; font-size: 63%;"
-            . " $font_blocks color: $fg_col; z-index: 205; }\n"
+            . " color: $fg_col; z-index: 205; }\n"
             . "div#$idg_id-top { width: 250px; height: 16px;"
-            . " background: url($elements/infobox/box_top.png)"
+            . " background: url(blocks/elements/infobox/box_top.png)"
             . " no-repeat; background-position: bottom left; }\n"
             . "div#$idg_id-body { width: 100%; background: $bg_col;"
             . " border: 1px solid $bo_col; border-width: 0px 1px 0px 1px; }\n";
@@ -153,7 +137,7 @@ class infobox extends \idg_fragment_object {
                 . " top: -5px; left: 0px; }\n";
         } else
             $css .= "div#$idg_id-content { width: 218px;"
-                . " background: $co_col url($elements/infobox/arms.png)"
+                . " background: $co_col url(blocks/elements/infobox/arms.png)"
                 . " no-repeat;"
                 . " background-position: top right; margin-left: 10px;"
                 . " padding: 0px 5px 10px 5px; }\n";
@@ -185,74 +169,4 @@ class infobox extends \idg_fragment_object {
 
         $view->enable_filter('blocks_filter_infobox', false);
     }
-
-    function _parse_rss($text, $more_link, $more_text = false) {
-        $xml_version = '1.0';
-        $encoding = 'iso-8859-1';
-
-        $this->itemcnt = 0;
-
-        $parser = xml_parser_create($encoding);
-        xml_set_object($parser, $this);
-        xml_set_element_handler($parser, "_xml_read_start", "_xml_read_end");
-        xml_set_character_data_handler($parser, "_xml_character_data");
-        xml_set_default_handler($parser, "_xml_default_handler");
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-
-        $this->text = "<ul>\n";
-
-        if (!xml_parse($parser, $text)) {
-            return false;
-        }
-
-        if ($more_link && $more_text)
-            $this->text .= "<li><a href=\"$more_link\"><i>"
-                . "$more_text</i></a></li>\n";
-        $this->text .= "</ul>\n";
-
-        xml_parser_free($parser);
-        return true;
-    }
-
-    function _xml_read_start($parser, $name, $properties) {
-        if ($name == 'item') {
-            $this->is_item = true;
-        } else if ($this->is_item) {
-            $this->last_name = $name;
-        }
-    }
-
-    function _xml_read_end($parser, $name) {
-        if ($name == 'item') {
-            $this->is_item = false;
-            if ($this->itemcnt++ < $this->max_items &&
-                isset($this->chardata['pubDate'])) {
-                $date = $this->chardata['pubDate'];
-                $title = $this->chardata['title'];
-                $link = @$this->chardata['link'];
-                $description = @$this->chardata['description'];
-
-                if ($link)
-                    $this->text .= "<li>$date<br><a href=\"$link\">$title</a></li>\n";
-                else if ($this->max_items > 1)
-                    $this->text .= "<li>$title<br><strong>$description</strong></li>\n";
-                else
-                    $this->text .= "<li style=\"font-size: 150%;\">&ldquo;" 
-                        . "$description&rdquo;</li>\n";
-            }
-        }
-    }
-
-    private function _xml_character_data($parser, $character_data) {
-        if ($this->is_item)
-            if (($data = trim($character_data)) != '') {
-                $this->chardata[$this->last_name] = trim($character_data);
-            }
-    }
-
-    private function _xml_default_handler($parser, $data) {
-        
-    }
 }
-
-?>

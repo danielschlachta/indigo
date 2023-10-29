@@ -34,7 +34,7 @@ class idg_view_html_template_fancy extends idg_treenode
 	function render(&$document, &$view)
 	{
 		if ($this->get_child_count() == 0)
-			diag($this, 'part has no children');
+			idg_diag($this, 'part has no children');
 
 		//if ($stylesheet = $view->get_option('stylesheet'))
 		$stylesheet = '../designs/fancy/elements/default.css';

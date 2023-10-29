@@ -35,12 +35,12 @@ class idg_view_html_template_minimal extends idg_view_node_param_obj
 
 	    if (!$children
 			|| ($childcount = count($children)) != 1)
-			diag($this, get_class($this)
+			idg_diag($this, get_class($this)
 				. " needs exactly one container (found $childcount).");
 
 		if (count($children[0]->get_children(),
 			COUNT_RECURSIVE) != 3)
-			diag($this->get_class($this) . " needs exactly three "
+			idg_diag($this->get_class($this) . " needs exactly three "
 				. "elements in its container (see doc).");
 
 		$idg_id = $this->get_idg_id();

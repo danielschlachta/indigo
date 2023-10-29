@@ -12,7 +12,7 @@ $parsedown_main = __DIR__ . '/parsedown/Parsedown.php';
 if (file_exists($parsedown_main)) {
     require_once($parsedown_main);
 } else {
-    complain_module('parsedown', $parsedown_main,
+    idg_complain_module('parsedown', $parsedown_main,
         'https://github.com/erusev/parsedown.git');
     exit;
 }

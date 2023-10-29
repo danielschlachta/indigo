@@ -44,11 +44,11 @@ class idg_renderer extends idg_leafnode {
      * If the <code>nullable</code> property of the renderer is set this
      * can fail without producing an error.
      * @param idg_datasource $datasource The renderers datasource, if there is one
-     * @return idg_renderer|null The renderer
+     * @return object|null The renderer
      */
-    function create_instance(idg_datasource $datasource = null): ?idg_renderer {
+    function create_instance(idg_datasource $datasource = null): ?object {
         if (!$class_name = @$this->get_property('class'))
-            diag($this, "$obj_name: 'class' property missing");
+            idg_diag($this, "$obj_name: 'class' property missing");
 
         $nullable = $this->get_property('nullable') == "yes";
 
@@ -61,7 +61,7 @@ class idg_renderer extends idg_leafnode {
         }
 
         if (!$nullable)
-            diag($this, "unknown class '$class_name'");
+            idg_diag($this, "unknown class '$class_name'");
 
         return null;
     }
@@ -71,7 +71,7 @@ class idg_renderer extends idg_leafnode {
      * @param idg_datasource $datasource The datasource
      * @return <code>true</code>
      */
-    function _get_sitemap(idg_datasource_object $datasource): bool {
+    function _get_sitemap(idg_datasource_implementation $datasource): bool {
         if (($anchor = $this->get_property('anchor'))) {
             $token = [];
             $token['type'] = 'anchor';

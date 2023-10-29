@@ -93,13 +93,13 @@ class idg_site extends idg_site_element {
      * Returns an instance of a datasource containing the folder structure.
      * The datasource tokens are arrays with key/value pairs.
      * See the individual classes' _get_token() functions for the actual content.
-     * @return idg_datasource_object The datasource
+     * @return idg_datasource_implementation The datasource
      */
-    function get_datasource(): idg_datasource_object {
-        $datasource = new idg_datasource_object($this);
+    function get_datasource(): idg_datasource_implementation {
+        $datasource = new idg_datasource_implementation($this);
 
         if (!$this->traverse($datasource, '$this->_get_sitemap'))
-            diag($this, 'internal error: traverse(_get_sitemap) failed');
+            idg_diag($this, 'internal error: traverse(_get_sitemap) failed');
             
         return $datasource;
     }
@@ -221,7 +221,7 @@ abstract class idg_site_element extends idg_treenode {
             $site = $site->get_parent();
 
         if (!$site)
-            diag($this, 'internal error - no site definition found');
+            idg_diag($this, 'internal error - no site definition found');
 
         return $site;
     }
@@ -240,7 +240,7 @@ abstract class idg_site_element extends idg_treenode {
      * Produces a token meant for the site's built-in datasource.
      * @param idg_datasource $datasource An arbitrary datasource
      */
-    protected function _get_sitemap(idg_datasource_object $datasource): bool {
+    protected function _get_sitemap(idg_datasource_implementation $datasource): bool {
         $token = [];
         $this->_get_sitemap_token($token);
         $datasource->add_token($token);

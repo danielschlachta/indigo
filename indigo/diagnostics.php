@@ -5,38 +5,46 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-ini_set('display_errors', '1');
-error_reporting(E_ALL);
-
-function diag($obj, $msg) {
-    if (method_exists($obj, 'clear'))
-        $obj->clear();
+function idg_diag(object $object, string $message, string $level = null) {
+    $name = get_class($object);
+    
+    if ($level) {
+        trigger_error("$name: $message", $level);
+        return;
+    }
+    
+    if (method_exists($object, 'clear'))
+        $object->clear();
 	
-    $name = get_class($obj);
+
     
     $backtrace = debug_backtrace();
     $function = $backtrace[1]['function'];
-	echo "<h1>$name\\$function: $msg</h1>\n";
+	echo "<h1>$name\\$function: $message</h1>\n";
 	
     echo "<pre>\n";
     debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 	echo "\n";
-	foreach (array_reverse(class_parents($obj)) as $parent)
+	foreach (array_reverse(class_parents($object)) as $parent)
         echo "$parent->";
-	print_r($obj);
+	print_r($object);
 	echo '</pre>';
 	die();
 }
 
-function complain_version() {
-	global $idg_min_php_version;
+/**
+ * Todo: make this a more general thingy
+ * 
+ */
+function idg_complain_version() {
+	$idg_min_php_version = IDG_MIN_PHP_VERSION;
 
 	die("<html><body><h1>Indigo requires at least PHP $idg_min_php_version to run.</h1>"
 		. "<h2>You are running version " . phpversion() . ". Sorry.</h2>"
 		. "</body></html>");
 }
 
-function complain_module($name, $file, $repo) {
+function idg_complain_module($name, $file, $repo) {
 	$file = getcwd() . '/' . $file;
 
 	die("<html><body><h1>Git Submodule $name is missing</h1>"

@@ -7,12 +7,9 @@
 
 namespace Indigo\Design\Blocks;
 
-class dropdown extends \idg_fragment_object {
+class dropdown extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        global $font_blocks;
-        global $elements;
-
         $element = $this->get_parent();
         
         if (!$source_name = $element->get_property('source'))
@@ -101,9 +98,9 @@ class dropdown extends \idg_fragment_object {
         $style = @$element->get_property('style');
 
         $css = "div#$idg_id-box { width: 248px; font-size: 63%;"
-            . " $font_blocks color: $fg_col; z-index: 210; $style }\n"
+            . " color: $fg_col; z-index: 210; $style }\n"
             . "div#$idg_id-top { width: 250px; height: 16px;"
-            . " background: url($elements/dropdown/nav_top.png)"
+            . " background: url(blocks/elements/dropdown/nav_top.png)"
             . " no-repeat; background-position: bottom left; }\n"
             . "div#$idg_id-body { width: 100%; background: $bg_col;"
             . " border: 1px solid $fg_col; border-width: 0px 1px 0px 1px; }\n"
@@ -119,26 +116,26 @@ class dropdown extends \idg_fragment_object {
         $css .= " }\n"
             . "div#$idg_id-content h2 { font-size: 100%; font-weight: bold;"
             . " padding: 0 0 0 20px; margin: 0;"
-            . " background: url($elements/dropdown/arrow_right.png)"
+            . " background: url(blocks/elements/dropdown/arrow_right.png)"
             . " left center no-repeat; opacity: 0.8; }\n"
             . "div#$idg_id-content ul { margin: 0.5em 0 0 0;"
             . " padding: 0 4px 0 2px; list-style: none; }\n"
             . "div#$idg_id-content li { width: 100%;"
             . " padding: 2px 0 1px 0; margin: 0; clear: left; }\n"
             . "div#$idg_id-content li div { font-size: 120%;"
-            . " background: url($elements/dropdown/link.png) no-repeat;"
+            . " background: url(blocks/elements/dropdown/link.png) no-repeat;"
             . " background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content li:hover div,"
             . " div#$idg_id-content li.over div { padding: 1px 0 2px 1px;"
-            . " background: $bg_col url($elements/dropdown/link_h.png)"
+            . " background: $bg_col url(blocks/elements/dropdown/link_h.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content li#current div {"
-            . " background: url($elements/dropdown/link_c.png)"
+            . " background: url(blocks/elements/dropdown/link_c.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content li#current:hover div,"
             . " div#$idg_id-content li#current.over div {"
             . " padding: 1px 0 2px 1px; "
-            . " background: $bg_col url($elements/dropdown/link_h.png)"
+            . " background: $bg_col url(blocks/elements/dropdown/link_h.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-content a { display: block; padding-left: 18px; "
             . "text-decoration: none; color: $fg_col; }\n"
@@ -156,10 +153,10 @@ class dropdown extends \idg_fragment_object {
             . " padding-left: 19px; padding-bottom: 2px; }\n"
             . "div#$idg_id-content li:hover ul a:hover,"
             . " div#$idg_id-content li.over ul a:hover { color: $fg_col;"
-            . " background: $ac_col url($elements/dropdown/link_b.png)"
+            . " background: $ac_col url(blocks/elements/dropdown/link_b.png)"
             . " no-repeat; background-position: left center; opacity: 0.8; }\n"
             . "div#$idg_id-bottom { width: 250px; height: 16px;"
-            . " background: url($elements/dropdown/nav_bottom.png)"
+            . " background: url(blocks/elements/dropdown/nav_bottom.png)"
             . " no-repeat; background-position: top right; }\n";
 
         $css_print = "div#$idg_id-box { display: none }\n";

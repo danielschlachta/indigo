@@ -10,7 +10,7 @@ namespace Indigo\Module\Pagemap;
 $pagemap_main = __DIR__ . '/pagemap/dist/pagemap.min.js';
 
 if (!file_exists($pagemap_main)) {
-    complain_module('pagemap', $pagemap_main,
+    idg_complain_module('pagemap', $pagemap_main,
         'https://github.com/lrsjng/pagemap.git');
     exit;
 }

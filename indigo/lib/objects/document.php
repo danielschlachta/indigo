@@ -53,8 +53,10 @@ class idg_document extends idg_site_element {
 
     /**
      * Returns the containing folder for the document.
-     * <i>Note: This can indeed return <code>null</code> since a document
-     * can be a direct sibling of an idg_site object.</i>
+     * <blockquote>
+     * Note: This can indeed return <code>null</code> since a document
+     * can be a direct sibling of an idg_site object.
+     * </blockquote>
      * @return idg_folder|null The folder object
      */
     function get_folder(): ?idg_folder {
@@ -71,13 +73,13 @@ class idg_document extends idg_site_element {
      * @param string $name The name of the datasource
      * @return idg_datasource The datasource
      */
-    function get_datasource(string $name): idg_datasource_object {
+    function get_datasource(string $name): idg_datasource_implementation {
         if ($name == '_site') 
             return $this->get_site()->get_datasource();
 
         if (!($datasource = $this->get_child_by_key('name',
             $name, 'idg_datasource')))
-            diag($this, "datasource '$name' not found");
+            idg_diag($this, "datasource '$name' not found");
 
         return $datasource->create_instance();
     }
@@ -85,7 +87,7 @@ class idg_document extends idg_site_element {
     /**
      * Returns an array containing instances of all renderers for a given slot.
      * @param type $slot_name The name of the slot
-     * @return array|null An array or idg_datasource_object or null if none found
+     * @return array|null An array of idg_datasource_implementation
      */
     function get_renderers($slot_name): ?array {
         $renderers = [];

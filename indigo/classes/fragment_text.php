@@ -7,7 +7,7 @@
 
 namespace Indigo\Fragment;
 
-class text extends \idg_fragment_object {
+class text extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view) {
         $idg_id = $this->get_parent()->get_idg_id();
