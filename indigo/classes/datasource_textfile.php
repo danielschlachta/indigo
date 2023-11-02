@@ -22,15 +22,13 @@ namespace Indigo\Datasource;
  */
 class textfile extends \idg_datasource_implementation {
 
-    function __construct(idg_datasource $parent) {
+    function __construct(\idg_datasource $parent) {
         parent::__construct($parent);
 
-        $filename = $this->get_parameter('filename');
+        $filename = $parent->get_parameter('filename');
 
-        if (!$filename) {
-            $name = $this->parent->get_property('name');
+        if (!$filename) 
             idg_diag($this, "no 'filename' parameter given");
-        }
 
         if (@stat($filename) === false)
             idg_diag($this, "file '$filename' not found");
@@ -38,15 +36,15 @@ class textfile extends \idg_datasource_implementation {
         if (is_dir($filename))
             idg_diag($this, "'$filename' is a directory");
 
-        $max_size = 0 + @$this->get_parameter('max-size');
+        $max_size = 0 + @$parent->get_parameter('max-size');
         $max_size = $max_size <= 0 ? 32 * 1024 : $max_size;
 
         if (@!$fp = fopen($filename, 'r'))
             idg_diag($this, "could not open file '$filename'");
 
-        $this->tokens[] = fread($fp, $max_size);
+        $this->add_token(fread($fp, $max_size));
         fclose($fp);
         
-        $this->tokens[] = filemtime($filename);
+        $this->add_token(filemtime($filename));
     }
 }

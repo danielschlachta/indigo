@@ -1,0 +1,330 @@
+<?php
+
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
+
+/**
+ * Type information for idg_object. 
+ */
+abstract class idg_type {
+
+    private array $properties = [];
+    private array $hooks = [];
+
+    /** The constructor. Register properties here. */
+    function __construct() {
+        $this->register_property('name');
+    }
+
+    /**
+     * Returns <code>true</code> if the object has a property with the given name.
+     * @param string $name The name of the property
+     * @return bool Whether the property exists
+     */
+    function has_property(string $name): bool {
+        return array_key_exists($name, $this->properties);
+    }
+
+    /**
+     * Adds a name to the list of known properties.
+     * @param string $name The name of the property
+     */
+    protected function register_property(string $name): void {
+        if (!array_key_exists($name, $this->properties))
+            $this->properties[$name] = false;
+    }
+
+    /**
+     * Returns an array with the names of all known properties as keys,
+     * <code>true</code> or <code>false</code> depending on whether the property 
+     * is mandatory.
+     * Values can be added with <code>idg_object\get_property_values()</code>.
+     * @return array Properties and their values as key/value pairs
+     */
+    function get_properties(): array {
+        return $this->properties;
+    }
+
+    /**
+     * Sets whether an existing property is mandatory.
+     * @param string $name The name of the property
+     * @param bool $is_mandatory Whether the property can be omitted in a declaration
+     */
+    protected function set_property_mandatory(string $name,
+        bool $is_mandatory = true): void {
+
+        if (!array_key_exists($name, $this->properties))
+            idg_diag($this, "unknown property '$name'");
+
+        $this->properties[$name] = $is_mandatory;
+    }
+
+    /**
+     * Returns <code>true</code> if a property of the given name exists and is mandatory.
+     * @param string $name The name of the property
+     * @return bool Whether a mandatory property of the given name exists
+     */
+    function property_is_mandatory(string $name): bool {
+        return array_key_exists($name, $this->properties) && $this->properties[$name];
+    }
+
+    /**
+     * Attach a hook function to a property that is called when the property value 
+     * is <code>null</code>. The function can be global or a property of this object.
+     * @see get_property(), execute()
+     * @param string $name The name of the property
+     * @param string $function The function to execute, gets passed the
+     *        $name and may return null
+     */
+    protected function set_property_hook(string $name, string $function): void {
+        $this->hooks[$name] = $function;
+    }
+
+    function get_property_hook(string $name) {
+        return @$this->hooks[$name];
+    }
+}
+
+/**
+ * Base class for all objects.
+ */
+class idg_object {
+
+    private string $idg_id;
+    private object $type_object;
+    private array $properties = [];
+    private array $hooks = [];
+    private static array $object_counters = [];
+    private static array $type_objects = [];
+
+    function __construct() {
+        $type_name = $this->get_type_name();
+
+        if (!class_exists($type_name))
+            idg_diag($this, "no corresponding idg_type '$type_name'");
+
+        if (!is_subclass_of($type_name, 'idg_type'))
+            idg_diag($this, "class '$this->type_name' is not a subclass of idg_type");
+
+        if (!($this->type_obj = @idg_object::$type_objects[$type_name])) {
+
+
+            $this->type_object = new $type_name;
+            idg_object::$type_objects[$type_name] = & $this->type_obj;
+        }
+
+        if (!@idg_object::$object_counters[$type_name])
+            $id_count = idg_object::$object_counters[$type_name] = 1;
+        else
+            $id_count = ++idg_object::$object_counters[$type_name];
+
+        $this->idg_id = str_replace('Indigo\\', '', get_class($this)) . '-' . $id_count;
+    }
+
+    /**
+     * Returns a unique readable identifier for the object, based on the type and 
+     * the number of the object instance.
+     * <blockquote>
+     * Note: This assumes that objects are never destroyed.
+     * </blockquote>
+     * @return string The identifier
+     */
+    function get_idg_id(): string {
+        return $this->idg_id;
+    }
+
+    /**
+     * Returns the name of the corresponding type object. 
+     * @return string The name of the object
+     */
+    function get_type_name(): string {
+        return get_class($this) . '_type';
+    }
+
+    /**
+     * Returns an instance of the corresponding type object.
+     * @return idg_type The type object
+     */
+    function get_type(): idg_type {
+        return $this->type_object;
+    }
+
+    /**
+     * Returns the value of a property, possibly generated by a hook function
+     * if it is not explicitly set, or <code>null</code>.
+     * 
+     * If <code>$execute_hooks</code> is <code>true</code> and a hook function is set, 
+     * the return value of the hook function is returned. If this fails, the same is 
+     * tried with the associated idg_type's hook function.
+     * 
+     * @param string $name The name of the property
+     * @param bool $execute_hooks Whether to execute hooks at all
+     * @return string|null The value of the property
+     */
+    function get_property(string $name, $execute_hooks = true): ?string {
+        if (($prop = @$this->properties[$name]))
+            return $prop;
+        if (($hook = @$this->hooks[$name]))
+            return $this->execute($hook, $dummy, $dummy);
+        if (($hook = $this->get_type()->get_property_hook($name)))
+            return $this->execute($hook, $dummy, $dummy);
+
+        return null;
+    }
+
+    /**
+     * Returns an array of all properties without executing any hooks. 
+     * @return array An array of the properties and their values as key/value pairs 
+     */
+    function get_properties(): array {
+        return $this->properties;
+    }
+
+    /**
+     * Decorates an array containing property names with the corresponding values.
+     * Overwrites the values in the array with <code>null</code> if it is not 
+     * set in the object.
+     * @see get_property(), idg_type\get_properties()
+     * @param $properties The array to process
+     * @param boolean $execute_hooks Whether to execute hooks
+     */
+    function get_property_values(array &$properties, bool $execute_hooks = false): void {
+        foreach ($properties as $name => $value) {
+            if (($value = $this->get_property($name, $execute_hooks)))
+                $properties[$name] = $value;
+            else
+                $properties[$name] = null;
+        }
+    }
+
+    /**
+     * Sets the property <code>$name</code> to <code>$value</code>.
+     * @param string $name The name of the property
+     * @param string $value The new value
+     */
+    function set_property(string $name, string $value): void {
+        if (!($type_object = $this->get_type()))
+            idg_diag($this, "object has no type");
+
+        if (!$type_object->has_property($name))
+            idg_diag($this, "unknown property '$name'");
+
+        $this->properties[$name] = $value;
+    }
+
+    /**
+     * Sets properties based on the key/value pairs in an array.
+     * Properties not contained in the array will remain unchanged.
+     * @param array $properties
+     */
+    function set_properties(array $properties): void {
+        if (!($type_obj = $this->get_type())) {
+            idg_diag($this, "object has no type");
+        }
+
+        foreach ($properties as $name => $value) {
+            if ($this->get_type()->has_property($name))
+                $this->properties[$name] = $value;
+            else
+                idg_diag($this, "unknown property '$name'");
+        }
+    }
+
+    /**
+     * Executes a function which can be global or a a member of this object,
+     * if <code>$function_name</code> starts with <code>$this-></code>.
+     * 
+     * @param string $function_name The name of the function or member
+     * @param &$param An arbitrary parameter passed to the function
+     * @return The return value of the function
+     */
+    function execute(string $function_name, &$param_1, $param_2) {
+        if (strpos($function_name, '$this->') === 0) {
+            $do_func = substr($function_name, strlen('$this->'));
+
+            if (!method_exists($this, $do_func))
+                idg_diag($this, "unknown method '$do_func'");
+
+            $retval = $this->$do_func($param_1, $param_2);
+        } else {
+            if (!function_exists($function_name))
+                idg_diag($this, "unknown function '$function_name'");
+
+            $retval = $function_name($param_1, $param_2);
+        }
+
+        return $retval;
+    }
+
+    /**
+     * Performs a basic consistency check.
+     * @todo This currently only checks whether all mandatory properties have
+     *       values. Objects should implement their own checks.
+     * @param $parameter Unused
+     * @return <code>true</code>
+     */
+    protected function _check(&$parameter, $dummy): bool {
+        if (!($type_obj = $this->get_type()))
+            idg_diag($this, 'object has no type');
+
+        $properties = $type_obj->get_properties();
+
+        foreach ($properties as $name => $value) {
+            if (!$this->get_type()->property_is_mandatory($name))
+                continue;
+            if (!($value = $this->get_property($name))) {
+                if (($object_name = $this->get_property('name')))
+                    $object_name .= ': ';
+                else
+                    $object_name = '';
+
+                idg_diag($this, "${object_name}missing property '$name '");
+            }
+        }
+
+        return true;
+    }
+}
+
+/**
+ * Base class for ancillary objects that have no associated type information.
+ * @see idg_datasource_implementation, idg_renderer_implementation, 
+ *      idg_view_implementation, idg_fragment_implementation
+ */
+abstract class idg_object_implementation {
+
+    private idg_object $parent;
+
+    public function __construct(idg_object $parent) {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Returns the parent of the object, as it was declared.
+     * @return idg_view_element The idg_fragment object in question
+     */
+    function get_declaration(): idg_object {
+        return $this->parent;
+    }
+
+    /**
+     * Returns the idg_id of the object, as it was set in the parent.
+     * @see idg_object
+     * @return string The id
+     */
+    function get_idg_id(): string {
+        return $this->parent->get_idg_id();
+    }
+
+    /**
+     * Returns the property with the given name of the object, as set in the parent.
+     * @see idg_object
+     * @param string $name The name of the property
+     * @return string|null The value of the property
+     */
+    function get_property(string $name): ?string {
+        return $this->parent->get_property($name);
+    }
+}

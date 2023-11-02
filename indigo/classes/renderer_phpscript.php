@@ -7,7 +7,7 @@
 
 namespace Indigo\Renderer;
 
-class phpscript extends \idg_renderer {
+class phpscript extends \idg_renderer_implementation {
 
     function _render(idg_documen $document, idg_view $view): void {
         $this->datasource->rewind();

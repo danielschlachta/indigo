@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generated on Thu, 02 Nov 2023 14:10:44 +0200 by indigo/web version 1.4 -->
+<view
+    icon="favicon.png"
+    style="font-family: 'DejaVu Serif', georgia, serif; font-size: 120%; line-height: 1.2; background: #53538a url(views/blocks/elements/bg_grad.png) fixed repeat-x;">
+    <container
+        style="position: relative; top: 0; left: 0; margin-left: 130px; margin-right: 330px;"
+        style-a="text-decoration: none; color: black; background: url(views/blocks/elements/underline.png) bottom left repeat-x; padding-bottom: 1px; padding-right: 1px; margin-right: -1px; white-space: nowrap;"
+        style-a-hover="background: #729e8d url(views/blocks/elements/underline.png) bottom left repeat-x;"
+        style-print="margin: 0;">
+        <fragment
+            class="Indigo\Design\Blocks\tabs"
+            source="_site"
+            tag="main"
+            style="font-family: 'DejaVu Sans', sans-serif; font-size: 120%;" />
+        <container
+            name="center_body"
+            style="height: 100%; border: solid #1e3723; border-width: 0px 1px 1px 1px; padding: 0 30px 30px 23px; background: #b4d2b0 url(views/blocks/elements/line_red.png) repeat-y; text-align: justify;"
+            style-h1="padding: 0.35em 0.5em 0.35em 0; border: solid #729e8d; border-width: 2px 0 2px 0; background: url(views/blocks/elements/randomsymbols_bg.jpg); margin: 0; padding: 0.5em 15px 0.4em 0; text-align: right; font-family: 'DejaVu Serif', 'Noto Serif', serif; font-style: italic; font-weight: bold; font-size: 130%;"
+            style-h2="padding: 0 1em 0.1em 0; border: solid #729e8d; border-width: 1px 0 1px 0; background: url(views/blocks/elements/randomsymbols_bg.jpg); margin: 0; text-align: right; font-family: 'Noto Serif', serif; font-style: italic; font-weight: bold; font-size: 110%;"
+            style-print="border: 0; padding: 1em; margin: 100px 0 0 0;">
+            <slot
+                name="main-text"
+                style="padding: 0 0 0 17px; background: url(views/blocks/elements/line_blue.png);"
+                style-list-image="$elements/bullet.png" />
+        </container>
+        <container
+            name="footer-container"
+            style="background: #b4d2b0 url(views/blocks/elements/line_red.png) repeat-y;padding: 15px 25px 0 35px; margin: 6px 1px 0 1px;">
+            <fragment
+                class="Indigo\Design\Blocks\footer"
+                name="footer"
+                tag="Copyright &amp;copy; 2023 Daniel Schlachta"
+                style="background-image: url(views/blocks/elements/metal.png);  font-family: 'DejaVu Sans', sans-serif; font-size: 70%; padding: 5px;" />
+        </container>
+    </container>
+    <container
+        name="logo"
+        style="position: fixed; text-align: right; top: 20px; right: 20px;"
+        style-print="position: absolute; top: 0; right: 0;">
+        <fragment
+            class="\Indigo\Fragment\text"
+            style="color: #394a71; padding-right: 8px; font-family: sans; font-style: italic;">
+        &lt;b&gt;indigo&lt;/b&gt; / web
+        </fragment>
+        <fragment
+            class="\Indigo\Fragment\image">
+            <parameter name="src">views/blocks/elements/indigo.png</parameter>
+        </fragment>
+    </container>
+    <fragment
+        class="Indigo\Design\Blocks\imageframe">
+        <attribute name="blocks::image">
+            <option name="top">30</option>
+            <option name="left">30</option>
+        </attribute>
+    </fragment>
+    <fragment
+        class="Indigo\Design\Blocks\infobox"
+        source="infobox"
+        style="font-family: 'DejaVu Sans', sans-serif; font-size: 110%;">
+        <attribute name="blocks::infobox">
+            <option name="bg-url">$elements/arms.png</option>
+        </attribute>
+    </fragment>
+    <fragment
+        class="Indigo\Design\Blocks\dropdown"
+        tag="resources"
+        style="position: fixed; top: 160px; right: 30px; z-index: 1;font-family: 'DejaVu Sans', sans-serif;"
+        source="_site">
+        <attribute name="dropdown">
+            <option name="bg-url">$elements/compass.png</option>
+        </attribute>
+    </fragment>
+    <container
+        name="image-bg">
+        <container
+            name="image-sky"
+            style="position: fixed; top: 49px; right: 212px; width: 629px; height: 80px; background: url(views/blocks/elements/bg_sky.png) no-repeat; z-index: -1;" />
+        <container
+            name="image-graph-l"
+            style="position: fixed; top: 352px; left: 0px; width: 130px; height: 75px; background: url(views/blocks/elements/bg_graph_l.png) no-repeat;" />
+        <container
+            name="image-graph-r"
+            style="position: fixed; top: 352px; right: 0px; width: 330px; height: 130px; background: url(views/blocks/elements/bg_graph_r.png) no-repeat;" />
+    </container>
+</view>

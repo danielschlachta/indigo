@@ -27,7 +27,7 @@ class rss extends \idg_datasource_implementation {
 
     function __construct(\idg_leafnode $parent) {
         parent::__construct($parent);
-
+       
         $url = $this->get_parameter('url');
 
         if (!$url)

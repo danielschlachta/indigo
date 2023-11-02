@@ -7,7 +7,7 @@
 
 namespace Indigo\Renderer;
 
-class null extends \idg_renderer {
+class null extends \idg_renderer_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
         ;

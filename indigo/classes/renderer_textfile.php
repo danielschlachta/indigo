@@ -7,13 +7,15 @@
 
 namespace Indigo\Renderer;
 
-class textfile extends \idg_renderer {
+class textfile extends \idg_renderer_implementation {
 
     function _render(\idg_document $document, \idg_view $view) {
         $this->datasource->rewind();
-        $content = $this->datasource->get_token();
+        
+        $content = $this->datasource->current();
         $view->stream_append('html-body', $content);
-        $last_change = $this->datasource->get_token();
+        $this->datasource->next();
+        $last_change = $this->datasource->current();
         $document->set_last_change($last_change);
     }
 }

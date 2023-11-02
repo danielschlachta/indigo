@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <site name="indigo"	content-language="en" index-document="main/home">
     <attribute name="blocks::image">
-        <option name="src">main/home/randomsymbols.jpg</option>
+        <option name="src">pages/main/home/randomsymbols.jpg</option>
     </attribute>
 
     <folder id="main" name="Main" show-name="no">
@@ -10,34 +10,34 @@
                   description="Welcome to indigo"
                   navigation-comment="The page of pages">
 
-            <!-- default <attribute name="blocks::image">
-                <option name="src">main/home/randomsymbols.jpg</option>
-            </attribute> -->
-
+            <attribute name="blocks::image">
+                <option name="src">pages/main/home/randomsymbols.jpg</option>
+            </attribute>
+            
             <datasource name="infobox"
-                        class="idg_datasource_rss">
+                        class="Indigo\Datasource\rss">
                 <parameter name="type">rss</parameter>
-                <attribute name="infobox">
-                    <option name="caption">Excuse of the day</option>
-                    <option name="feed">https://meyerweb.com/feeds/excuse/rss20.xml</option>
-                </attribute>
-                <!-- caption: Latest news from CNN; rss: http://rss.cnn.com/rss/cnn_latest.rss; maxitems: 1
-                caption: Excuse of the day; rss: https://meyerweb.com/feeds/excuse/rss20.xml; maxitems: 1 -->
+                <parameter name="url">https://meyerweb.com/feeds/excuse/rss20.xml</parameter>
+                <parameter name="max-items">1</parameter>
+                <parameter name="reverse">yes</parameter>
             </datasource>
-
+            <attribute name="blocks::infobox">
+                <option name="caption">Procrastination</option>
+            </attribute>
+            
             <datasource name="text1_src"
-                        class="idg_datasource_textfile">
-                <parameter name="filename">main/home/home.html</parameter>
+                        class="Indigo\Datasource\textfile">
+                <parameter name="filename">pages/main/home/home.html</parameter>
             </datasource>
             <renderer slot="main-text"
-                      class="idg_view_html_renderer_textfile"
+                      class="Indigo\Renderer\textfile"
                       source="text1_src" />
             <datasource name="readme_src"
-                        class="idg_datasource_textfile">
+                        class="Indigo\Datasource\textfile">
                 <parameter name="filename">../README.md</parameter>
             </datasource>
             <renderer slot="main-text"
-                      class="idg_view_html_renderer_markdown"
+                      class="Indigo\Module\Markdown\renderer"
                       source="readme_src" />
         </document>
 
@@ -46,20 +46,20 @@
                   description="What it's about">
 
             <attribute name="blocks::image">
-                <option name="src">main/about/fractal.jpg</option>
+                <option name="src">pages/main/about/fractal.jpg</option>
             </attribute>
 
             <datasource name="infobox"
-                        class="idg_datasource_blocks_infobox">
-                caption: Quick Links; links: main/about/about.html
+                        class="Indigo\Datasource\text">
+                <parameter name="filename">pages/main/about/about.html</parameter>
             </datasource>
 
             <datasource name="text1_src"
-                        class="idg_datasource_textfile">
-                <parameter name="filename">main/about/about.html</parameter>
+                        class="Indigo\Datasource\textfile">
+                <parameter name="filename">pages/main/about/about.html</parameter>
             </datasource>
             <renderer slot="main-text"
-                      class="idg_view_html_renderer_textfile"
+                      class="Indigo\Renderer\textfile"
                       source="text1_src" />
         </document>
 
@@ -68,52 +68,52 @@
                   description="The old switcheroo">
 
             <!-- <attribute name="blocks::image">
-                <option name="src">main/desings/none.jpg</option>
+                <option name="src">pages/main/desings/none.jpg</option>
             </attribute> -->
 
             <datasource name="infobox"
-                        class="idg_datasource_blocks_infobox">
-                caption: Choose your poison; file: infobox.html
+                        class="Indigo\Datasource\text">
+                <parameter name="filename">pages/main/designs/infobox.html</parameter>
             </datasource>
 
             <datasource name="text1_src"
-                        class="idg_datasource_textfile">
-                <parameter name="filename">main/designs/designs.html</parameter>
+                        class="Indigo\Datasource\textfile">
+                <parameter name="filename">pages/main/designs/designs.html</parameter>
             </datasource>
             <renderer slot="main-text"
-                      class="idg_view_html_renderer_textfile"
+                      class="Indigo\Renderer\textfile"
                       source="text1_src" />
         </document>
     </folder>
 
     <folder id="resources" name="Resources" show-name="no">
         <attribute name="image">
-            <option name="src">resources/tutorial/sneakers.jpg</option>
+            <option name="src">pages/resources/tutorial/sneakers.jpg</option>
         </attribute>
 
         <xi:include
-            href="resources/tutorial/tutorial.xml"
+            href="pages/resources/tutorial/tutorial.xml"
             xmlns:xi="http://www.w3.org/2003/XInclude" />
-
-        <document id="reference"
+        
+            <document id="reference"
                   name="Reference"
                   description="Further Reading">
 
             <attribute name="blocks::image">
-                <option name="src">resources/reference/telescope.jpg</option>
+                <option name="src">pages/resources/reference/telescope.jpg</option>
             </attribute>
 
             <datasource name="infobox"
-                        class="idg_datasource_blocks_infobox">
-                caption: Quick Links; links: resources/license/license.html
+                        class="Indigo\Datasource\text">
+                <parameter name="filename">pages/resources/license/license.html</parameter>
             </datasource>
 
             <datasource name="text1_src"
-                        class="idg_datasource_textfile">
-                <parameter name="filename">resources/reference/reference.html</parameter>
+                        class="Indigo\Datasource\textfile">
+                <parameter name="filename">pages/resources/reference/reference.html</parameter>
             </datasource>
             <renderer slot="main-text"
-                      class="idg_view_html_renderer_textfile"
+                      class="Indigo\Renderer\textfile"
                       source="text1_src" />
         </document>
 
@@ -122,20 +122,20 @@
                   description="Stuff you can use">
 
             <!--<attribute name="blocks::image">
-                <option name="src">resources/examples/none.jpg</option>
+                <option name="src">pages/resources/examples/none.jpg</option>
             </attribute>-->
 
             <datasource name="infobox"
-                        class="idg_datasource_blocks_infobox">
-                caption: Quick Links; links: resources/license/license.html
+                        class="Indigo\Datasource\text">
+                <parameter name="filename">pages/resources/license/license.html</parameter>
             </datasource>
 
             <datasource name="text1_src"
-                        class="idg_datasource_textfile">
-                <parameter name="filename">resources/examples/examples.html</parameter>
+                        class="Indigo\Datasource\textfile">
+                <parameter name="filename">pages/resources/examples/examples.html</parameter>
             </datasource>
             <renderer slot="main-text"
-                      class="idg_view_html_renderer_textfile"
+                      class="Indigo\Renderer\textfile"
                       source="text1_src" />
         </document>
 
@@ -144,20 +144,20 @@
                   description="Legalese">
 
             <!--<attribute name="blocks::image">
-                <option name="src">resources/reference/none.jpg</option>
+                <option name="src">pages/resources/reference/none.jpg</option>
             </attribute>-->
 
             <datasource name="infobox"
-                        class="idg_datasource_blocks_infobox">
-                caption: Quick Links; links: resources/license/license.html
+                        class="Indigo\Datasource\text">
+                <parameter name="filename">pages/resources/license/license.html</parameter>
             </datasource>
 
             <datasource name="text1_src"
-                        class="idg_datasource_textfile">
-                <parameter name="filename">resources/license/license.html</parameter>
+                        class="Indigo\Datasource\textfile">
+                <parameter name="filename">pages/resources/license/license.html</parameter>
             </datasource>
             <renderer slot="main-text"
-                      class="idg_view_html_renderer_textfile"
+                      class="Indigo\Renderer\textfile"
                       source="text1_src" />
         </document>
     </folder>

@@ -5,45 +5,41 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-set_include_path(get_include_path() . ':' . __DIR__ . '/lib');
-set_include_path(get_include_path() . ':' . __DIR__ . '/modules');
-set_include_path(get_include_path() . ':' . __DIR__ . '/classes');
-
 spl_autoload_register(function ($class_name) {
     $name_arr = explode('_', $class_name);
 
     if ($name_arr[0] == 'idg') {
-        $filename = __DIR__ . '/lib/objects/' . $name_arr[1];
+        if (count($name_arr) > 1) {
+            $filename = __DIR__ . '/objects/' . $name_arr[1] . '.php';
 
-        if (count($name_arr) >= 3 && $name_arr[2] != 'implementation')
-            $filename .= '_' . $name_arr[2];
-
-        $filename .= '.php';
-
-        if (file_exists($filename))
-            require_once $filename;
+            if (file_exists($filename))
+                require_once $filename;
+        }
     }
 
     if (strpos($name_arr[0], 'Indigo\\') === 0) {
         $namespace_arr = explode('\\', $name_arr[0]);
-        $filename = __DIR__ . '/classes/' . strtolower($namespace_arr[1])
-            . '_' . $namespace_arr[2] . '.php';
-        
-        if (file_exists($filename))
-            require_once $filename;
+
+        if (count($namespace_arr) > 2) {
+            $filename = __DIR__ . '/classes/' . strtolower($namespace_arr[1])
+                . '_' . $namespace_arr[2] . '.php';
+
+            if (file_exists($filename))
+                require_once $filename;
+        }
     }
 });
 
-require_once 'diagnostics.php';
-require_once 'object.php';
-require_once 'parameters.php';
-require_once 'tree.php';
-require_once 'site.php';
-require_once 'view.php';
+require_once 'library/diagnostics.php';
+require_once 'library/parameters.php';
+require_once 'library/object.php';
+require_once 'library/tree.php';
+require_once 'library/site.php';
+require_once 'library/view.php';
 
-require_once 'mod_markdown.php';
-require_once 'mod_pagemap.php';
-require_once 'mod_src.php';
+require_once 'modules/mod_md.php';
+require_once 'modules/mod_pagemap.php';
+require_once 'modules/mod_src.php';
 
 $path = explode('/', $_SERVER['DOCUMENT_ROOT']);
 $dir = array_pop($path);
@@ -64,7 +60,7 @@ define('IDG_PROGRAM_NAME', IDG_SHORT_NAME . ' version ' . IDG_VERSION);
 
 define('IDG_MIN_PHP_VERSION', '7.4.33');
 
-define('IDG_XML_INDENT', "\t");
+define('IDG_XML_INDENT', '    ');
 
 if (version_compare(PHP_VERSION, IDG_MIN_PHP_VERSION, '<'))
     idg_complain_version();

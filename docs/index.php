@@ -10,8 +10,6 @@ error_reporting(E_ALL);
 
 require_once '../indigo/startup.php';
 
-$cache_dir = getcwd() . '/cache';
-
 function isMobile() {
     return preg_match('/\b(?:a(?:ndroid|vantgo)|b(?:lackberry|olt|o?ost)'
         . '|cricket|docomo|hiptop|i(?:emobile|p[ao]d)|kitkat|m(?:ini|obi)'
@@ -20,101 +18,49 @@ function isMobile() {
         @$_SERVER["HTTP_USER_AGENT"]);
 }
 
-function complain_cache($dir, $file) {
-    global $idg_path;
-
-    echo "<html><body><h1>Cache directory is not writable</h1>"
-    . "The directory <blockquote><code>$dir"
-    . "</blockquote></code> seems not to be writable by the web server. ";
-
-    exec("ls -ld $dir 2>&1", $ls);
-    $perm = $ls[0];
-
-    exec("id -nru", $userarr);
-    $user = $userarr[0];
-
-    exec("id -gn", $grouparr);
-    $group = $grouparr[0];
-
-    die("Current owner and permissions:<blockquote><code>$perm</code></blockquote>"
-        . "You should probably do:"
-        . "<blockquote><b><code>sudo chown $user:$group -data $dir"
-        . "</b></blockquote></code> from any directory."
-        . "<ul><li>Trying to create file: <code>$file</code></li></ul>"
-        . "</body></html>");
-}
-
-// ---------------------------------------------------------------------
-
 $site = new idg_site;
 $site->read_xml('site.xml');
-//$site->check();
+$site->write_xml('/tmp/site.xml');
+$site->check();
 
-/* ! @todo this currently does not work */
-// $site->print_debug_all($dummy, $depth, $path);
+if (@$_GET['sitemap'] == 'xml')
+    die($site->get_sitemap());
 
-if (@$_GET['sitemap'] == 'xml') {
-    die($site->_get_sitemap());
-}
 
 $design = @$_GET['view'];
 
-if ($design) {
+if ($design)
     setcookie("view", $design);
-} else {
-    if (isMobile()) {
-        $design = 'mobile';
-    } else {
-        $design = @$_COOKIE['view'];
-    }
-}
+else if (isMobile())
+    $design = 'mobile';
+else
+    $design = @$_COOKIE['view'];
 
 if ($design == 'mobile')
     $site->set_property('title-reverse-order', 'no');
 
-if (!$design || !file_exists("../designs/$design.php"))
-    $design = 'blocks';
-
-$view_preload = "config/$design.preload.php";
-
-if (file_exists($view_preload))
-    require_once($view_preload);
-
-require_once("../designs/$design.php");
-
 if (!($document = $site->get_document())) {
     die('operation broken error');
-    require_once('error/error.php');
+    require_once 'error/error.php';
     $document = get_error_document();
 }
 
-$view_php = "config/$design.php";
+// $view->write_xml($view_xml);
 
-$view_xml = "$cache_dir/$design.xml";
+$view = new idg_view;
+if (!$view->load_template($design, '../designs'))
+    die('could not load design');
 
-/* if (!file_exists($view_xml)
-  || filemtime($view_php) > filemtime($view_xml)) {
-  if (!$fc = @fopen($view_xml, "w")) {
-  complain_cache($cache_dir, $view_xml);
-  } else {
-  fclose($fc);
-  }
+$view->read_xml("views/$design/$design.xml");
+//require_once "config/$design.php";
+//configure_view($view);
 
-  require_once($view_php);
 
-  $view->write_xml($view_xml);
-
-  if (!(filesize($view_xml) > 0))
-  unlink($viw_xml);
-  }
-
-  $view = new idg_view_html;
-  $view->read_xml($view_xml); */
-
-require_once($view_php);
+$view_preload = "config/$design.preload.php";
+if (file_exists($view_preload))
+    require_once($view_preload);
 
 $view_postload = "config/$design.postload.php";
-
 if (file_exists($view_postload))
     require_once($view_postload);
 
