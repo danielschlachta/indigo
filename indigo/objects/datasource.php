@@ -48,9 +48,7 @@ Iterator, idg_parameterized {
     private idg_leafnode $parent;
 
     function __construct(idg_leafnode $parent) {
-        $this->parent = $parent;
-        $this->parametes = [];
-
+        parent::__construct($parent);
         if (method_exists($parent, 'get_parameters'))
             $this->parameters = $parent->get_parameters();
     }
