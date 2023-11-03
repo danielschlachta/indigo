@@ -7,22 +7,24 @@
 
 class idg_view_element_type extends idg_treenode_type {
 
-    function __construct() {
+    function __construct(bool $register_styles = true) {
         parent::__construct();
 
-        foreach (idg_view::CSS_PROPERTIES as $property => $style)
-            $this->register_property($property);
+        if ($register_styles) {
+            foreach (idg_view::CSS_PROPERTIES as $property => $style)
+                $this->register_property($property);
 
-        $this->register_property('style-list-image');
-        $this->register_property('style-print');
+            $this->register_property('style-list-image');
+            $this->register_property('style-print');
+        }
     }
 }
 
 abstract class idg_view_element extends idg_treenode {
 
-    private array $filters = [];
-  
-    abstract function _render(idg_document $document, idg_view $view): void;
+    function _render(idg_document $document, idg_view $view): void {
+        
+    }
 }
 
 /**
@@ -35,11 +37,12 @@ class idg_view_type extends idg_view_element_type {
 
         $this->child_types = [
             'idg_container',
-            'idg_fragment'
+            'idg_fragment',
+            'idg_filter'
         ];
 
-        $this->register_property('icon');
         $this->register_property('class');
+        $this->register_property('icon');
     }
 }
 
@@ -112,7 +115,7 @@ class idg_view extends idg_view_element {
 
         return $retval;
     }
-
+    
     /**
      * Adds a filter with a given name.
      * It is not an error if the filter already exists. If <code>$fun</code>
@@ -131,10 +134,13 @@ class idg_view extends idg_view_element {
      * @param callable $fun A closure to execute as the filter
      */
     function add_filter(string $function, callable $fun = null): void {
+        if (!$fun)
+            $fun = @$this->filter_repo[$function];
+        
         if (!$fun && !function_exists($function))
             idg_diag($this, "filter function '$function' does not exist");
-        
-        $this->filters[$function] = $fun;
+
+        $this->filters[$function] = $fun; // null means global function is called
     }
 
     /**
@@ -157,12 +163,12 @@ class idg_view extends idg_view_element {
             if ($stream_name == 'html-body')
                 foreach ($this->filters as $filter => $fun) {
                     $tmp = null;
-                
+
                     if ($fun)
                         $tmp = $fun($this, $content);
                     else
                         $tmp = $filter($this, $content);
-                    
+
                     if ($tmp)
                         $content = $tmp;
                 }
@@ -216,10 +222,18 @@ class idg_view extends idg_view_element {
         $document->uuid = idg_view::uuid_v4();
         $render_start = idg_view::milliseconds();
 
+        foreach ($children as $child)
+            if ($child->get_element_name() == 'filter') 
+                $child->_apply_filter($this);
+        
         if ($this->get_property('class'))
             $this->create_instance()->_render($document, $this);
         else
             $this->_render($document, $this);
+        
+        foreach ($children as $child)
+            if ($child->get_element_name() == 'filter')
+                $this->remove_filter($child->get_property('name'));
 
         $render_time = idg_view::milliseconds() - $render_start;
 
@@ -307,10 +321,10 @@ class idg_view extends idg_view_element {
         require_once $filename;
 
         $this->set_property('class', $this->namespace . '\view');
-        
+
         return true;
     }
-    
+
     /**
      * Sets the namespace of the view.
      * This is useful when <code>load_template()</code> has not been executed.

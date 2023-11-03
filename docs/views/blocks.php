@@ -11,6 +11,13 @@ function configure_view(idg_view $view): void {
         . "background: #53538a url($elements/bg_grad.png) fixed repeat-x;"
     ]);
 
+    $filter_links = new idg_filter;
+    $filter_links->set_properties([
+        'name' => 'filter_links'
+    ]);
+    $filter_links->load('blocks_filter_links.php');
+    $view->add_child($filter_links);
+    
     $centercol = new idg_container;
     $centercol->set_properties([
         'style' => "position: relative; top: 0; left: 0; " 
@@ -22,17 +29,9 @@ function configure_view(idg_view $view): void {
         'style-a-hover' => "background: #729e8d " 
         . "url($elements/underline.png) bottom left repeat-x;",
         'style-print' => "margin: 0;",
-     //   'filter' => 'blocks_filter_linkimg'
     ]);
-    //$centercol->set_text(file_get_contents('config/blocks_filter_linkimg.php'));
-    //eval(preg_replace('/^\<\?php/', '', $centercol->get_text()));
-    //$view->add_filter($view->qualify('filter_link'));
-    /* $view->add_filter('filter_l', 
-        eval("function filter_l(\$view, \$text)  { include_once 'config/blocks_filter_linkimg.php'; " 
-        . "return " . $view->qualify('filter_link') . "(\$view, \$text); }")
-    );*/
     $view->add_child($centercol);
-
+    
     $tabs = new idg_fragment;
     $tabs->set_properties([
         'class' => $view->qualify('tabs'),
@@ -71,17 +70,29 @@ function configure_view(idg_view $view): void {
         'style' => "padding: 0 0 0 17px; " 
         . "background: url($elements/line_blue.png);",
         'style-list-image' => '$elements/bullet.png',
-        //'filter' => 'blocks_filter_blockquote'
     ]);
     $centercol_body->add_child($main_text);
 
+    $filter_blockquote = new idg_filter;
+    $filter_blockquote->set_properties([
+        'name' => 'filter_blockquote',
+        'apply' => 'yes'
+    ]);
+    $filter_blockquote->load('blocks_filter_blockquote.php');
+    $centercol_body->add_child($filter_blockquote);
+
+    $filter_links_body = new idg_filter;
+    $filter_links_body->set_properties([
+        'name' => 'filter_links'
+    ]);
+    $centercol_body->add_child($filter_links_body);
+   
     $footer_container = new idg_container;
     $footer_container->set_properties([
         'name' => 'footer-container',
         'style' => "background: #b4d2b0 "
         . "url($elements/line_red.png) repeat-y;"
         . "padding: 15px 25px 0 35px; margin: 6px 1px 0 1px;",
-        //'filter' => 'blocks_filter_linkimg'
     ]);
     $centercol->add_child($footer_container);
 
@@ -89,12 +100,18 @@ function configure_view(idg_view $view): void {
     $footer->set_properties([
         'class' => $view->qualify('footer'),
         'name' => 'footer',
-        'tag' => 'Copyright &copy; 2023 Daniel Schlachta',
+        'tag' => 'Copyright &copy;2023 Daniel Schlachta',
         'style' => "background-image: url($elements/metal.png); "
         . " $font_sans; font-size: 70%; padding: 5px;"
     ]);
     $footer_container->add_child($footer);
-
+    
+    $filter_links_footer = new idg_filter;
+    $filter_links_footer->set_properties([
+        'name' => 'filter_links'
+    ]);
+    $footer->add_child($filter_links_footer);
+    
     $logo = new idg_container;
     $logo->set_properties([
         'name' => 'logo',
@@ -138,19 +155,19 @@ function configure_view(idg_view $view): void {
         'style' => "$font_sans; font-size: 110%;"
     ]);
     $attr = $infobox->create_attribute('blocks::infobox');
-    $attr->set_parameter('bg-url', '$elements/arms.png');
+    $attr->set_parameter('bg-url', "$elements/arms.png");
     $view->add_child($infobox);
 
     $dropdown = new idg_fragment;
     $dropdown->set_properties([
         'class' => $view->qualify('dropdown'),
-        'tag' => "resources",
-        'style' => "position: fixed; top: 160px; right: 30px; z-index: 1;" 
-        . "$font_sans;",
+        'tag' => 'resources',
         'source' => '_site',
+        'style' => "position: fixed; top: 160px; right: 30px; z-index: 1;" 
+        . "$font_sans;"
     ]);
     $attr = $dropdown->create_attribute('dropdown');
-    $attr->set_parameter('bg-url', '$elements/compass.png');
+    $attr->set_parameter('bg-url', "$elements/compass.png");
     $view->add_child($dropdown);
 
     /*

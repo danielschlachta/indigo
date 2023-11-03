@@ -16,7 +16,8 @@ class idg_container_type extends idg_view_element_type {
         $this->child_types = [
             'idg_container',
             'idg_fragment',
-            'idg_slot'
+            'idg_slot',
+            'idg_filter'
         ];
 
         $this->register_property('anchor');
@@ -38,9 +39,18 @@ class idg_container extends idg_view_element {
         if (($has_css = $view->render_css($this, "div#$idg_id")))
             $view->stream_append('html-body', "<div id=\"$idg_id\">\n");
 
-        if (($children = $this->get_children()))
+        if (($children = $this->get_children())) {
+            foreach ($children as $child)
+                if ($child->get_element_name() == 'filter')
+                    $child->_apply_filter($view);
+
             foreach ($children as $child)
                 $child->_render($document, $view);
+
+            foreach ($children as $child)
+                if ($child->get_element_name() == 'filter')
+                    $view->remove_filter($child->get_property('name'));
+        }
 
         if ($has_css)
             $view->stream_append('html-body', "</div>\n");

@@ -45,11 +45,10 @@ Iterator, idg_parameterized {
 
     private int $position = 0;
     private array $tokens = [];
-    private idg_leafnode $parent;
 
     function __construct(idg_leafnode $parent) {
         parent::__construct($parent);
-        if (method_exists($parent, 'get_parameters'))
+        if (method_exists($parent, 'get_parameters')) 
             $this->parameters = $parent->get_parameters();
     }
 

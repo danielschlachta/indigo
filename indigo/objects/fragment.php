@@ -12,7 +12,9 @@ class idg_fragment_type extends idg_view_element_type {
 
     function __construct() {
         parent::__construct();
-        $this->child_types = [];
+        $this->child_types = [
+            'idg_filter'
+        ];
 
         $this->register_property('class');
         $this->set_property_mandatory('class');
@@ -33,15 +35,17 @@ class idg_fragment extends idg_view_element implements idg_parameterized {
     }
 
     function _render(idg_document $document, idg_view $view): void {
-        if (!$class_name = $this->get_property('class'))
-            return;
-
-        if (!class_exists($class_name))
+        if (!class_exists($class_name = $this->get_property('class')))
             idg_diag($this, "class '$class_name' does not exist");
 
         if (!is_subclass_of($class_name, 'idg_fragment_implementation'))
             idg_diag($this,
                 "class '$class_name' is not a subclass of idg_fragment_implementation");
+
+        if (($children = $this->get_children()))
+            foreach ($children as $child)
+                if ($child->get_element_name() == 'filter')
+                    $child->_apply_filter($view);
 
         $datasource = null;
         if (($source_name = $this->get_property('source')))
@@ -49,6 +53,11 @@ class idg_fragment extends idg_view_element implements idg_parameterized {
 
         $object = new $class_name($this, $datasource);
         $object->_render($document, $view);
+
+        if ($children)
+            foreach ($children as $child)
+                if ($child->get_element_name() == 'filter')
+                    $view->remove_filter($child->get_property('name'));
     }
 }
 
@@ -88,12 +97,12 @@ abstract class idg_fragment_implementation extends idg_object_implementation {
 
         for ($i = $document; $i; $i = $i->get_parent())
             if (method_exists($i, 'get_or_create_attribute') &&
-                (($object = $i->get_or_create_attribute($name)))) 
+                (($object = $i->get_or_create_attribute($name))))
                 if (($parameters = $object->get_parameters()))
                     foreach ($parameters as $parameter => $value)
                         if (!$attribute->get_parameter($parameter))
                             $attribute->set_parameter($parameter, $value);
-        
+
         return $attribute;
     }
 
@@ -101,6 +110,7 @@ abstract class idg_fragment_implementation extends idg_object_implementation {
      * Returns the datasource.
      * @return string|null idg_datasource_implementation The datasource
      */
+
     function get_datasource(): ?idg_datasource_implementation {
         return $this->datasource;
     }

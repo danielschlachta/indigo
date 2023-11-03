@@ -16,17 +16,36 @@ function idg_diag(object $object, string $message, string $level = null) {
     if (method_exists($object, 'clear'))
         $object->clear();
 	
-
-    
     $backtrace = debug_backtrace();
     $function = $backtrace[1]['function'];
-	echo "<h1>$name\\$function: $message</h1>\n";
-	
+
+    echo "<h1>$name\\$function: $message</h1>\n";
+	  
     echo "<pre>\n";
     debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-	echo "\n";
+	echo "\nobject";
 	foreach (array_reverse(class_parents($object)) as $parent)
-        echo "$parent->";
+        echo "->$parent";
+    
+    if (method_exists($object, 'get_property')) {
+        $prop_id = $object->get_property('id');
+        $prop_name = $object->get_property('name');
+        $prop_str = null;
+        
+        if ($prop_id) {
+            $prop_str = "id='$prop_id'";
+            if ($prop_name)
+                $prop_str .= ', ';
+        }
+        
+        if ($prop_name)
+            $prop_str .= "name='$prop_name'";
+        
+        if ($prop_str)
+            echo "($prop_str)";
+    }
+    
+    echo " ";
 	print_r($object);
 	echo '</pre>';
 	die();

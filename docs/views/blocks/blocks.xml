@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- generated on Thu, 02 Nov 2023 14:10:44 +0200 by indigo/web version 1.4 -->
+<!-- generated on Fri, 03 Nov 2023 02:41:17 +0200 by indigo/web version 1.4 -->
 <view
     icon="favicon.png"
     style="font-family: 'DejaVu Serif', georgia, serif; font-size: 120%; line-height: 1.2; background: #53538a url(views/blocks/elements/bg_grad.png) fixed repeat-x;">
+    <filter
+        name="filter_links">
+        $elements = 'views/blocks/elements';
+        
+        $image = &quot;&lt;img src=\&quot;$elements/link.png\&quot; width=\&quot;11\&quot; height=\&quot;10\&quot; alt=\&quot;\&quot;&gt;&quot;;
+        $ext_image = &quot;&lt;img src=\&quot;$elements/link_ext.png\&quot; width=\&quot;11\&quot; height=\&quot;10\&quot; alt=\&quot;\&quot;&gt;&quot;;
+        
+        $output = $text;
+        
+        $output = preg_replace('/(&lt;a[^hH]+href=[&quot;\'][^h][^t][^t][^p][^&gt;]*)&gt;/', &quot;\\1&gt;$image&quot;,
+            $output);
+        $output = preg_replace('/(&lt;a[^hH]+href=[&quot;\']#[^&gt;]*)&gt;/', &quot;\\1&gt;$image&quot;,
+            $output);
+        $output = preg_replace('/(&lt;a[^hH]+href=[&quot;\']http[^&gt;]*)&gt;/', &quot;\\1&gt;$ext_image&quot;,
+            $output);
+        
+        return $output;
+    </filter>
     <container
         style="position: relative; top: 0; left: 0; margin-left: 130px; margin-right: 330px;"
         style-a="text-decoration: none; color: black; background: url(views/blocks/elements/underline.png) bottom left repeat-x; padding-bottom: 1px; padding-right: 1px; margin-right: -1px; white-space: nowrap;"
@@ -23,6 +41,25 @@
                 name="main-text"
                 style="padding: 0 0 0 17px; background: url(views/blocks/elements/line_blue.png);"
                 style-list-image="$elements/bullet.png" />
+            <filter
+                name="filter_blockquote"
+                apply="yes">
+                $elements = 'views/blocks/elements';
+                
+                $output = str_replace('&lt;blockquote&gt;',
+                    &quot;&lt;div style=\&quot;background: url($elements/bg_div.png); &quot;
+                    . &quot;width: 100%; height: 100%; border: solid black; border-width: 1px;\&quot;&gt;&quot;
+                    . &quot;&lt;blockquote style=\&quot;margin-left: 1em;\&quot;&gt;&quot;, $text);
+                
+                $output = str_replace('&lt;/blockquote&gt;', &quot;&lt;/blockquote&gt;&quot;
+                    . &quot;&lt;img src=\&quot;$elements/lightbulb.png\&quot; alt=\&quot;\&quot; style=\&quot;float: right; &quot;
+                    . &quot;position: relative; bottom: 40px; right: 2px;\&quot;&gt;&lt;/div&gt;&quot;, $output);
+                
+                return $output;
+                
+            </filter>
+            <filter
+                name="filter_links" />
         </container>
         <container
             name="footer-container"
@@ -30,8 +67,11 @@
             <fragment
                 class="Indigo\Design\Blocks\footer"
                 name="footer"
-                tag="Copyright &amp;copy; 2023 Daniel Schlachta"
-                style="background-image: url(views/blocks/elements/metal.png);  font-family: 'DejaVu Sans', sans-serif; font-size: 70%; padding: 5px;" />
+                tag="Copyright &amp;copy;2023 Daniel Schlachta"
+                style="background-image: url(views/blocks/elements/metal.png);  font-family: 'DejaVu Sans', sans-serif; font-size: 70%; padding: 5px;">
+                <filter
+                    name="filter_links" />
+            </fragment>
         </container>
     </container>
     <container
@@ -41,7 +81,7 @@
         <fragment
             class="\Indigo\Fragment\text"
             style="color: #394a71; padding-right: 8px; font-family: sans; font-style: italic;">
-        &lt;b&gt;indigo&lt;/b&gt; / web
+            &lt;b&gt;indigo&lt;/b&gt; / web
         </fragment>
         <fragment
             class="\Indigo\Fragment\image">
@@ -60,16 +100,16 @@
         source="infobox"
         style="font-family: 'DejaVu Sans', sans-serif; font-size: 110%;">
         <attribute name="blocks::infobox">
-            <option name="bg-url">$elements/arms.png</option>
+            <option name="bg-url">views/blocks/elements/arms.png</option>
         </attribute>
     </fragment>
     <fragment
         class="Indigo\Design\Blocks\dropdown"
         tag="resources"
-        style="position: fixed; top: 160px; right: 30px; z-index: 1;font-family: 'DejaVu Sans', sans-serif;"
-        source="_site">
+        source="_site"
+        style="position: fixed; top: 160px; right: 30px; z-index: 1;font-family: 'DejaVu Sans', sans-serif;">
         <attribute name="dropdown">
-            <option name="bg-url">$elements/compass.png</option>
+            <option name="bg-url">views/blocks/elements/compass.png</option>
         </attribute>
     </fragment>
     <container

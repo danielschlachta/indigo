@@ -13,7 +13,9 @@ class idg_slot_type extends idg_view_element_type {
     function __construct() {
         parent::__construct();
 
-        $this->child_types = [];
+        $this->child_types = [
+            'idg_filter'
+        ];
         $this->set_property_mandatory('name');
     }
 }
@@ -28,6 +30,11 @@ class idg_slot extends idg_view_element {
     }
 
     function _render(idg_document $document, idg_view $view): void {
+        if (($children = $this->get_children()))
+            foreach ($children as $child)
+                if ($child->get_element_name() == 'filter')
+                    $child->_apply_filter($view);
+
         $idg_id = $this->get_idg_id();
         $name = $this->get_property('name');
 
@@ -44,5 +51,10 @@ class idg_slot extends idg_view_element {
             $renderer->_render($document, $view);
 
         $view->stream_append('html-body', "</div>\n");
+
+        if ($children)
+            foreach ($children as $child)
+                if ($child->get_element_name() == 'filter')
+                    $view->remove_filter($child->get_property('name'));
     }
 }

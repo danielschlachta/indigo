@@ -48,7 +48,7 @@ abstract class idg_leafnode extends idg_object {
      * Returns the element name of the node.
      * @return string|null The element name
      */
-    protected function get_element_name(): ?string {
+    function get_element_name(): ?string {
         return $this->element_name;
     }
 
@@ -166,7 +166,7 @@ abstract class idg_leafnode extends idg_object {
                 $text_lines = explode("\n", htmlentities($text));
 
                 foreach ($text_lines as $line)
-                    $xml .= "$indent$line\n";
+                    $xml .= IDG_XML_INDENT . "$indent$line\n";
             }
 
             return "$xml$indent</$element>\n";
