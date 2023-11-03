@@ -16,6 +16,8 @@ class idg_document_type extends idg_site_element_type {
         $this->child_types[] = 'idg_datasource';
         $this->child_types[] = 'idg_renderer';
         $this->child_types[] = 'idg_attribute';
+        
+        $this->register_property('uuid');
 
         $this->set_property_mandatory('name');
         $this->set_property_hook('title', '$this->get_default_title');

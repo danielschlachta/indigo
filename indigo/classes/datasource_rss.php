@@ -24,6 +24,7 @@ class rss extends \idg_datasource_implementation {
 
     private int $num_items = 0;
     private ?array $token = null;
+    private string $name;
 
     function __construct(\idg_leafnode $parent) {
         parent::__construct($parent);

@@ -33,27 +33,22 @@ class imageframe extends \idg_fragment_implementation {
       
         $bg_col = '#8a94b6';
         $bo_col = '#23314f';
-
-        $body = "<div id=\"$idg_id-frame\"></div>\n"
+ 
+        $view->stream_append('html-body', 
+            "<div id=\"$idg_id-frame\"></div>\n"
             . "<div id=\"$idg_id-image\">"
-            . "<img src=\"$img\" width=\"$width\" height=\"$height\" alt=\"\"></div>\n";
+            . "<img src=\"$img\" width=\"$width\" height=\"$height\" alt=\"\"></div>\n");
 
-        $view->stream_append('html-body', $body);
-
-        $css = "div#$idg_id-frame { position: fixed; top: ${top}px; left: ${left}px; "
+        $view->stream_append('css', 
+            "div#$idg_id-frame { position: fixed; top: {$top}px; left: {$left}px; "
             . "background: $bg_col; border: 1px solid $bo_col; width: 120px; "
-            . "height: 120px; opacity:0.5;  }\n"
+            . "height: 120px; opacity:0.5; }\n"
             . "div#$idg_id-image { position: fixed;"
-            . " top: ${imgtop}px; left: ${imgleft}px; }\n"
-            . "div#$idg_id-image img { opacity: 0.8; }\n";
+            . " top: {$imgtop}px; left: {$imgleft}px; }\n"
+            . "div#$idg_id-image img { opacity: 0.8; }\n");
 
-        $view->stream_append('css', $css);
-
-        $css_print = "div#$idg_id-frame { display: none; }\n"
-            . "div#$idg_id-image { display: none; }\n";
-
-        $view->stream_append('css-print', $css_print);
+        $view->stream_append('css-print', 
+            "div#$idg_id-frame { display: none; }\n"
+            . "div#$idg_id-image { display: none; }\n");
     }
 }
-
-?>

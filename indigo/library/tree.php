@@ -260,6 +260,7 @@ abstract class idg_treenode extends idg_leafnode {
     private ?object $current_object;
     private ?idg_attribute $current_attribute = null;
     private ?string $current_parameter = null;
+    private ?string $current_option = null;
     
     /**
      * Unlinks the object from the tree, mainly to avoid recursion in diagnostic output. 

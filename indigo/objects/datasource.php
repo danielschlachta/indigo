@@ -52,7 +52,7 @@ Iterator, idg_parameterized {
             $this->parameters = $parent->get_parameters();
     }
 
-    function add_token($token) {
+    function add_token($token): void {
         $this->tokens[] = $token;
     }
 
@@ -60,11 +60,11 @@ Iterator, idg_parameterized {
         $this->position = 0;
     }
 
-    function current() {
+    function current(): mixed {
         return $this->tokens[$this->position];
     }
 
-    function key() {
+    function key(): int {
         return $this->position;
     }
 

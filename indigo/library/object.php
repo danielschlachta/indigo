@@ -93,12 +93,12 @@ abstract class idg_type {
 class idg_object {
 
     private string $idg_id;
-    private object $type_object;
     private array $properties = [];
     private array $hooks = [];
-    private static array $object_counters = [];
+    private ?idg_type $type_object;
     private static array $type_objects = [];
-
+    private static array $object_counters = [];
+    
     function __construct() {
         $type_name = $this->get_type_name();
 
@@ -108,11 +108,9 @@ class idg_object {
         if (!is_subclass_of($type_name, 'idg_type'))
             idg_diag($this, "class '$this->type_name' is not a subclass of idg_type");
 
-        if (!($this->type_obj = @idg_object::$type_objects[$type_name])) {
-
-
+        if (!($this->type_object = @idg_object::$type_objects[$type_name])) {
             $this->type_object = new $type_name;
-            idg_object::$type_objects[$type_name] = & $this->type_obj;
+            idg_object::$type_objects[$type_name] = & $this->type_object;
         }
 
         if (!@idg_object::$object_counters[$type_name])
@@ -120,7 +118,7 @@ class idg_object {
         else
             $id_count = ++idg_object::$object_counters[$type_name];
 
-        $this->idg_id = str_replace('Indigo\\', '', get_class($this)) . '-' . $id_count;
+        $this->idg_id = get_class($this) . '-' . $id_count;
     }
 
     /**
@@ -280,7 +278,7 @@ class idg_object {
                 else
                     $object_name = '';
 
-                idg_diag($this, "${object_name}missing property '$name '");
+                idg_diag($this, "{$object_name}missing property '$name '");
             }
         }
 

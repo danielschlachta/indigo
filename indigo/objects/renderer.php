@@ -51,9 +51,9 @@ class idg_renderer extends idg_leafnode {
         $nullable = $this->get_property('nullable') == "yes";
 
         if (class_exists($class_name)) {
-            $object = new $class_name($this);
+            $object = new $class_name($this, $datasource);
             $object->datasource = $datasource;
-            $object->anchor = $this->get_property('anchor');
+            // $object->anchor = $this->get_property('anchor');
 
             return $object;
         }
@@ -84,5 +84,11 @@ class idg_renderer extends idg_leafnode {
 }
 
 class idg_renderer_implementation extends idg_object_implementation {
+    public idg_datasource_implementation $datasource;
     
+    public function __construct(idg_object $parent, 
+        idg_datasource_implementation $datasource) {
+        parent::__construct($parent);
+        $this->datasource = $datasource;
+    }
 }

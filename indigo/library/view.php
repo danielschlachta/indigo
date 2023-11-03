@@ -219,7 +219,7 @@ class idg_view extends idg_view_element {
         if (!$children)
             die('<code>This page intentionally left blank.</code>');
 
-        $document->uuid = idg_view::uuid_v4();
+        $document->set_property('uuid', idg_view::uuid_v4());
         $render_start = idg_view::milliseconds();
 
         foreach ($children as $child)
@@ -242,7 +242,7 @@ class idg_view extends idg_view_element {
 
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_mod) . " GMT");
 
-        $this->_print('<!-- document UUID=' . $document->uuid
+        $this->_print('<!-- document UUID=' . $document->get_property('uuid')
             . ' generated on ' . date('r', time())
             . " by " . IDG_PROGRAM_NAME . ", time: $render_time ms  -->\n"
             . "<!DOCTYPE html>\n");
@@ -392,7 +392,7 @@ class idg_view extends idg_view_element {
     }
 
     private static function milliseconds(): int {
-        return hrtime(true) / 1e+6;
+        return (int)(hrtime(true) / 1e+6);
     }
 }
 
