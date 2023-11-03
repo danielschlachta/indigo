@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <document id="tutorial" name="Tutorial"
           description="Indigo - the tutorial">
-
+    
     <attribute name="blocks::image">
-        <option name="src">resources/tutorial/sneakers.jpg</option>
+        <option name="src">pages/resources/tutorial/sneakers.jpg</option>
     </attribute>
 
+    <datasource name="blocks::infobox"
+                class="Indigo\Datasource\text">
+        Lorem ipsum.
+    </datasource>
+    <attribute name="blocks::infobox">
+        <option name="caption">Dolor sit amet</option>
+    </attribute>
+    
     <datasource name="text1_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/what.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/what.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -16,7 +24,7 @@
 
     <datasource name="text2_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/how.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/how.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -24,46 +32,46 @@
               anchor="how"
               name="Getting started" />
     <datasource name="site_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/hello/site.xml</parameter>
         <parameter name="language">xml</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="site_src" />
     <datasource name="text3_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/how1.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/how1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
               source="text3_src" />
     <datasource name="scatter_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/hello/scatter.xml</parameter>
         <parameter name="language">xml</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="scatter_src" />
     <datasource name="text4_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/how2.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/how2.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
               source="text4_src" />
     <datasource name="index_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/hello/index.php</parameter>
         <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="index_src" />
     <datasource name="text5_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/how3.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/how3.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -71,7 +79,7 @@
 
     <datasource name="text6_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/dynamic.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/dynamic.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -79,16 +87,16 @@
               anchor="dynamic"
               name="Creating dynamic content" />
     <datasource name="strip_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/hello-dynamic/strip.php</parameter>
         <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="strip_src" />
     <datasource name="text7_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/dynamic1.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/dynamic1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -96,7 +104,7 @@
 
     <datasource name="text8_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/phpscript.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/phpscript.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -104,31 +112,31 @@
               anchor="phpscript"
               name="Embedding php code" />
     <datasource name="error_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/hello-dynamic/error.php</parameter>
         <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="error_src" />
     <datasource name="text9_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/phpscript1.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/phpscript1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
               source="text9_src" />
     <datasource name="rend_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/hello-dynamic/display_error.php</parameter>
         <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="rend_src" />
     <datasource name="text10_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/phpscript2.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/phpscript2.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -136,7 +144,7 @@
 
     <datasource name="text11_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/datasources.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/datasources.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -144,16 +152,16 @@
               anchor="datasource"
               name="Accessing data sources" />
     <datasource name="nav_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/navi/navigation.php</parameter>
         <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="nav_src" />
     <datasource name="text12_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/datasources1.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/datasources1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -161,7 +169,7 @@
 
     <datasource name="text13_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/newdatasources.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/newdatasources.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -169,16 +177,16 @@
               anchor="newdatasource"
               name="Creating data sources" />
     <datasource name="src_src"
-                class="idg_datasource_sourcefile">
+                class="Indigo\Module\Sourcefile\datasource">
         <parameter name="filename">demo/final/datasource_imagelist.php</parameter>
         <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="src_src" />
     <datasource name="text14_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/newdatasources1.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/newdatasources1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -186,7 +194,7 @@
 
     <datasource name="text15_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/more.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/more.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"
@@ -194,16 +202,16 @@
               anchor="more"
               name="More features" />
     <datasource name="example_src"
-                class="idg_datasource_sourcefile">
-        <parameter name="filename">resources/tutorial/html_item.php</parameter>
+                class="Indigo\Module\Sourcefile\datasource">
+        <parameter name="filename">pages/resources/tutorial/html_item.php</parameter>
         <parameter name="language">php</parameter>
     </datasource>
     <renderer slot="main-text"
-              class="idg_view_html_renderer_sourcefile"
+              class="Indigo\Module\Sourcefile\renderer"
               source="example_src" />
     <datasource name="text16_src"
                 class="Indigo\Datasource\textfile">
-        <parameter name="filename">resources/tutorial/more1.html</parameter>
+        <parameter name="filename">pages/resources/tutorial/more1.html</parameter>
     </datasource>
     <renderer slot="main-text"
               class="Indigo\Renderer\textfile"

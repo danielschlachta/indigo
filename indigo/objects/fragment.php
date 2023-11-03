@@ -19,6 +19,7 @@ class idg_fragment_type extends idg_view_element_type {
         $this->register_property('class');
         $this->set_property_mandatory('class');
         $this->register_property('source');
+        $this->register_property('anchor');
     }
 }
 
@@ -42,22 +43,15 @@ class idg_fragment extends idg_view_element implements idg_parameterized {
             idg_diag($this,
                 "class '$class_name' is not a subclass of idg_fragment_implementation");
 
-        if (($children = $this->get_children()))
-            foreach ($children as $child)
-                if ($child->get_element_name() == 'filter')
-                    $child->_apply_filter($view);
-
+        if (($anchor = $this->get_property('anchor')))
+            $view->stream_append('html-body', "<span id=\"$anchor\"></span>");
+                
         $datasource = null;
         if (($source_name = $this->get_property('source')))
             $datasource = $document->get_datasource($source_name);
 
         $object = new $class_name($this, $datasource);
         $object->_render($document, $view);
-
-        if ($children)
-            foreach ($children as $child)
-                if ($child->get_element_name() == 'filter')
-                    $view->remove_filter($child->get_property('name'));
     }
 }
 

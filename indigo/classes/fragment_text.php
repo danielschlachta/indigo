@@ -7,6 +7,9 @@
 
 namespace Indigo\Fragment;
 
+/**
+ * Inserts the character data into a <code>&lt;span&gt;</code>, supports all styles.
+ */
 class text extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view) {
@@ -15,23 +18,12 @@ class text extends \idg_fragment_implementation {
         if (!$text = $this->get_declaration()->get_text())
             return;
 
-        $vars = array();
-
-        while (preg_match('/(\{[a-z0-9\-]+\})/', $text, $match)) {
-            $name = substr($match[0], 1, strlen($match[0]) - 2);
-            $vars[$name] = '';
-            $text = preg_replace($match[0], '', $text);
-        }
-
-        $vars = $document->get_properties($vars);
-
-        $text = "<span id=\"$idg_id\">" . $this->get_declaration()->get_text() . "</span>";
-        
-        foreach ($vars as $name => $value) {
-            $text = preg_replace("/\{$name\}/", $value, $text);
-        }
+        if (($properties = $document->get_properties()))
+            foreach ($properties as $name => $value) {
+                $text = preg_replace("/\{$name\}/", $value, $text);
+            }
 
         $view->render_css($this->get_declaration(), "span#$idg_id");
-        $view->stream_append('html-body', $text);
+        $view->stream_append('html-body', "<span id=\"$idg_id\">$text</span>");
     }
 }

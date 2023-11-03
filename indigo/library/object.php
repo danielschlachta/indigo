@@ -181,23 +181,6 @@ class idg_object {
     }
 
     /**
-     * Decorates an array containing property names with the corresponding values.
-     * Overwrites the values in the array with <code>null</code> if it is not 
-     * set in the object.
-     * @see get_property(), idg_type\get_properties()
-     * @param $properties The array to process
-     * @param boolean $execute_hooks Whether to execute hooks
-     */
-    function get_property_values(array &$properties, bool $execute_hooks = false): void {
-        foreach ($properties as $name => $value) {
-            if (($value = $this->get_property($name, $execute_hooks)))
-                $properties[$name] = $value;
-            else
-                $properties[$name] = null;
-        }
-    }
-
-    /**
      * Sets the property <code>$name</code> to <code>$value</code>.
      * @param string $name The name of the property
      * @param string $value The new value

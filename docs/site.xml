@@ -14,7 +14,7 @@
                 <option name="src">pages/main/home/randomsymbols.jpg</option>
             </attribute>
             
-            <datasource name="infobox"
+            <datasource name="blocks::infobox"
                         class="Indigo\Datasource\rss">
                 <parameter name="type">rss</parameter>
                 <parameter name="url">https://meyerweb.com/feeds/excuse/rss20.xml</parameter>
@@ -49,11 +49,14 @@
                 <option name="src">pages/main/about/fractal.jpg</option>
             </attribute>
 
-            <datasource name="infobox"
-                        class="Indigo\Datasource\text">
-                <parameter name="filename">pages/main/about/about.html</parameter>
+            <datasource name="blocks::infobox"
+                        class="Indigo\Datasource\scanlinks">
+                <parameter name="view">view</parameter>
             </datasource>
-
+            <attribute name="blocks::infobox">
+                <option name="caption">Quick Links</option>
+            </attribute>
+            
             <datasource name="text1_src"
                         class="Indigo\Datasource\textfile">
                 <parameter name="filename">pages/main/about/about.html</parameter>
@@ -71,10 +74,13 @@
                 <option name="src">pages/main/desings/none.jpg</option>
             </attribute> -->
 
-            <datasource name="infobox"
+            <datasource name="blocks::infobox"
                         class="Indigo\Datasource\text">
-                <parameter name="filename">pages/main/designs/infobox.html</parameter>
+                Lorem ipsum.
             </datasource>
+            <attribute name="blocks::infobox">
+                <option name="caption">Dolor sit amet</option>
+            </attribute>
 
             <datasource name="text1_src"
                         class="Indigo\Datasource\textfile">
@@ -147,11 +153,14 @@
                 <option name="src">pages/resources/reference/none.jpg</option>
             </attribute>-->
 
-            <datasource name="infobox"
-                        class="Indigo\Datasource\text">
-                <parameter name="filename">pages/resources/license/license.html</parameter>
+            <datasource name="blocks::infobox"
+                        class="Indigo\Datasource\scanlinks">
+                <parameter name="view">view</parameter>
             </datasource>
-
+            <attribute name="blocks::infobox">
+                <option name="caption">Quick Links</option>
+            </attribute>
+            
             <datasource name="text1_src"
                         class="Indigo\Datasource\textfile">
                 <parameter name="filename">pages/resources/license/license.html</parameter>

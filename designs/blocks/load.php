@@ -22,7 +22,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     $imageframe->set_properties([
         'class' => 'Indigo\Design\Blocks\imageframe'
     ]);
-    $attr = $imageframe->create_attribute('imageframe', 'blocks');
+    $attr = $imageframe->create_attribute('blocks::image');
     $attr->set_parameter('src', 'https://thispersondoesnotexist.com/');
     $attr->set_parameter('top', 15);
     $attr->set_parameter('left', 15);
@@ -31,7 +31,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     $datasource = new \idg_datasource();
     $datasource->set_properties([
         'class' => '\Indigo\Datasource\rss',
-        'name' => 'infobox'
+        'name' => 'cnn'
     ]);
     $datasource->set_parameter('url', 'http://rss.cnn.com/rss/cnn_latest.rss');
     $datasource->set_parameter('max-items', '4');
@@ -40,7 +40,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     $infobox = new \idg_fragment;
     $infobox->set_properties([
         'class' => 'Indigo\Design\Blocks\infobox',
-        'source' => 'infobox'
+        'source' => 'cnn'
     ]);
     $attr = $infobox->create_attribute('blocks::infobox');
     $attr->set_parameter('caption', 'News from CNN');

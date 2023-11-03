@@ -7,7 +7,13 @@
 
 namespace Indigo\Design\Blocks;
 
-function filter_links(\idg_view $view, string $text): string {
+/**
+ * Decorates links with arrow icons.
+ * @param \idg_view $view
+ * @param string $text
+ * @return string
+ */
+function infobox_filter_links(\idg_view $view, string $text): string {
     $output = $text;
     $elements = $view->get_elements('infobox');
 
@@ -41,28 +47,20 @@ function filter_links(\idg_view $view, string $text): string {
  */
 class infobox extends \idg_fragment_implementation {
 
-    var $text;
-    var $is_item = false;
-    var $last_name = '';
-    var $chardata = array();
-    var $itemcnt = 0;
-    var $max_items = 0;
+    // for render_css()
+    private string $text;
+    private bool $is_item = false;
+    private string $last_name = '';
+    private array $chardata = [];
+    private int $itemcnt = 0;
+    private int $max_items = 0;
 
-    function _render(\idg_document $document, \idg_view $view): void {
-        $elements = $view->get_elements('infobox');
+    private function _render_text(\idg_datasource_implementation $datasource): string {
+        return "<ul><li>\n" . $datasource->current() . "</li></ul>\n";
+    }
 
-        if (!$datasource = $this->get_datasource())
-            idg_diag($this, "datasource not found");
-
-        $idg_id = $this->get_idg_id();
-
-        $attr = $this->fetch_attribute('blocks::infobox', $document);
-        $bg_url = $attr->get_parameter('bg-url');
-        $caption = $attr->get_parameter('caption');
-
-        $view->add_filter($view->qualify('filter_links'));
-
-        $text = "<ul>\n";
+    private function _render_rss(\idg_datasource_implementation $datasource): string {
+        $retval = "<ul>\n";
 
         foreach ($datasource as $key => $value) {
             $link = @$value['link'];
@@ -71,52 +69,58 @@ class infobox extends \idg_fragment_implementation {
             $date = @$value['pubDate'];
 
             if ($link)
-                $text .= "<li>$date<br><a href=\"$link\">$title</a></li>\n";
+                $retval .= "<li>$date<br><a href=\"$link\">$title</a></li>\n";
             else if ($datasource->get_parameter('max-items') == 1)
-                $text .= "<li>$title<br><strong>$description</strong></li>\n";
+                $retval .= "<li>$title<br><strong>$description</strong></li>\n";
             else
-                $text .= "<li>For $date: &ldquo;"
+                $retval .= "<li>For $date: &ldquo;"
                     . "$description&rdquo;</li>\n";
         }
 
-        $text .= "</ul>\n";
+        return "$retval</ul>";
+    }
 
-        /*
-          if (($file = @$parameters['file'])) {
-          if (@!$fp = fopen($file, 'r'))
-          die(get_class($this) . "file not found: '$file'");
-          $this->text = fread($fp, 10000);
-          fclose($fp);
-          } else if (@$parameters['text'])
-          $this->text = @$parameters['text'];
-          else if (@$parameters['rss']) {
-          } else if (@$parameters['image']) {
-          $image = $document->get_path()
-          . '/images/' . $parameters['image'];
-          $width = $parameters['width'];
-          $height = $parameters['height'];
-          } else if (@$parameters['links']) {
-          $links = $parameters['links'];
-          if (@$fc = file_get_contents($links)) {
-          $this->text = "<ol>\n";
+    private function _render_scanlinks(\idg_datasource_implementation $datasource)
+    : string {
+        $retval = "<ul>\n";
 
-          preg_match_all('|(<a[^hH]+href=["\']http[^>]*)>.*</a>|', $fc, $out,
-          PREG_PATTERN_ORDER);
+        foreach ($datasource as $key => $value) {
+            $text = $value['text'];
+            $link = $value['link'];
+            $retval .= "<li><a href=\"$link\"><i>$text</i></a></li>\n";
+        }
 
-          $arr = $out[0];
+        return "$retval</ul>\n";
+    }
 
-          foreach ($arr as &$entry) {
-          $this->text .= "<li>$entry</li>\n";
-          }
+    function _render(\idg_document $document, \idg_view $view): void {
+        $elements = $view->get_elements('infobox');
 
-          $this->text .= "\n</ol>\n";
-          } else {
-          $this->text = "File not found: $links";
-          }
-          } else {
-          $view->enable_filter('blocks_filter_infobox', false);
-          return;
-          } */
+        if (!$datasource = $this->get_datasource())
+            idg_diag($this, "datasource not found");
+
+        $datasource->rewind();
+        $idg_id = $this->get_idg_id();
+
+        $attr = $this->fetch_attribute('blocks::infobox', $document);
+        $bg_url = $attr->get_parameter('bg-url');
+        $caption = $attr->get_parameter('caption');
+
+        $view->add_filter($view->qualify('infobox_filter_links'));
+
+        switch (($class_name = get_class($datasource))) {
+            case 'Indigo\Datasource\text':
+                $content = $this->_render_text($datasource);
+                break;
+            case 'Indigo\Datasource\rss':
+                $content = $this->_render_rss($datasource);
+                break;
+            case 'Indigo\Datasource\scanlinks':
+                $content = $this->_render_scanlinks($datasource);
+                break;
+            default:
+                idg_diag($this, "incompatible datasource type '$class_name'");
+        }
 
         $body = "<div id=\"$idg_id-box\">\n"
             . "<div id=\"$idg_id-top\"></div>\n"
@@ -126,8 +130,8 @@ class infobox extends \idg_fragment_implementation {
         $body .= "<img src=\"$elements/info.png\""
             . " id=\"$idg_id-info\""
             . " width=\"14\" height=\"14\" alt=\"\">\n"
-            . "<div id=\"$idg_id-caption\">$caption</div>\n" 
-            . "$text\n</div>\n</div>\n</div>\n";
+            . "<div id=\"$idg_id-caption\">$caption</div>\n"
+            . "$content</div>\n</div>\n</div>\n";
 
         $fg_col = '#42262c';
         $bg_col = '#9d6575';
@@ -183,6 +187,6 @@ class infobox extends \idg_fragment_implementation {
 
         $view->render_css($this->get_declaration(), "div#$idg_id-content");
 
-        $view->remove_filter($view->qualify('filter_links'));
+        $view->remove_filter($view->qualify('infobox_filter_links'));
     }
 }

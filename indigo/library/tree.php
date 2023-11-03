@@ -53,7 +53,11 @@ abstract class idg_leafnode extends idg_object {
     }
 
     /**
-     * Stores free-format text.
+     * Stores free-format text, also referred to as <i>character data</i>
+     * because in the <code>xml</code> representation, that's what it is.
+     * <blockquote>
+     * Note: HTML entities are decoded after reading from <code>xml</code> files.
+     * </blockquote>
      * @see get_text()
      * @param string $text The text
      */
@@ -63,6 +67,10 @@ abstract class idg_leafnode extends idg_object {
 
     /**
      * Gets the text previously set with <code>set_text()</code>.
+     * <blockquote>
+     * Note: HTML entities are encoded before writing to <code>xml</code> files.
+     * </blockquote>
+     * @see set_text()
      * @return string|null The text
      */
     function get_text(): ?string {

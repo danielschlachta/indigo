@@ -69,7 +69,7 @@ function configure_view(idg_view $view): void {
         'name' => 'main-text',
         'style' => "padding: 0 0 0 17px; " 
         . "background: url($elements/line_blue.png);",
-        'style-list-image' => '$elements/bullet.png',
+        'style-list-image' => "$elements/bullet.png",
     ]);
     $centercol_body->add_child($main_text);
 
@@ -151,7 +151,7 @@ function configure_view(idg_view $view): void {
     $infobox = new idg_fragment;
     $infobox->set_properties([
         'class' => $view->qualify('infobox'),
-        'source' => 'infobox',
+        'source' => 'blocks::infobox',
         'style' => "$font_sans; font-size: 110%;"
     ]);
     $attr = $infobox->create_attribute('blocks::infobox');

@@ -10,12 +10,14 @@ namespace Indigo\Renderer;
 class textfile extends \idg_renderer_implementation {
 
     function _render(\idg_document $document, \idg_view $view) {
-        $this->datasource->rewind();
+        $datasource = $this->get_datasource();
         
-        $content = $this->datasource->current();
+        $datasource->rewind();
+        
+        $content = $datasource->current();
         $view->stream_append('html-body', $content);
-        $this->datasource->next();
-        $last_change = $this->datasource->current();
+        $datasource->next();
+        $last_change = $datasource->current();
         $document->set_last_change($last_change);
     }
 }

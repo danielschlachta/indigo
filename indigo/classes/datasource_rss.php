@@ -9,8 +9,8 @@ namespace Indigo\Datasource;
 
 /**
  * Retrieves an <code>rss</code> feed and returns the entries as tokens.
- *   @param url The URL of the feed
- *   @param max-items The maximum number of entries to retrieve, defaults to 0 (all)
+ * @param url The URL of the feed
+ * @param max-items The maximum number of entries to retrieve, defaults to 0 (all)
  *
  * @return The datasource produces tokens of the following form:
  * 

@@ -30,6 +30,42 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
+function idg_init(): void {
+    $path = explode('/', $_SERVER['DOCUMENT_ROOT']);
+    $dir = array_pop($path);
+
+    if (count($path) > 0 && array_pop($path) == 'indigo') {
+        $dir = "'indigo/$dir'";
+        if (strpos($_SERVER['SERVER_SOFTWARE'], 'Development') > 0)
+            die("<html><body><h1>Please do not run php -S"
+                . " from a subdirectory ($dir).");
+        else
+            die("<html><body><h1>Please do not use a subdirectory ($dir) "
+                . "as document root.</h1>");
+    }
+
+    define('IDG_SHORT_NAME', 'indigo/web');
+    define('IDG_VERSION', '1.4');
+    define('IDG_PROGRAM_NAME', IDG_SHORT_NAME . ' version ' . IDG_VERSION);
+
+    define('IDG_MIN_PHP_VERSION', '7.4.33');
+
+    define('IDG_XML_INDENT', '    ');
+
+    if (version_compare(PHP_VERSION, IDG_MIN_PHP_VERSION, '<'))
+        idg_complain_version();
+
+    $ua = explode('/', @$_SERVER['HTTP_USER_AGENT']);
+
+    if ($ua[0] == 'Wget') {
+        define('IDG_WGET_VERSION', ua[1]);
+        define('IDG_URL_FOLDER_SEPARATOR', '-');
+    } else {
+        define('IDG_WGET_VERSION', '');
+        define('IDG_URL_FOLDER_SEPARATOR', '/');
+    }
+}
+
 require_once 'library/diagnostics.php';
 require_once 'library/parameters.php';
 require_once 'library/object.php';
@@ -37,40 +73,8 @@ require_once 'library/tree.php';
 require_once 'library/site.php';
 require_once 'library/view.php';
 
-require_once 'modules/mod_md.php';
+require_once 'modules/mod_markdown.php';
 require_once 'modules/mod_pagemap.php';
-require_once 'modules/mod_src.php';
+require_once 'modules/mod_sourcefile.php';
 
-$path = explode('/', $_SERVER['DOCUMENT_ROOT']);
-$dir = array_pop($path);
-
-if (count($path) > 0 && array_pop($path) == 'indigo') {
-    $dir = "'indigo/$dir'";
-    if (strpos($_SERVER['SERVER_SOFTWARE'], 'Development') > 0)
-        die("<html><body><h1>Please do not run php -S"
-            . " from a subdirectory ($dir).");
-    else
-        die("<html><body><h1>Please do not use a subdirectory ($dir) "
-            . "as document root.</h1>");
-}
-
-define('IDG_SHORT_NAME', 'indigo/web');
-define('IDG_VERSION', '1.4');
-define('IDG_PROGRAM_NAME', IDG_SHORT_NAME . ' version ' . IDG_VERSION);
-
-define('IDG_MIN_PHP_VERSION', '7.4.33');
-
-define('IDG_XML_INDENT', '    ');
-
-if (version_compare(PHP_VERSION, IDG_MIN_PHP_VERSION, '<'))
-    idg_complain_version();
-
-$ua = explode('/', @$_SERVER['HTTP_USER_AGENT']);
-
-if ($ua[0] == 'Wget') {
-    define('IDG_WGET_VERSION', ua[1]);
-    define('IDG_URL_FOLDER_SEPARATOR', '-');
-} else {
-    define('IDG_WGET_VERSION', '');
-    define('IDG_URL_FOLDER_SEPARATOR', '/');
-}
+idg_init();

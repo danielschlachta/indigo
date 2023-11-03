@@ -22,45 +22,26 @@ class datasource extends \idg_datasource_implementation {
     function __construct($parameters = null) {
         parent::__construct($parameters);
 
-        $filename = $this->get_parameter('filename');
-
+        if (!($filename = $this->get_parameter('filename')))
+            idg_diag($this, "parameter 'filename' not set");
+       
         if (@stat($filename) === false)
-            idg_diag($this, get_class($this)
-                . ': file "' . $filename . '" not found');
+            idg_diag($this, "file '$filename' not found");
 
         $max_size = @$this->parameters['max_size'];
         if (!$max_size || $max_size < 0)
             $max_size = 32 * 1024;
-
-        if (@!$fp = fopen($filename, 'r'))
-            idg_diag($this, get_class($this)
-                . ': could not open text file "' . $filename . '"');
-
-        $tok = fread($fp, $max_size);
-        fclose($fp);
-        $this->tokens[] = $tok;
-
-        $this->tokens[] = filemtime($filename);
-
-        if (!$filename)
-            idg_diag($this, get_class($this)
-                . ': mandatory parameter(filename) not set');
-
-        if (@stat($filename) === false)
-            idg_diag($this, get_class($this)
-                . ': source file "' . $filename . '" not found');
 
         $max_size = @$this->parameters['max_size'];
         if (!$max_size || $max_size < 0)
             $max_size = 32 * 1024;/** todo make this a parameter */
 
         if (@!$fp = fopen($filename, 'r'))
-            idg_diag($this, get_class($this)
-                . ': could not open source file "' . $filename . '"');
+            idg_diag($this, "could not open file '$filename'");
 
-        $tok = fread($fp, $max_size);
+        $this->add_token(fread($fp, $max_size));
         fclose($fp);
-        $this->tokens[] = $tok;
+        
     }
 }
 
@@ -68,16 +49,14 @@ class datasource extends \idg_datasource_implementation {
  * @todo documentation, parameters
  */
 
-class renderer extends \idg_renderer {
+class renderer extends \idg_renderer_implementation {
 
-    function render(idg_document $document, idg_view $view) {
-        $this->datasource->rewind();
-        $parameters = $this->datasource->get_token();
-
-        $language = 'php';
-        //$language = $this->get_parameters('language');
-        //$bgcolor = $this->get_parameter('bgcolor');
-        //$height = $this->get_parameter('height');
+    function _render(\idg_document $document, \idg_view $view) {
+        $datasource = $this->get_datasource();
+        
+        $language = $datasource->get_parameter('language');
+        $bgcolor = $datasource->get_parameter('bgcolor');
+        $height = $datasource->get_parameter('height');
 
         if (!$bgcolor)
             $bgcolor = '#e8e8e8';
@@ -85,11 +64,12 @@ class renderer extends \idg_renderer {
         if (!$height)
             $height = '100%';
 
-        $text = $this->datasource->get_token();
-
-        $geshi = new GeSHi($text, $language);
+        $datasource->rewind();
+        $text = $datasource->current();
+        
+        $geshi = new \GeSHi($text, $language);
         $geshi->enable_keyword_links(false);
-        $geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS);
+        $geshi->enable_line_numbers(\GESHI_FANCY_LINE_NUMBERS);
         $geshi->set_line_style("background: $bgcolor;", "background: #f0f0f0;");
 
         $content = "<div style=\"";

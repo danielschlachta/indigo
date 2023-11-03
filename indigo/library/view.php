@@ -102,7 +102,7 @@ class idg_view extends idg_view_element {
                 $retval = true;
             }
 
-        if (($list_style_image = $this->get_property('style-list-image'))) {
+        if (($list_style_image = $object->get_property('style-list-image'))) {
             $this->stream_append('css',
                 "$id ul { list-style-image: url($list_style_image); }\n");
             $retval = true;
@@ -177,6 +177,17 @@ class idg_view extends idg_view_element {
         } else
             idg_diag($this, "stream  '$stream_name' does not exist");
     }
+    
+    /**
+     * Returns a stream the way it is, which depends on when this function is called.
+     * This is useful for data sources such as \Indigo\Datasource\extlinks placed
+     * in strategic locations throughout the document.
+     * @param string $stream_name The name of the stream
+     * @return string|null The stream in its current state
+     */
+    function get_stream(string $stream_name): ?string {
+        return @$this->streams[$stream_name];
+    }
 
     /**
      * Print everyting.
@@ -203,7 +214,7 @@ class idg_view extends idg_view_element {
         foreach ($this->get_children() as $child)
             $child->_render($document, $this);
     }
-
+    
     /**
      * 
      * @param idg_document $document
@@ -285,7 +296,7 @@ class idg_view extends idg_view_element {
         $this->_print($this->streams['html-body']);
         $this->_print("</body>\n</html>");
     }
-
+    
     /**
      * Loads a template from a directory.
      * The function looks for a file named <code>load.php</code> in the directory 

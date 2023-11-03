@@ -50,13 +50,8 @@ class idg_renderer extends idg_leafnode {
 
         $nullable = $this->get_property('nullable') == "yes";
 
-        if (class_exists($class_name)) {
-            $object = new $class_name($this, $datasource);
-            $object->datasource = $datasource;
-            // $object->anchor = $this->get_property('anchor');
-
-            return $object;
-        }
+        if (class_exists($class_name))
+            return new $class_name($this, $datasource, $this->get_property('anchor'));
 
         if (!$nullable)
             idg_diag($this, "unknown class '$class_name'");
@@ -83,12 +78,34 @@ class idg_renderer extends idg_leafnode {
     }
 }
 
+/**
+ * The actual renderer object.
+ */
 class idg_renderer_implementation extends idg_object_implementation {
-    public idg_datasource_implementation $datasource;
-    
-    public function __construct(idg_object $parent, 
-        idg_datasource_implementation $datasource) {
+
+    private idg_datasource_implementation $datasource;
+    private ?string $anchor;
+
+    function __construct(idg_object $parent,
+        idg_datasource_implementation $datasource, ?string $anchor) {
         parent::__construct($parent);
         $this->datasource = $datasource;
+        $this->anchor = $anchor;
+    }
+    
+    /**
+     * Gets the associated datasource object.
+     * @return idg_datasource_implementation The datasource
+     */
+    function get_datasource(): idg_datasource_implementation {
+        return $this->datasource;
+    }
+    
+    /**
+     * Gets the anchor originally set in the renderer declaration.
+     * @return string|null The name of the anchor
+     */
+    function get_anchor(): ?string {
+        return $this->anchor;
     }
 }

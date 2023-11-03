@@ -30,6 +30,11 @@ class idg_datasource extends idg_leafnode implements idg_parameterized {
         parent::__construct('datasource');
     }
 
+    /**
+     * Produces a token meant for the site's built-in datasource (that is, none).
+     * @param idg_datasource $datasource The datasource
+     * @return <code>true</code>
+     */
     protected function _add_token(idg_datasource_implementation $datasource): bool {
         return true;
     }

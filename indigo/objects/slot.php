@@ -38,17 +38,17 @@ class idg_slot extends idg_view_element {
         $idg_id = $this->get_idg_id();
         $name = $this->get_property('name');
 
-        $renderers = $document->get_renderers($name);
-
-        foreach ($renderers as $renderer)
-            if (($anchor = $renderer->get_property('anchor')))
-                $has_anchors = true;
-
         $view->render_css($this, "div#$idg_id");
         $view->stream_append('html-body', "<div id=\"$idg_id\">\n");
 
-        foreach ($renderers as $renderer)
+
+        if (($renderers = $document->get_renderers($name)))
+        foreach ($renderers as $renderer) {
+            if (($anchor = $renderer->get_anchor())) 
+                $view->stream_append('html-body', "<span id=\"$anchor\"></span>");
+                
             $renderer->_render($document, $view);
+        }
 
         $view->stream_append('html-body', "</div>\n");
 
