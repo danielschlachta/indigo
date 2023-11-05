@@ -143,13 +143,9 @@ abstract class idg_leafnode extends idg_object {
 
     /**
      * Unlinks the object from the tree, mainly to avoid recursion in diagnostic output. 
-     * @todo Make this traverse the subtree to only void the parent backlink.
      */
     function clear(): void {
         unset($this->parent);
-        unset($this->children);
-        unset($this->current_object);
-        unset($this->current_attribute);
     }
 
     /**
@@ -249,10 +245,10 @@ abstract class idg_treenode_type extends idg_type {
         $this->register_property('tag');
     }
 
-    protected array $child_types = ['idg_tree_node'];
+    protected array $child_types = [];
 
     function accepts_child($child_type): bool {
-        return in_array(str_replace('Indigo\\', '', $child_type), $this->child_types);
+        return in_array($child_type, $this->child_types);
     }
 }
 
@@ -261,7 +257,6 @@ abstract class idg_treenode_type extends idg_type {
  */
 abstract class idg_treenode extends idg_leafnode {
 
-    /** @todo this is protected because it is accessed in view_html! */
     private ?array $children = null;
     private ?object $current_object;
     private ?idg_attribute $current_attribute = null;
@@ -270,7 +265,7 @@ abstract class idg_treenode extends idg_leafnode {
 
     /**
      * Unlinks the object from the tree, mainly to avoid recursion in diagnostic output. 
-     * @todo Make this traverse the subtree to only void the parent backlink.
+     * @todo Make this traverse the subtree. See also get_xml_sitemap.
      */
     function clear(): void {
         parent::clear();
