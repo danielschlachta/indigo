@@ -96,6 +96,12 @@ function configure_view(idg_view $view): void {
     ]);
     $centercol->add_child($footer_container);
 
+    $filter_links_footer = new idg_filter;
+    $filter_links_footer->set_properties([
+        'name' => 'filter_links'
+    ]);
+    $footer_container->add_child($filter_links_footer);
+    
     $footer = new idg_fragment;
     $footer->set_properties([
         'class' => $view->qualify('footer'),
@@ -105,12 +111,6 @@ function configure_view(idg_view $view): void {
         . " $font_sans; font-size: 70%; padding: 5px;"
     ]);
     $footer_container->add_child($footer);
-    
-    $filter_links_footer = new idg_filter;
-    $filter_links_footer->set_properties([
-        'name' => 'filter_links'
-    ]);
-    $footer->add_child($filter_links_footer);
     
     $logo = new idg_container;
     $logo->set_properties([

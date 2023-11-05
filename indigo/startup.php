@@ -5,6 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @todo Create a class path variable for user defined components. */
+
 spl_autoload_register(function ($class_name) {
     $name_arr = explode('_', $class_name);
 
@@ -44,9 +46,9 @@ function idg_init(): void {
                 . "as document root.</h1>");
     }
 
-    define('IDG_SHORT_NAME', 'indigo/web');
+    define('IDG_SHORT_NAME', 'indigo');
     define('IDG_VERSION', '1.4');
-    define('IDG_PROGRAM_NAME', IDG_SHORT_NAME . ' version ' . IDG_VERSION);
+    define('IDG_PROGRAM_NAME', IDG_SHORT_NAME . ' v' . IDG_VERSION);
 
     define('IDG_MIN_PHP_VERSION', '7.4.33');
 
@@ -58,7 +60,8 @@ function idg_init(): void {
     $ua = explode('/', @$_SERVER['HTTP_USER_AGENT']);
 
     if ($ua[0] == 'Wget') {
-        define('IDG_WGET_VERSION', ua[1]);
+        define('IDG_WGET_VERSION', $ua[1]);
+        define('IDG_URL_DEFAULT_FOLDER_SEPARATOR', '/');
         define('IDG_URL_FOLDER_SEPARATOR', '-');
     } else {
         define('IDG_WGET_VERSION', '');

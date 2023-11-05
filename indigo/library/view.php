@@ -253,9 +253,11 @@ class idg_view extends idg_view_element {
 
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_mod) . " GMT");
 
+        $wget = IDG_WGET_VERSION ? " for wget v" . IDG_WGET_VERSION : '';
+            
         $this->_print('<!-- document UUID=' . $document->get_property('uuid')
             . ' generated on ' . date('r', time())
-            . " by " . IDG_PROGRAM_NAME . ", time: $render_time ms  -->\n"
+            . " by " . IDG_PROGRAM_NAME . "$wget, time: $render_time ms  -->\n"
             . "<!DOCTYPE html>\n");
 
         $this->_print('<html lang="'

@@ -25,15 +25,17 @@ if (file_exists($parsedown_main)) {
 class renderer extends \idg_renderer_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        $this->datasource->rewind();
-        $content = $this->datasource->current();
-
+        $datasource = $this->get_datasource();
         $Parsedown = new \Parsedown();
 
-        $view->stream_append('html-body', $Parsedown->text($content));
+        $datasource->rewind();
+ 
+        if (($content = $datasource->current())) {
+            $view->stream_append('html-body', $Parsedown->text($content));
         
-        $this->datasource->next();
-        $last_change = $this->datasource->current();
-        $document->set_last_change($last_change);
+            $datasource->next();
+            if (($last_change = $datasource->current()))
+                $document->set_last_change($last_change);
+        }
     }
 }

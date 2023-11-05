@@ -19,12 +19,15 @@ class sidebar extends \idg_view_implementation {
     function _render(\idg_document $document): void {
         $view->render_css($this->get_declaration());
         
-        $children = $this->get_children();
-        $style = $this->get_property('style');
-        
-        if (!$children || count($children) < 2)
+        if (!($children =  $this->get_children()) || count($children) < 2)
             idg_diag($this, 'must have two or three children');
 
+        $style_body = $this->get_property('style');
+        
+        $style = \idg_view::CSS_PROPERTIES;
+        unset($style['style']);
+        $view->render_css($this->get_declaration(), '', $style);
+        
         $fixed = $children[0];
         $fixed_id = $fixed->get_idg_id() . '-part';
         $style_fixed = $fixed->get_property('style');
@@ -45,10 +48,10 @@ class sidebar extends \idg_view_implementation {
         /**
          * @todo We need a mechanism for this.
          */
-        $style = $this->get_property('style');
+        $style_body = $this->get_property('style');
 
         $css = "	body { padding: 0; margin: 0; width: 100%; "
-            . "overflow-x: hidden; $style; }\n"
+            . "overflow-x: hidden; $style_body; }\n"
             . "div#$fixed_id { overflow: hidden; "
             . "position: fixed; top: 0; $fixed_position: 0; "
             . "height: 100%; width: $fixed_width; "
@@ -61,29 +64,22 @@ class sidebar extends \idg_view_implementation {
 
         $this->stream_append('css', $css);
 
-        if (@$bg) {
-            $body = "<div id=\"$bg_id\">\n";
-
-            $this->stream_append('html-body', $body);
+        $body = '';
+        
+        if ($bg) {
+            $this->stream_append('html-body', "<div id=\"$bg_id\">\n");
             $bg->_render($document, $view);
-
             $body = "</div>\n";
         } else
-            $body = '';
 
         $body .= "<div id=\"$fixed_id\">\n";
-
         $this->stream_append('html-body', $body);
         $fixed->_render($document, $view);
 
-        $body = "</div>\n";
-        $body .= "<div id=\"$main_id\">\n";
-
+        $body = "</div>\n<div id=\"$main_id\">\n";
         $this->stream_append('html-body', $body);
         $main->_render($document, $view);
-
-        $body = "</div>\n";
-        $this->stream_append('html-body', $body);
+        $this->stream_append('html-body', "</div>\n");
     }
 }
 

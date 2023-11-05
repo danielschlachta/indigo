@@ -12,10 +12,7 @@ class idg_fragment_type extends idg_view_element_type {
 
     function __construct() {
         parent::__construct();
-        $this->child_types = [
-            'idg_filter'
-        ];
-
+        
         $this->register_property('class');
         $this->set_property_mandatory('class');
         $this->register_property('source');

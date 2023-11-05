@@ -53,14 +53,17 @@ class idg_site extends idg_site_element {
             }
         }
 
-        /** @todo wget */
-        
-        if (!$document_name)
+        if (!$document_name) {
             $document_name = $this->get_property('index-document');
+        
+            if (IDG_WGET_VERSION) 
+                $document_name = str_replace(IDG_URL_DEFAULT_FOLDER_SEPARATOR, '-', 
+                    $document_name);
+        }
 
         if ($document_name) {
-            if ($document_name[0] != '/')
-                $document_name = '/' . $document_name;
+            if ($document_name[0] != IDG_URL_FOLDER_SEPARATOR)
+                $document_name = IDG_URL_FOLDER_SEPARATOR . $document_name;
 
             $path = explode(IDG_URL_FOLDER_SEPARATOR, $document_name);
             $count = count($path);

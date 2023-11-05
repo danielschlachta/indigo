@@ -5,13 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
-function idg_diag(object $object, string $message, string $level = null) {
+function idg_diag(object $object, string $message, $xml_parser = null) {
     $name = get_class($object);
-    
-    if ($level) {
-        trigger_error("$name: $message", $level);
-        return;
-    }
     
     if (method_exists($object, 'clear'))
         $object->clear();
@@ -20,6 +15,13 @@ function idg_diag(object $object, string $message, string $level = null) {
     $function = $backtrace[1]['function'];
 
     echo "<h1>$name\\$function: $message</h1>\n";
+    
+    if ($xml_parser) {
+        $err_line = xml_get_current_line_number($xml_parser);
+        $err_col = xml_get_current_column_number($xml_parser);
+
+        echo "<h2>XML input line $err_line, column $err_col</h2>\n";
+    }
 	  
     echo "<pre>\n";
     debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);

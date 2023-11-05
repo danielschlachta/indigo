@@ -25,7 +25,7 @@ abstract class idg_leafnode extends idg_object {
         parent::__construct();
         $this->element_name = $element_name;
     }
-    
+
     /**
      * Set the parent object.
      * This is usually done in idg_treenode\add_child() but becomes
@@ -269,7 +269,7 @@ abstract class idg_treenode extends idg_leafnode {
     private ?idg_attribute $current_attribute = null;
     private ?string $current_parameter = null;
     private ?string $current_option = null;
-    
+
     /**
      * Unlinks the object from the tree, mainly to avoid recursion in diagnostic output. 
      * @todo Make this traverse the subtree to only void the parent backlink.
@@ -431,7 +431,7 @@ abstract class idg_treenode extends idg_leafnode {
             . " by " . IDG_PROGRAM_NAME . " -->\n";
 
         if (@!$fp = fopen($file_name, 'w'))
-            idg_diag($this, 'xml: could not write ' . $file_name);
+            idg_diag($this, "could not write to '$file_name'");
 
         $this->traverse($xml, '$this->_xml_write_start', '$this->_xml_write_end');
         fwrite($fp, $xml);
@@ -479,7 +479,7 @@ abstract class idg_treenode extends idg_leafnode {
         $encoding = 'utf-8';
 
         if (@!$fp = fopen($file_name, 'r'))
-            idg_diag($this, 'xml: could not read ' . $file_name);
+            idg_diag($this, "could not read from '$file_name'");
 
         $xml = '';
         while ($chunk = fread($fp, 8129))
@@ -495,7 +495,7 @@ abstract class idg_treenode extends idg_leafnode {
         }
 
         if ($xml_version != '1.0')
-            idg_diag($this, "read_xml: wrong xml version ($xml_version)");
+            idg_diag($this, "wrong xml version ($xml_version)");
 
         $parser = xml_parser_create($encoding);
         xml_set_object($parser, $this);
@@ -520,90 +520,91 @@ abstract class idg_treenode extends idg_leafnode {
     }
 
     private function _xml_read_start($parser, $name, $properties): void {
-        if ($name == 'xi:include') {
-            if (!$href = @$properties['href'])
-                idg_diag($this,
-                    "xml: xi:include: must specify property 'href'");
+        switch ($name) {
+            case 'xi:include':
+                if (!($href = @$properties['href']))
+                    idg_diag($this, "xi:include must specify property 'href'", $parser);
 
-            $this->read_xml($href, $this->current_object);
-            return;
-        }
+                $this->read_xml($href, $this->current_object);
+                break;
 
-        if ($name == 'parameter') {
-            if (!$this->current_object)
-                idg_diag($this, "xml: orphaned 'parameter' tag");
+            case 'parameter':
+                $class_name = str_replace('_declaration', '',
+                    get_class($this->current_object));
 
-            $class_name = str_replace('_declaration', '',
-                get_class($this->current_object));
+                if (!$this->current_object)
+                    idg_diag($this, "orphaned parameter", $parser);
+                
+                if (!($param_name = @$properties['name']))
+                    idg_diag($this, "anonymous paramenter", $parser);
+                
+                if (!is_subclass_of($class_name, 'idg_parameterized'))
+                    idg_diag($this, 'parameters are not accepted here', $parser);
 
-            if (!is_subclass_of($class_name, 'idg_parameterized'))
-                idg_diag($this, 'xml: parameters are not accepted here');
+                $this->current_parameter = $param_name;
+                break;
 
-            if (!($param_name = @$properties['name']))
-                idg_diag($this,
-                    "xml: parameter '$name' needs a name");
+            case 'attribute':
+                if (!$this->current_object)
+                    idg_diag($this, "orphaned attribute", $parser);
 
-            $this->current_parameter = $param_name;
-            return;
-        }
+                if (!($attr_name = @$properties['name']))
+                    idg_diag($this, "amonymous attribute", $parser);
 
-        if ($name == 'attribute') {
-            if (!$this->current_object)
-                idg_diag($this, 'xml: attribute has no parent');
+                $this->current_attribute = $this->current_object->create_attribute(
+                    $attr_name);
+                break;
 
-            if (!($attr_name = @$properties['name']))
-                idg_diag($this,
-                    "xml: attribute '$name' needs a name");
+            case 'option':
+                if (!$this->current_object)
+                    idg_diag($this, "orphaned option", $parser);
+                
+                if (!($opt_name = @$properties['name']))
+                    idg_diag($this, "anonymous option", $parser);
 
-            $this->current_attribute = $this->current_object->create_attribute(
-                $attr_name);
-            return;
-        }
+                if (!$this->current_attribute) 
+                    idg_diag($this, "options are not accepted here", $parser);
+                
+                $this->current_option = $opt_name;
+                break;
 
-        if ($name == 'option') {
-            if (!$opt_name = @$properties['name'])
-                idg_diag($this, "xml: option has no 'name' property");
+            default:
+                $class_name = "idg_$name";
 
-            if (!$this->current_attribute) {
-                idg_diag($this,
-                    "xml: option '$opt_name' outside attribute");
-            }
+                if (!method_exists($class_name, '__construct'))
+                    idg_diag($this, "unknown tag '$name'", $parser);
 
-            $this->current_option = $opt_name;
-            return;
-        }
-
-        $class_name = "idg_$name";
-
-        if (!method_exists($class_name, '__construct'))
-            idg_diag($this, "unknown tag '$name'");
-
-        if (!$this->current_object) {
-            $this->set_properties($properties);
-            $this->current_object = $this;
-        } else {
-            $new_object = new $class_name;
-            $new_object->set_properties($properties);
-            $this->current_object->add_child($new_object);
-            $this->current_object = $new_object;
+                if (!$this->current_object) {
+                    $this->set_properties($properties);
+                    $this->current_object = $this;
+                } else {
+                    $new_object = new $class_name;
+                    $new_object->set_properties($properties);
+                    $this->current_object->add_child($new_object);
+                    $this->current_object = $new_object;
+                }
         }
     }
 
     private function _xml_read_end($parser, $name): void {
-        if ($this->current_object)
-            $this->current_object->set_text(html_entity_decode(
-                    $this->current_object->get_text()));
+        if (!$this->current_object)
+            return;
+        
+         $this->current_object->set_text(html_entity_decode(
+             $this->current_object->get_text()));
 
-        if ($this->current_object &&
-            $name != 'xi:include' &&
-            !in_array($name, ['attribute', 'option', 'parameter']))
-            $this->current_object = $this->current_object->get_parent();
-
-        if ($name == 'attribute')
-            $this->current_attribute = null;
-
-        if ($name == 'parameter')
-            $this->current_parameter = null;
+        switch ($name) {
+            case 'parameter':
+                $this->current_parameter = null;
+                break;
+            case 'attribute':
+                $this->current_attribute = null;
+                break;
+            case 'option':
+                break;
+            default:
+                $this->current_object = $this->current_object->get_parent();
+        }
     }
 
     private function _xml_character_data($parser, $character_data): void {
@@ -611,25 +612,24 @@ abstract class idg_treenode extends idg_leafnode {
             return;
 
         if ($this->current_attribute) {
-            $this->current_attribute->set_parameter($this->current_option,
-                $this->current_attribute->get_parameter(
-                    $this->current_option) . $character_data);
+            $text = $this->current_attribute->get_parameter(
+                    $this->current_option) . $character_data;
+            $this->current_attribute->set_parameter($this->current_option, $text);
             return;
         }
 
         if ($this->current_parameter) {
-            $this->current_object->set_parameter($this->current_parameter,
-                $this->current_object->get_parameter(
-                    $this->current_parameter) . $character_data);
+            $text = $this->current_object->get_parameter(
+                    $this->current_parameter) . $character_data;
+            $this->current_object->set_parameter($this->current_parameter, $text);
             return;
         }
 
         if (!$this->current_object)
-            idg_diag($this,
-                "xml: spurious character data: '$character_data'");
-
-        $this->current_object->set_text(
-            $this->current_object->get_text() . $character_data);
+            idg_diag($this, "spurious character data: ('$character_data')", $parser);
+        
+        $text = $this->current_object->get_text() . $character_data;
+        $this->current_object->set_text($text);
     }
 
     private function _xml_default_handler($parser, $data): void {

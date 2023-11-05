@@ -10,7 +10,7 @@
                   description="Welcome to indigo"
                   navigation-comment="The page of pages">
 
-            <attribute name="blocks::image">
+            <attribute>
                 <option name="src">pages/main/home/randomsymbols.jpg</option>
             </attribute>
             

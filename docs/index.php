@@ -47,6 +47,9 @@ if (!($document = $site->get_document())) {
 
 // $view->write_xml($view_xml);
 
+if (!$design)
+    $design = 'blocks';
+
 $view = new idg_view;
 if (!$view->load_template($design, '../designs'))
     die('could not load design');
