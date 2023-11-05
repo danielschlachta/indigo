@@ -127,15 +127,13 @@ abstract class idg_leafnode extends idg_object {
     }
 
     /**
-     * Creates an instance of a subclass of the object with the class name constructed 
-     * from the current class and its <code>class</code> property.
-     * E.g. an <code>idg_datasource</code> of class <code>text</code> would
-     * yield an <code>idg_datasource_text</code> object (if there such a class, or die).
+     * Creates an instance of what is set in the objects <code>class</property>
+     * with <code>this</code> as the parent.
      * @return object|null The created object
-     * @todo Naming convention is broken, see also idg_fragment, idg_renderer
      */
     function create_instance(): ?object {
-        $object_name = $this->get_property('class');
+        if (!($object_name = $this->get_property('class')))
+            idg_diag($this, "internal error: no 'class'");
 
         if (!class_exists($object_name))
             idg_diag($this, "class '$object_name' does not exist");
@@ -419,9 +417,6 @@ abstract class idg_treenode extends idg_leafnode {
 
     /**
      * Writes an <code>xml</code> representation of the subtree to a file.
-     * @todo Failure to write should probably not be catastrophic and the function
-     *       should simply return a string.
-     * @todo Indentation ...!
      * @param string $file_name The name of the file
      */
     function write_xml(string $file_name): void {
@@ -549,7 +544,7 @@ abstract class idg_treenode extends idg_leafnode {
                     idg_diag($this, "orphaned attribute", $parser);
 
                 if (!($attr_name = @$properties['name']))
-                    idg_diag($this, "amonymous attribute", $parser);
+                    idg_diag($this, "anonymous attribute", $parser);
 
                 $this->current_attribute = $this->current_object->create_attribute(
                     $attr_name);
