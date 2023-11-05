@@ -14,7 +14,6 @@ class simple extends \idg_view_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
 
-
         if (!($children = $this->get_children()))
             return;
 

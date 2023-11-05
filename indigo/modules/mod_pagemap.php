@@ -27,11 +27,11 @@ function get_css($position_vert, $position_horz,
         . "	}\n\n";
 }
 
-function get_html_body() {
-    global $pagemap_main;
+function get_html_body($view) {
+    $pagemap = $view->get_rel_url() . '../indigo/modules/pagemap/dist/pagemap.min.js';
 
-    return "<canvas id=\"map\"></canvas>\n"
-        . "<script src=\"$pagemap_main\"></script>\n"
+        return "<canvas id=\"map\"></canvas>\n"
+        . "<script src=\"$pagemap\"></script>\n"
         . "<script>pagemap(document.querySelector('#map'));"
         . "</script>\n";
 }
@@ -40,7 +40,7 @@ function add_to_view($view,
     $position_vert = 'top: 0', $position_horz = 'left: 0',
     $width = '160px', $height = '100%') {
 
-    $view->stream_append('css', idg_pagemap::get_css(
+    $view->stream_append('css', get_css(
             $position_vert, $position_horz, $width, $height));
-    $view->stream_append('html-body', idg_pagemap::get_html_body());
+    $view->stream_append('html-body', get_html_body($view));
 }

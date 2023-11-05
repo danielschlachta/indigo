@@ -81,6 +81,10 @@ class idg_view extends idg_view_element {
     function __construct() {
         parent::__construct('view');
     }
+    
+    function inject_css(idg_view_element $element, string $property, string $value) {
+        
+    }
 
     /**
      * Emits <code>css</code> style information according to the properties of an object.
@@ -312,7 +316,7 @@ class idg_view extends idg_view_element {
      */
     function load_template(string $name, string $rel_path = null,
         string $rel_url = null): bool {
-        $filename = ($rel_path ? $rel_path . '/' . $name : $name) . '/load.php';
+        $filename = ($rel_path ? $rel_path . '/' . $name : $name) . "/$name.php";
 
         if (!file_exists($filename))
             return false;
@@ -320,7 +324,7 @@ class idg_view extends idg_view_element {
         if (!($fp = fopen($filename, "r")))
             return false;
 
-        $string = fread($fp, 2048);
+        $string = fread($fp, 4096); // Hope it's enough, some people write novels ...
         fclose($fp);
 
         if (preg_match('/.*namespace[ \t\n]+([^;]+);/', $string, $matches) !== 1)
@@ -355,20 +359,27 @@ class idg_view extends idg_view_element {
     function get_namespace(): ?string {
         return $this->namespace;
     }
+    
+    function get_rel_url(): ?string {
+        $url = $this->rel_url;
 
+        if (!$url)
+            $url = $this->rel_path;
+        
+        return $url;
+    }
+    
     /**
      * Returns the URL prefix to where sundry files are normally stored for a template.
      * @param string subdir Optional name of a subdirectory for a component
      * @return string The partial URL
+     * @todo Scrap this nonsense!
      */
     function get_elements(string $subdir = null): string {
         if (!$this->template_name)
             idg_diag($this, "no template loaded");
 
-        $url = $this->rel_url;
-
-        if (!$url)
-            $url = $this->rel_path;
+        $url = $this->get_rel_url();
 
         return ($url ? $url . '/' : '') . $this->template_name . '/'
             . ($subdir ? $subdir . '/' : '') . 'elements';
