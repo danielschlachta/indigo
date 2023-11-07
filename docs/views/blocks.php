@@ -5,6 +5,7 @@ function configure_view(idg_view $view): void {
     $elements = 'views/blocks/elements';
 
     $view->set_properties([
+        'class' => $view->core()->qualify('view'),
         'icon' => "favicon.png",
         'style' => "font-family: 'DejaVu Serif', georgia, serif; font-size: 120%; " 
         . "line-height: 1.2; " 
@@ -34,7 +35,7 @@ function configure_view(idg_view $view): void {
     
     $tabs = new idg_fragment;
     $tabs->set_properties([
-        'class' => $view->qualify('tabs'),
+        'class' => $view->core()->qualify('tabs'),
         'source' => '_site',
         'tag' => 'main',
         'style' => "$font_sans; font-size: 120%;"
@@ -104,7 +105,7 @@ function configure_view(idg_view $view): void {
     
     $footer = new idg_fragment;
     $footer->set_properties([
-        'class' => $view->qualify('footer'),
+        'class' => $view->core()->qualify('footer'),
         'name' => 'footer',
         'tag' => 'Copyright &copy;2023 Daniel Schlachta',
         'style' => "background-image: url($elements/metal.png); "
@@ -141,7 +142,7 @@ function configure_view(idg_view $view): void {
 
     $imageframe = new idg_fragment;
     $imageframe->set_properties([
-        'class' => $view->qualify('imageframe')
+        'class' => $view->core()->qualify('imageframe')
     ]);
     $attr = $imageframe->create_attribute('blocks::image'); // could be just 'image'
     $attr->set_parameter('top', 30);
@@ -150,7 +151,7 @@ function configure_view(idg_view $view): void {
 
     $infobox = new idg_fragment;
     $infobox->set_properties([
-        'class' => $view->qualify('infobox'),
+        'class' => $view->core()->qualify('infobox'),
         'source' => 'blocks::infobox',
         'style' => "$font_sans; font-size: 110%;"
     ]);
@@ -160,7 +161,7 @@ function configure_view(idg_view $view): void {
 
     $dropdown = new idg_fragment;
     $dropdown->set_properties([
-        'class' => $view->qualify('dropdown'),
+        'class' => $view->core()->qualify('dropdown'),
         'tag' => 'resources',
         'source' => '_site',
         'style' => "position: fixed; top: 160px; right: 30px; z-index: 1;" 

@@ -27,11 +27,17 @@ function get_css($position_vert, $position_horz,
         . "	}\n\n";
 }
 
-function get_html_body($view) {
-    $pagemap = $view->get_rel_url() . '../indigo/modules/pagemap/dist/pagemap.min.js';
+/**
+ * @todo: The path isn't always right!
+ * @param type $view
+ * @return type
+ */
 
-        return "<canvas id=\"map\"></canvas>\n"
-        . "<script src=\"$pagemap\"></script>\n"
+function get_html_body($view) {
+    global $idg_path;
+    
+    return "<canvas id=\"map\"></canvas>\n"
+        . "<script src=\"$idg_path/modules/pagemap/dist/pagemap.min.js\"></script>\n"
         . "<script>pagemap(document.querySelector('#map'));"
         . "</script>\n";
 }

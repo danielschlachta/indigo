@@ -158,16 +158,12 @@ for ($i = 1; $i < 6; $i++) {
 
 $site->check();
 
-// -----------------------------------------------------------------------
-
-$view = new idg_view;
-if (!$view->load_template($design))
-    die("Design '$design' could not be loaded.");
-
-$func = $view->get_namespace() . '\testcard';
+$view = new idg_view(new idg_core($design));
+    
+$func = $view->core()->qualify('testcard');
 $func($document, $view, $text);
 
 $view->check();
 $view->render($document);
 $view->print();
-?>
+

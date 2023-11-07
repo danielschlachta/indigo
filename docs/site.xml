@@ -4,7 +4,7 @@
         <option name="src">pages/main/home/randomsymbols.jpg</option>
     </attribute>
 
-    <folder id="main" name="Main" show-name="no">
+    <folder id="main" name="Main">
         <document id="home"
                   name="Home"
                   description="Welcome to indigo"
@@ -92,7 +92,7 @@
         </document>
     </folder>
 
-    <folder id="resources" name="Resources" show-name="no">
+    <folder id="resources" name="Resources">
         <attribute name="image">
             <option name="src">pages/resources/tutorial/sneakers.jpg</option>
         </attribute>

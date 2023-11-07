@@ -14,12 +14,13 @@ namespace Indigo\Design\Blocks;
 class dropdown extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        $elements = $view->get_elements('dropdown');
+        $elements = $view->core()->get_template_uri('dropdown/elements');
 
-        if (!$source_name = $this->get_property('source'))
-            return;
-
-        $datasource = $document->get_datasource($source_name);
+        if (!$source = $this->get_property('source'))
+            idg_diag($this, "property 'source' not set");
+        
+        $datasource = $document->get_datasource($source);
+        
         $idg_id = $this->get_idg_id();
         $tag = $this->get_property('tag');
 
@@ -47,6 +48,7 @@ class dropdown extends \idg_fragment_implementation {
                 while ($datasource->valid()) {
                     $token = $datasource->current();
                     $datasource->next();
+                    
 
                     if ($token['type'] == 'folder')
                         break;
@@ -59,12 +61,13 @@ class dropdown extends \idg_fragment_implementation {
                         $close_doc = true;
                         $name = $token['name'];
                         $path = $token['path'];
-                        $url = $token['url'];
+                        $uri = $view->core()->get_full_uri($path);
+                        
                         if ($path == $doc_path)
                             $body .= "  <li id=\"current\">"
                                 . "<div><a href=\"#top\">$name</a></div>";
                         else
-                            $body .= "  <li><div><a href=\"$url\">$name</a></div>";
+                            $body .= "  <li><div><a href=\"$uri\">$name</a></div>";
                         $is_first = true;
                     } else if ($token['type'] == 'anchor') {
                         if ($is_first) {
@@ -73,7 +76,7 @@ class dropdown extends \idg_fragment_implementation {
                         }
                         $anchor = $token['anchor'];
                         $name = $token['name'];
-                        $body .= "      <li><a href=\"$url#$anchor\">$name</a></li>\n";
+                        $body .= "      <li><a href=\"?display=$path#$anchor\">$name</a></li>\n";
                     }
                 }
                 if (!$is_first)

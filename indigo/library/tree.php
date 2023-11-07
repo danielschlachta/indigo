@@ -64,7 +64,7 @@ abstract class idg_leafnode extends idg_object {
     function set_text(string $text): void {
         $this->text = $text;
     }
-
+    
     /**
      * Gets the text previously set with <code>set_text()</code>.
      * <blockquote>

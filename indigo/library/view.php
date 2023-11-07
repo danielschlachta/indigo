@@ -5,6 +5,9 @@
  *  License: MIT License, see https://openslot.org/license/mit/
  */
 
+/**
+ * Type information for idg_view_element.
+ */
 class idg_view_element_type extends idg_treenode_type {
 
     function __construct(bool $register_styles = true) {
@@ -20,6 +23,9 @@ class idg_view_element_type extends idg_treenode_type {
     }
 }
 
+/**
+ * The parent class for idg_view and every sibling thereof.
+ */
 abstract class idg_view_element extends idg_treenode {
 
     function _render(idg_document $document, idg_view $view): void {
@@ -47,7 +53,7 @@ class idg_view_type extends idg_view_element_type {
 }
 
 /**
- * Class representing a view.
+ * A view.
  */
 class idg_view extends idg_view_element {
 
@@ -72,16 +78,19 @@ class idg_view extends idg_view_element {
     ];
     private string $output = '';
     private array $filters = [];
-    // For load_template():
-    private ?string $template_name = null;
-    private ?string $namespace = null;
-    private ?string $rel_path = null;
-    private ?string $rel_url = null;
-
-    function __construct() {
-        parent::__construct('view');
-    }
+    private ?idg_core $core;
     
+    function __construct(idg_core $core = null) {
+        parent::__construct('view');
+        $this->core = $core;
+    }
+   
+    /**
+     * @todo Maybe we don't need this?
+     * @param idg_view_element $element
+     * @param string $property
+     * @param string $value
+     */
     function inject_css(idg_view_element $element, string $property, string $value) {
         
     }
@@ -304,99 +313,16 @@ class idg_view extends idg_view_element {
     }
     
     /**
-     * Loads a template from a directory.
-     * The function looks for a file named <code>load.php</code> in the directory 
-     * specified by <code>name</code>, scans it for a  <code>namespace</code> 
-     * directive, loads it and then sets the view's class to be the view object declared
-     * in the file.
-     * @param string $name The name of the template
-     * @param string $rel_path Where <code>php</code> can find the directory
-     * @param string $rel_url Where the web server can find the files in the directory
-     * @return bool True on success
+     * Returns the idg_core object the view was initialized with or a default one.
+     * @return idg_core The core
      */
-    function load_template(string $name, string $rel_path = null,
-        string $rel_url = null): bool {
-        $filename = ($rel_path ? $rel_path . '/' . $name : $name) . "/$name.php";
-
-        if (!file_exists($filename))
-            return false;
-
-        if (!($fp = fopen($filename, "r")))
-            return false;
-
-        $string = fread($fp, 4096); // Hope it's enough, some people write novels ...
-        fclose($fp);
-
-        if (preg_match('/.*namespace[ \t\n]+([^;]+);/', $string, $matches) !== 1)
-            return false;
-
-        $this->template_name = $name;
-        $this->namespace = $matches[1];
-        $this->rel_path = $rel_path;
-        $this->rel_url = $rel_url;
-
-        require_once $filename;
-
-        $this->set_property('class', $this->namespace . '\view');
-
-        return true;
-    }
-
-    /**
-     * Sets the namespace of the view.
-     * This is useful when <code>load_template()</code> has not been executed.
-     * @see qualify()
-     * @param string $namespace The namespace
-     */
-    function set_namespace(string $namespace): void {
-        $this->namespace = $namespace;
-    }
-
-    /**
-     * Returns the namespace associated with the template if one is loaded.
-     * @return string|null The namespace.
-     */
-    function get_namespace(): ?string {
-        return $this->namespace;
-    }
-    
-    function get_rel_url(): ?string {
-        $url = $this->rel_url;
-
-        if (!$url)
-            $url = $this->rel_path;
+    function core(): idg_core {
+        if (!$this->core)
+            $this->core = new idg_core;
         
-        return $url;
+        return $this->core;
     }
     
-    /**
-     * Returns the URL prefix to where sundry files are normally stored for a template.
-     * @param string subdir Optional name of a subdirectory for a component
-     * @return string The partial URL
-     * @todo Scrap this nonsense!
-     */
-    function get_elements(string $subdir = null): string {
-        if (!$this->template_name)
-            idg_diag($this, "no template loaded");
-
-        $url = $this->get_rel_url();
-
-        return ($url ? $url . '/' : '') . $this->template_name . '/'
-            . ($subdir ? $subdir . '/' : '') . 'elements';
-    }
-
-    /**
-     * Simply prefixes a string with the view's namespace, if set.
-     * @param string $string The string
-     * @return string The string with the namespace prepended
-     */
-    function qualify(string $string): string {
-        if ($this->namespace)
-            return $this->namespace . '\\' . $string;
-
-        return $string;
-    }
-
     private static function uuid_v4(): string {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"

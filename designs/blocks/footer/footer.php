@@ -25,7 +25,8 @@ class footer extends \idg_fragment_implementation {
         unset($style['style']);
         $view->render_css($this->get_declaration(), "div#$idg_id-content", $style);
         
-        $url = $document->get_site()->get_absolute_url();
+        //$url = $document->get_site()->get_absolute_url();
+        $url = 'https://larifari.org';
 
         $body = "<div id=\"$idg_id-content\">\n"
             . "Last change: $last_change\n"

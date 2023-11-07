@@ -7,19 +7,13 @@
 
 namespace Indigo\Design\Fancy;
 
-class fancy_navigation extends \idg_fragment_implementation {
+class fancy_nav extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
         if (!$datasource = $this->get_datasource())
             return;
 
         $css = "	body {\n"
-            . "	}\n\n"
-            . "	nav {\n"
-            . "		position: fixed;\n"
-            . "		border-radius: 1em;\n"
-            . "		top: 0; left: 0;\n"
-            . "		height: 4em; width: 95%;\n"
             . "	}\n\n"
             . "	.navlink, .navlink-selected {\n"
             . "		color: black;\n"
@@ -35,15 +29,14 @@ class fancy_navigation extends \idg_fragment_implementation {
 
         $view->stream_append('css', $css);
 
-        /** @todo FIXTHIS PRONTO * */
         $document_path = $document->get_path();
 
         foreach ($datasource as $number => $node) {
             $name = $node['name'];
-            if (!($path = @$node['url']))
+            if (!($path = @$node['path']))
                 continue;
             
-            $class = str_replace('?display=', '', $path) == $document_path ? 
+            $class = $path == $document_path ? 
                 'navlink-selected' : 'navlink';
             
             $view->stream_append('html-body', 

@@ -5,6 +5,17 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/**
+ * Prints as much information as possible and then terminates execution calling die().
+ * This is used only if it really does not make any sense to continue.
+ * @todo Log this to a file, present some friendly message to the user.
+ * @see idg_log
+ * @param object $object The calling object
+ * @param string $message An error message
+ * @param $xml_parser|null An <code>xml</code> parser, to include line and column info
+ * if applicable. The actual error is <b>not</b> reproduced, expecting the error message 
+ * to be more specific.
+ */
 function idg_diag(object $object, string $message, $xml_parser = null) {
     $name = get_class($object);
     

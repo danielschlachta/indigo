@@ -10,7 +10,7 @@ namespace Indigo\View;
 class grid extends \idg_view_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        
+
         $idg_id = $this->get_idg_id();
         $stylesheet = '../designs/fancy/default.css';
 
@@ -19,12 +19,10 @@ class grid extends \idg_view_implementation {
         $view->stream_append('html-head', $head);
 
         $nav = $view->get_child_by_key('name', 'nav');
-        $header = $view->get_child_by_key('name', 'header');    
-        $aside = $view->get_child_by_key('name', 'aside');    
+        $header = $view->get_child_by_key('name', 'header');
+        $aside = $view->get_child_by_key('name', 'aside');
         $article = $view->get_child_by_key('name', 'article');
         $footer = $view->get_child_by_key('name', 'footer');
-        
-        //$idg_id = $view->idg_id;
 
         $css = "	body {\n"
             . "		font-family: Liberation Serif', sans-serif;\n"
@@ -48,33 +46,18 @@ class grid extends \idg_view_implementation {
             . "		padding: 20px;\n"
             . "		margin-bottom: 10px;\n"
             . "		border-radius: 5px;\n"
-            . "	}\n\n"
-            . "	article {\n"
-            . "		float: right;\n"
-            . "		width: 79.7872%;\n"
-            . "		padding-top: 0.9em;\n"
-            . "		padding-bottom: 0.5em;\n"
-            . "		padding-right: 1.5em;\n"
-            . "	}\n\n"
-            . "	footer {\n"
-            . "		float: right;\n"
-            . "		width: 79.7872%;\n"
-			. "		grid-column: 1 / -1;\n"
-			. "		clear: both;\n"
             . "	}\n\n";
 
         $view->stream_append('css', $css);
 
-        
-        
         $view->stream_append('html-body', "<div id=\"$idg_id\">\n");
 
         // header
         if ($header) {
-            $view->stream_append('css', 
-                "header { grid-column: 1 / -1; clear: both; float: right; " 
+            $view->stream_append('css',
+                "header { grid-column: 1 / -1; clear: both; float: right; "
                 . " width: 79.7872%; }\n");
-            
+
             $view->stream_append('html-body', "<header>\n");
             $header->_render($document, $view);
             $view->stream_append('html-body', "</header>\n");
@@ -85,10 +68,13 @@ class grid extends \idg_view_implementation {
             $view->stream_append('html-body', "<aside>\n");
             $view->stream_append('css', "aside { float: left; width: 19.1489%; }\n");
             $aside->_render($document, $view);
-             $view->stream_append('html-body', "</aside>\n");
+            $view->stream_append('html-body', "</aside>\n");
         }
-        
+
         // content
+        $view->stream_append('css', " article { float: right; width: 79.7872%; " 
+            . " padding-top: 0.9em; padding-bottom: 0.5em; padding-right: 1.5em; }\n");
+            
         $view->stream_append('html-body', "<article>\n");
 
         if ($article)
@@ -100,15 +86,18 @@ class grid extends \idg_view_implementation {
 
         // footer
         if ($footer) {
-            $view->stream_append('html-body', "<footer>\n");
-            $footer->_render($document, $view);
-            $view->stream_append('html-body', "\n</footer>\n");
+        $view->stream_append('css', " footer { float: right; width: 79.7872%; "
+            . "	grid-column: 1 / -1; clear: both; }\n");
+        $view->stream_append('html-body', "<footer>\n");
+        $footer->_render($document, $view);
+        $view->stream_append('html-body', "\n</footer>\n");
         }
 
         // navigation
         if ($nav) {
+            $view->stream_append('css', "nav { position: fixed; top: 0; left: 0; " .
+                "height: 4em; width: 95%; border-radius: 1em; }\n");
             $view->stream_append('css-print', "nav { display: none; }\n");
-
             $view->stream_append('html-body', "	<nav>\n");
             $nav->_render($document, $view);
             $view->stream_append('html-body', "	</nav>\n");
@@ -121,7 +110,7 @@ class grid extends \idg_view_implementation {
             . "			margin: 0;\n"
             . "		}\n"
             . "	}\n\n");
-        
+
         // page map
         \Indigo\Module\Pagemap\add_to_view($view,
             'bottom: 0', 'right: 0', '25%', '93%');

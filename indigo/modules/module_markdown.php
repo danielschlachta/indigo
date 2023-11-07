@@ -17,7 +17,6 @@ if (file_exists($parsedown_main)) {
     exit;
 }
 
-
 /**
  * Support for .md files via parsedown.
  * Use datasource_textfile as data source.

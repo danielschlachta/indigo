@@ -34,7 +34,6 @@ interface idg_parameterized {
 }
 
 trait idg_parameters {
-
     private ?array $parameters = null;
 
     /**

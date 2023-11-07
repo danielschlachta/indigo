@@ -12,20 +12,21 @@ class view extends \Indigo\View\grid {
 }
 
 /**
- * #todo docu
+*  #todo docu
  */
 
-require_once 'fancy_navigation.php';
-require_once 'fancy_caption.php';
-require_once 'fancy_sidebar.php';
+require_once 'fancy_nav.php';
+require_once 'fancy_header.php';
+require_once 'fancy_aside.php';
 require_once 'fancy_footer.php';
 
 function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text): void {
+    $view->set_property('class', $view->core()->qualify('view'));
     
     $navigation = new \idg_fragment;
     $navigation->set_properties([
         'name' => 'nav',
-        'class' => $view->qualify('fancy_navigation'),
+        'class' => $view->core()->qualify('fancy_nav'),
         'source' => '_site'
     ]);
     $view->add_child($navigation);
@@ -33,17 +34,17 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     $header = new \idg_fragment;
     $header->set_properties([
         'name' => 'header',
-        'class' => $view->qualify('fancy_header')
+        'class' => $view->core()->qualify('fancy_header')
     ]);
     $view->add_child($header); 
     
-    $sidebar = new \idg_fragment;
-    $sidebar->set_properties([
+    $aside = new \idg_fragment;
+    $aside->set_properties([
         'name' => 'aside',
-        'class' => '\Indigo\Fragment\text'
+        'class' => $view->core()->qualify('fancy_aside'),
+        'source' => '_site'
     ]);
-    $sidebar->set_text('&lt;aside&gt;');
-    $view->add_child($sidebar);
+    $view->add_child($aside);
      
     $article = new \idg_container;
     $article->set_properties([
@@ -54,7 +55,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     
     $footer = new \idg_fragment;
     $footer->set_properties([
-        'class' => $view->qualify('fancy_footer'),
+        'class' => $view->core()->qualify('fancy_footer'),
         'name' => 'footer',
         'tag' => '&lt;footer&gt;'
     ]);

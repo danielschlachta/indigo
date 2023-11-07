@@ -10,16 +10,13 @@ namespace Indigo\Design\Blocks;
 class tabs extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        $elements = $view->get_elements('tabs');
+        $elements = $view->core()->get_template_uri('tabs/elements');
+        
         if (!$source_name = $this->get_property('source'))
             return;
-
         $datasource = $document->get_datasource($source_name);
         $idg_id = $this->get_idg_id();
-        $style = $this->get_property('style');
         
-        $body = "<div id=\"$idg_id-tabbox\">\n<div id=\"$idg_id-tabs\">\n<ul>\n";
-
         $document_path = $document->get_path();
         $tag = $this->get_property('tag');
         $has_current = false;
@@ -29,37 +26,41 @@ class tabs extends \idg_fragment_implementation {
         foreach ($datasource as $count => $token) {
             $type = $token['type'];
             $name = @$token['name'];
-            $url = @$token['url'];
             
-            if ($type == 'document' && 
-                    (!$tag || $tag == $token['parent-folder-id'])) {              
-                if ($token['path'] == $document_path) {
+            $path = @$token['path'];
+            
+            if ($path && (!$tag || $tag == @$token['parent-folder-id'])) {              
+                $uri = $view->core()->get_full_uri($path);
+                
+                if ($path == $document_path) {
                     $list .= "<li id=\"current\">"
                         . "<div>$name</div></li>\n";
                     $has_current = true;
                 } else
-                    $list .=  "<li><a href=\"$url\">$name</a></li>\n";
+                    $list .=  "<li><a href=\"$uri\">$name</a></li>\n";
             }
         }
         
         if ($list == '')
             return;
         
-        $body .= $list . "</ul>\n</div>\n</div>\n"
-            . "<div id=\"$idg_id-corner\">\n<div id=\"$idg_id-top\">\n"
-            . "</div>\n</div>\n";
+        $body = "<div id=\"$idg_id-tabbox\">\n" 
+            . "<div id=\"$idg_id-tabs\">\n<ul>\n$list</ul>\n</div>\n" 
+            . "</div>\n"
+            . "<div id=\"$idg_id-corner\">\n<div id=\"$idg_id-top\">\n</div>\n</div>\n";
 
         if ($has_current)
             $bottom = '-1px';
         else
-            $bottom = '0px';
+            $bottom = '0';
 
         $li_col = '#23314f';
         $fg_col = '#284a2f';
         $bg_col = '#b4d2b0';
         $to_col = '#1e3723';
         $tx_col = '#555';
-
+        $style = $this->get_property('style');
+        
         $css = "div#$idg_id-tabbox { position: relative;"
             . " top: 0; left: 30px; height: 130px; $style }\n"
             . "div#$idg_id-tabs { position: absolute;"
