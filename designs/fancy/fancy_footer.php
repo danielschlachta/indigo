@@ -5,32 +5,37 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @package Fancy */
+
 namespace Indigo\Design\Fancy;
 
-class fancy_footer extends \idg_fragment_implementation {
+class footer extends \idg_fragment_implementation {
 	
 	function _render(&$document, &$view)
 	{
+        /** 
+         * @todo Make this settable 
+         */
 		$image = '../docs/views/fancy/postmark.png';
 
-		$css = "	footer {\n"
-            . "		margin: -1em 0 -1em 10px;\n";
+		$css = "footer { height: 4em; padding: 1.5em; ";
 		
         if ($image) {
-			$css .= "		background-image: url($image);"
-				. "		background-position: left center;\n"
-				. "		background-repeat: no-repeat;\n"
-				. "		text-align: right;\n";
-		} else
-			$css .= "		padding-left: 1em;\n";
-
-		$css .= "	}\n\n";
+			$css .= "background-image: url($image); "
+                . "background-position: left center; "
+				. "background-repeat: no-repeat; "
+				. "text-align: right; ";
+		} 
+        
+		$css .= "}\n";
 
 		$view->stream_append('css', $css);
+        
+        $view->render_css($this->get_declaration(), "footer");
 
-		$tag = $this->get_property('tag');
+		$text = $this->get_declaration()->get_text();
 
-		if ($tag)
-			$view->stream_append('html-body', $tag);
+		if ($text)
+			$view->stream_append('html-body', $text);
 	}
 }

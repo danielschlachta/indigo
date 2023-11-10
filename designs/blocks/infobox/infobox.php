@@ -5,13 +5,12 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @package Blocks */
+
 namespace Indigo\Design\Blocks;
 
 /**
- * Decorates links with arrow icons.
- * @param \idg_view $view
- * @param string $text
- * @return string
+ * Decorates links with icons, used by infobox.
  */
 function infobox_filter_links(\idg_view $view, string $text): string {
     $output = $text;
@@ -40,10 +39,6 @@ function infobox_filter_links(\idg_view $view, string $text): string {
 /**
  * A box that displays various types of information gleaned from one of the
  * following data sources: rss.
- * Attribute: infobox
- * Options:
- *   bg_url: the url() part of the background div
- *   caption: the caption for the box
  */
 class infobox extends \idg_fragment_implementation {
 

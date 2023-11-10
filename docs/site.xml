@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<site name="indigo"	content-language="en" index-document="main/home">
+<site name="indigo"	
+      content-language="en" 
+      index-document="main/home"
+      title-reverse-order="yes">
     <attribute name="blocks::image">
         <option name="src">pages/main/home/randomsymbols.jpg</option>
     </attribute>
 
-    <folder id="main" name="Main">
+    <folder id="main" 
+            name="Main"
+            show-name="no">
         <document id="home"
                   name="Home"
                   description="Welcome to indigo"
@@ -92,7 +97,9 @@
         </document>
     </folder>
 
-    <folder id="resources" name="Resources">
+    <folder id="resources" 
+            name="Resources"
+            show-name="no">
         <attribute name="image">
             <option name="src">pages/resources/tutorial/sneakers.jpg</option>
         </attribute>
@@ -101,7 +108,7 @@
             href="pages/resources/tutorial/tutorial.xml"
             xmlns:xi="http://www.w3.org/2003/XInclude" />
         
-            <document id="reference"
+        <document id="reference"
                   name="Reference"
                   description="Further Reading">
 

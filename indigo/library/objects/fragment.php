@@ -12,7 +12,7 @@ class idg_fragment_type extends idg_view_element_type {
 
     function __construct() {
         parent::__construct();
-        
+
         $this->register_property('class');
         $this->set_property_mandatory('class');
         $this->register_property('source');
@@ -42,11 +42,11 @@ class idg_fragment extends idg_view_element implements idg_parameterized {
 
         if (($anchor = $this->get_property('anchor')))
             $view->stream_append('html-body', "<span id=\"$anchor\"></span>");
-                
+
         $datasource = null;
         if (($source_name = $this->get_property('source')))
             $datasource = $document->get_datasource($source_name);
-
+        
         $object = new $class_name($this, $datasource);
         $object->_render($document, $view);
     }
@@ -99,10 +99,12 @@ abstract class idg_fragment_implementation extends idg_object_implementation {
 
     /*
      * Returns the datasource.
-     * @return string|null idg_datasource_implementation The datasource
+     * @return idg_datasource_implementation The datasource
      */
-
-    function get_datasource(): ?idg_datasource_implementation {
+    function get_datasource(): idg_datasource_implementation {
+        if (!$this->datasource)
+            idg_diag($this, "object has no datasource");
+        
         return $this->datasource;
     }
 }

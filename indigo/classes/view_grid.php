@@ -12,11 +12,9 @@ class grid extends \idg_view_implementation {
     function _render(\idg_document $document, \idg_view $view): void {
 
         $idg_id = $this->get_idg_id();
-        $stylesheet = '../designs/fancy/default.css';
-
-        $head = " <link rel=\"stylesheet\" href=\"$stylesheet\">\n";
-
-        $view->stream_append('html-head', $head);
+        //$stylesheet = 'views/fancy/style.css';
+        //$head = " <link rel=\"stylesheet\" href=\"$stylesheet\">\n";
+        //$view->stream_append('html-head', $head);
 
         $nav = $view->get_child_by_key('name', 'nav');
         $header = $view->get_child_by_key('name', 'header');
@@ -24,32 +22,21 @@ class grid extends \idg_view_implementation {
         $article = $view->get_child_by_key('name', 'article');
         $footer = $view->get_child_by_key('name', 'footer');
 
-        $css = "	body {\n"
-            . "		font-family: Liberation Serif', sans-serif;\n"
-            . "		font-size: 110%;\n"
-            . "		margin: 0;\n"
-            . "		padding: 0;\n"
-            . "	}\n\n"
-            . "	*, *:before, *:after {\n"
-            . "		box-sizing: border-box;\n"
-            . "	}\n\n"
-            . "	div#$idg_id {\n"
-            . "		max-width: 940px;\n"
-            . "		width: 66%;\n"
-            . "		margin: 2em;\n"
-            . "		float: left;\n"
-            . "		display: grid;\n"
-            . "		grid-template-columns: min-content 1fr;\n"
-            . "		grid-gap: 10px;\n"
-            . "	}\n\n"
-            . "	div#$idg_id > * {\n"
-            . "		padding: 20px;\n"
-            . "		margin-bottom: 10px;\n"
-            . "		border-radius: 5px;\n"
-            . "	}\n\n";
+        $css = "body { font-size: 100%; margin: 0; padding: 1em; }\n"
+            . "*, *:before, *:after { box-sizing: border-box; }\n"
+            . "div#$idg_id { max-width: 940px; width: 66%;"
+            . " float: left;" 
+            . " display: grid; grid-template-columns: min-content 1fr; grid-gap: 10px;"
+            . " margin-bottom: 1em; }\n"
+            . "div#$idg_id > * { border-radius: 5px; }\n"
+            . "@supports (display: grid) {\n"
+            . " #$idg_id > * { width: auto; }\n"
+            . "}\n";
 
         $view->stream_append('css', $css);
 
+        $view->render_css($this->get_declaration());
+        
         $view->stream_append('html-body', "<div id=\"$idg_id\">\n");
 
         // header
@@ -65,54 +52,52 @@ class grid extends \idg_view_implementation {
 
         // sidebar
         if ($aside) {
-            $view->stream_append('html-body', "<aside>\n");
-            $view->stream_append('css', "aside { float: left; width: 19.1489%; }\n");
+            $view->stream_append('css',
+                "aside { float: left; width: 19.1489%; min-width: 1.5em; }\n");
+        
+            $view->stream_append('html-body', "<aside>&middot;<br>\n");
             $aside->_render($document, $view);
             $view->stream_append('html-body', "</aside>\n");
         }
 
         // content
-        $view->stream_append('css', " article { float: right; width: 79.7872%; " 
-            . " padding-top: 0.9em; padding-bottom: 0.5em; padding-right: 1.5em; }\n");
-            
+        $view->stream_append('css', "article { float: right; width: 79.7872%; }\n");
+        
         $view->stream_append('html-body', "<article>\n");
 
         if ($article)
             $article->_render($document, $view);
         else
-            $view->stream_append('html-body', "<code>This page intentionally left blank.</code>\n");
+            $view->stream_append('html-body', 
+                "<code>This page intentionally left blank.</code>\n");
 
         $view->stream_append('html-body', "</article>\n");
 
         // footer
         if ($footer) {
-        $view->stream_append('css', " footer { float: right; width: 79.7872%; "
-            . "	grid-column: 1 / -1; clear: both; }\n");
-        $view->stream_append('html-body', "<footer>\n");
-        $footer->_render($document, $view);
-        $view->stream_append('html-body', "\n</footer>\n");
+            $view->stream_append('css',
+                "footer { float: right; width: 79.7872%;"
+                . "	grid-column: 1 / -1; clear: both; }\n");
+
+            $view->stream_append('html-body', "<footer>\n");
+            $footer->_render($document, $view);
+            $view->stream_append('html-body', "\n</footer>\n");
         }
 
         // navigation
         if ($nav) {
-            $view->stream_append('css', "nav { position: fixed; top: 0; left: 0; " .
-                "height: 4em; width: 95%; border-radius: 1em; }\n");
-            $view->stream_append('css-print', "nav { display: none; }\n");
-            $view->stream_append('html-body', "	<nav>\n");
-            $nav->_render($document, $view);
-            $view->stream_append('html-body', "	</nav>\n");
-        }
+            $view->stream_append('css',
+                "nav { position: fixed; top: 0; left: 0; }\n");
+            $view->stream_append('css-print',
+                "nav { display: none; }\n");
 
-        $view->stream_append('css',
-            "	@supports (display: grid) {\n"
-            . "		#$idg_id > * {\n"
-            . "			width: auto;\n"
-            . "			margin: 0;\n"
-            . "		}\n"
-            . "	}\n\n");
+            $view->stream_append('html-body', "<nav>");
+            $nav->_render($document, $view);
+            $view->stream_append('html-body', "</nav>\n");
+        }
 
         // page map
         \Indigo\Module\Pagemap\add_to_view($view,
-            'bottom: 0', 'right: 0', '25%', '93%');
+            'bottom: 20px', 'right: 20px', '25%', '93%');
     }
 }

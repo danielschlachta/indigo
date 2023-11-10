@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    padding: 0;
+ 	font-size: 120%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	width: 100%;
+}
+
+#Logo {
+	position: relative;
+	top: 15px;
+}
+
+#Header {
+	position: relative;
+	text-align: left;
+	width: 85%;
+}
+
+#HeaderBar {
+	position: relative;
+	bottom: -2px;
+	margin: 0px;
+	left: 45px;
+	width: 100%;
+	height: 20px;
+	text-align: right;
+	border-bottom: 1px solid black;
+}
+
+#HeaderText {
+	position: absolute;
+	bottom: 4px;
+	right: 0px;
+}
+
+#HeaderNav {
+	position: relative;
+	text-align: right;
+	width: 100%;
+	left: 30px;
+}
+
+#HeaderNavTxt {
+	margin-top: 7px;
+	margin-right: -12px;
+}
+
+#HeaderBtn {	
+	padding-left: 24px;
+    padding-top: 2px;
+	position: relative;
+	float: left;
+    font-family: sans;
+}
+
+#TextBody {
+	position: absolute;
+	top: 100px;
+	text-align: left;
+	left: 5%;
+	width: 80%;
+}
+
+#footer {
+	border-top: 1px solid black;
+	padding-top: 8px;
+	padding-bottom: 1em;
+	font-size: 80%;
+	width: 33%;
+	margin-left: -10px;
+}
+

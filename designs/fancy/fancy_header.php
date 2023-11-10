@@ -5,30 +5,30 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @package Fancy */
+
 namespace Indigo\Design\Fancy;
 
-class fancy_header extends \idg_fragment_implementation {
+class header extends \idg_fragment_implementation {
 
-    function _render(&$document, &$view)
-	{
-		$image = '../docs/views/fancy/caption.png';
+    function _render(&$document, &$view) {
+        $image = '../docs/views/fancy/caption.png';
         $idg_id = $this->get_idg_id();
 
-		$css = "	#caption {\n"
-			. "		margin: 0; padding: 0.1em;\n"
-			. "	}\n\n";
+        $css = "#caption { margin: 0; padding: 0.1em; }\n";
 
-			if (@$image)
-			$css .= "	#$idg_id {\n"
-				. "		background-image: url($image);\n"
-				. "		background-repeat: no-repeat;\n"
-				. "		background-position: right center;\n"
-				.  "	}\n\n";
+        if (@$image)
+            $css .= "div#$idg_id { margin: 0.5em;"
+                . " background-image: url($image);"
+                . " background-repeat: no-repeat;"
+                . " background-position: right center; }\n";
 
-		$view->stream_append('css', $css);
+        $view->stream_append('css', $css);
+        
+        $view->render_css($this->get_declaration(), 'header');
 
-		$caption = $this->get_property('tag');
-		$view->stream_append('html-body', "<div id=\"$idg_id\">"
-			. "<h1 id=\"caption\">foobar</h1></div>");
-	}
+        $caption = $document->get_property('description');
+        $view->stream_append('html-body', "<div id=\"$idg_id\">"
+            . "<h1 id=\"caption\">$caption</h1></div>");
+    }
 }

@@ -8,7 +8,7 @@
 /**
  * Type information for idg_filter.
  */
-class idg_filter_type extends idg_view_element_type {
+class idg_filter_type extends idg_treenode_type {
 
     function __construct() {
         parent::__construct(false);
@@ -40,7 +40,7 @@ class idg_filter_type extends idg_view_element_type {
  * instead, unless <code>apply</code> is set to <code>no</code> in which case it remains 
  * inactive but error checking is still performed (useful for debugging).</p>
  */
-class idg_filter extends idg_view_element {
+class idg_filter extends idg_treenode {
 
     function __construct() {
         parent::__construct('filter');

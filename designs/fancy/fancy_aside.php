@@ -5,39 +5,36 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @package Fancy */
+
 namespace Indigo\Design\Fancy;
 
-class fancy_aside extends \idg_fragment_implementation {
+class aside extends \idg_fragment_implementation {
 
-    function _render(&$document, &$view) {
+    function _render(\idg_document $document, \idg_view $view): void {
         if (!($datasource = $this->get_datasource()))
             return;
 
         $doc_path = $document->get_path();
-        $url = false;
-
-        return;
-        $body = "<ul>\n";
+        $path = null;
+        $body = '';
 
         foreach ($datasource as $count => $node) {
-            if (($path = @$token['path'])) {
-                if ($path != $doc_path)
-                    continue;
-
-                if ($node['type'] != 'anchor')
-                    continue;
-
-                $name = $node['name'];
-                $anchor = $node['anchor'];
-
-                $body .= "  <li><div><a href=\"$url#$anchor\">$name</a></div>\n";
+            if (@$node['path']) {
+                $path = $node['path'];
+                continue;
             }
-
-            $body .= "</ul>\n";
-
-            if ($body != "<ul>\n</ul>\n")
-                $view->stream_append('html-body', "$body\n");
+            
+            $anchor = @$node['anchor'];
+            $name = @$node['name'];
+            
+            if ($path == $doc_path && $anchor) {
+                $body .= "  <li><div><a href=\"#$anchor\">$name</a></div>\n";
+            }
         }
+        
+        $view->render_css($this->get_declaration(), 'aside');    
+        $view->stream_append('html-body', $body);
     }
 }
     

@@ -20,6 +20,7 @@ class idg_document_type extends idg_site_element_type {
         /** @todo Create an id (use core for UUID?) if none is set * */
         $this->set_property_mandatory('id');
 
+        $this->register_property('title');
         $this->register_property('uuid');
 
         $this->set_property_hook('title', '$this->get_default_title');
@@ -45,7 +46,6 @@ class idg_document extends idg_site_element {
      * can be a direct sibling of an idg_site object.
      * </blockquote>
      * @return idg_folder|null The folder object
-     */
     function get_folder(): ?idg_folder {
         $folder = $this;
 
@@ -54,6 +54,8 @@ class idg_document extends idg_site_element {
 
         return $folder;
     }
+     * 
+     */
 
     /**
      * Returns a datasource object for the given source name.
@@ -121,7 +123,7 @@ class idg_document extends idg_site_element {
 
         $tmp = $this;
         $path = '';
-        $reverse = $site->get_property('title-reverse-order') != 'no';
+        $reverse = $site->get_property('title-reverse-order') == 'yes';
         $separator = $site->get_property('title-separator');
 
         if (!$separator)
@@ -170,6 +172,13 @@ class idg_document extends idg_site_element {
         parent::_get_token($token);
 
         $token['path'] = $this->get_path();
+        
+        if ($description = $this->get_property('description')) 
+            $token['description'] = $description;
+        
+        if ($navigation_comment = $this->get_property('navigation-comment')) 
+            $token['navigation-comment'] = $navigation_comment;
+        
         if (($parent = $this->get_parent())->get_element_name() == 'folder')
             $token['parent-folder-id'] = $parent->get_property('id');
     }

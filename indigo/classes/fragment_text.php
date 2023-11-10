@@ -24,6 +24,6 @@ class text extends \idg_fragment_implementation {
             }
 
         $view->render_css($this->get_declaration(), "span#$idg_id");
-        $view->stream_append('html-body', "<span id=\"$idg_id\">$text</span>");
+        $view->stream_append('html-body', "<span id=\"$idg_id\">$text</span>\n");
     }
 }

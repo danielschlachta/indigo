@@ -76,7 +76,7 @@ function idg_init(): void {
     if (version_compare(PHP_VERSION, IDG_MIN_PHP_VERSION, '<'))
         idg_complain_version();
     
-    if (preg_match('/^PHP ([0-9.]+) Development Server/', $_SERVER['SERVER_SOFTWARE'],
+    if (preg_match('/^PHP ([0-9.]+) Development Server/', @$_SERVER['SERVER_SOFTWARE'],
         $match)) {
         define('IDG_PHP_SERVER_VERSION', $match[1]);
         define('IDG_DEFAULT_USE_PATH_INFO', true); 
@@ -87,7 +87,7 @@ function idg_init(): void {
     
     define('IDG_URL_DEFAULT_FOLDER_SEPARATOR', '/');
     
-    $user_agent = explode('/', $_SERVER['HTTP_USER_AGENT']);
+    $user_agent = explode('/', @$_SERVER['HTTP_USER_AGENT']);
 
     if ($user_agent[0] == 'Wget') {
         define('IDG_WGET_VERSION', $user_agent[1]);

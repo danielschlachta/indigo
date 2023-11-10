@@ -26,15 +26,10 @@ class simple extends \idg_view_implementation {
             . "div#$idg_id { position: relative; top: 0; left: 0; "
             . "overflow-y: hidden; }\n");
 
-        $style = \idg_view::CSS_PROPERTIES;
-        unset($style['style']);
-        $view->render_css($this->get_declaration(), '', $style);
-
         $this->stream_append('html-body', "<div id=\"$idg_id\">\n");
 
-        foreach ($children as $child)
-            $child->_render($document, $view);
-
+        parent::_render($document, $view);
+        
         $this->stream_append('html-body', "</div>\n");
     }
 }

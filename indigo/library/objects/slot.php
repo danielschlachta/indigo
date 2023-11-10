@@ -41,7 +41,6 @@ class idg_slot extends idg_view_element {
         $view->render_css($this, "div#$idg_id");
         $view->stream_append('html-body', "<div id=\"$idg_id\">\n");
 
-
         if (($renderers = $document->get_renderers($name)))
         foreach ($renderers as $renderer) {
             if (($anchor = $renderer->get_anchor())) 

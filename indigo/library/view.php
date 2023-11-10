@@ -10,16 +10,14 @@
  */
 class idg_view_element_type extends idg_treenode_type {
 
-    function __construct(bool $register_styles = true) {
+    function __construct() {
         parent::__construct();
 
-        if ($register_styles) {
-            foreach (idg_view::CSS_PROPERTIES as $property => $style)
-                $this->register_property($property);
+        foreach (idg_view::CSS_PROPERTIES as $property => $style)
+            $this->register_property($property);
 
-            $this->register_property('style-list-image');
-            $this->register_property('style-print');
-        }
+        $this->register_property('style-list-image');
+        $this->register_property('style-print');
     }
 }
 
@@ -28,9 +26,7 @@ class idg_view_element_type extends idg_treenode_type {
  */
 abstract class idg_view_element extends idg_treenode {
 
-    function _render(idg_document $document, idg_view $view): void {
-        
-    }
+    abstract function _render(idg_document $document, idg_view $view): void;
 }
 
 /**
@@ -79,12 +75,12 @@ class idg_view extends idg_view_element {
     private string $output = '';
     private array $filters = [];
     private ?idg_core $core;
-    
+
     function __construct(idg_core $core = null) {
         parent::__construct('view');
         $this->core = $core;
     }
-   
+
     /**
      * @todo Maybe we don't need this?
      * @param idg_view_element $element
@@ -102,14 +98,17 @@ class idg_view extends idg_view_element {
      * @param array $style An array of object property to <code>css</code> mappings
      * @return bool Whether something was emitted
      */
-    function render_css(idg_object $object, string $id,
+    function render_css(idg_object $object, string $id = null,
         array $styles = idg_view::CSS_PROPERTIES): bool {
 
         $retval = false;
 
         foreach ($styles as $key => $value)
             if (($style = $object->get_property($key))) {
-                if ($value != '')
+                if ($key == 'style' && $object instanceof idg_view)
+                    $value = 'body';
+
+                if ($value && $id)
                     $value = ' ' . $value;
                 $this->stream_append('css', "$id$value { $style }\n");
                 $retval = true;
@@ -128,7 +127,7 @@ class idg_view extends idg_view_element {
 
         return $retval;
     }
-    
+
     /**
      * Adds a filter with a given name.
      * It is not an error if the filter already exists. If <code>$fun</code>
@@ -149,7 +148,7 @@ class idg_view extends idg_view_element {
     function add_filter(string $function, callable $fun = null): void {
         if (!$fun)
             $fun = @$this->filter_repo[$function];
-        
+
         if (!$fun && !function_exists($function))
             idg_diag($this, "filter function '$function' does not exist");
 
@@ -190,7 +189,7 @@ class idg_view extends idg_view_element {
         } else
             idg_diag($this, "stream  '$stream_name' does not exist");
     }
-    
+
     /**
      * Returns a stream the way it is, which depends on when this function is called.
      * This is useful for data sources such as \Indigo\Datasource\extlinks placed
@@ -221,13 +220,13 @@ class idg_view extends idg_view_element {
      * @param idg_view $view
      */
     function _render(idg_document $document, idg_view $view): void {
-        $style = array_replace(idg_view::CSS_PROPERTIES, ['style' => 'body']);
-        $this->render_css($this, '', $style);
+        $this->render_css($this);
 
         foreach ($this->get_children() as $child)
-            $child->_render($document, $this);
+            if (!($child instanceof idg_filter))
+                $child->_render($document, $this);
     }
-    
+
     /**
      * 
      * @param idg_document $document
@@ -247,16 +246,16 @@ class idg_view extends idg_view_element {
         $render_start = idg_view::milliseconds();
 
         foreach ($children as $child)
-            if ($child->get_element_name() == 'filter') 
+            if ($child instanceof idg_filter)
                 $child->_apply_filter($this);
-        
+
         if ($this->get_property('class'))
             $this->create_instance()->_render($document, $this);
         else
             $this->_render($document, $this);
-        
+
         foreach ($children as $child)
-            if ($child->get_element_name() == 'filter')
+            if ($child instanceof idg_filter)
                 $this->remove_filter($child->get_property('name'));
 
         $render_time = idg_view::milliseconds() - $render_start;
@@ -267,7 +266,7 @@ class idg_view extends idg_view_element {
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_mod) . " GMT");
 
         $wget = IDG_WGET_VERSION ? " for wget v" . IDG_WGET_VERSION : '';
-            
+
         $this->_print('<!-- document UUID=' . $document->get_property('uuid')
             . ' generated on ' . date('r', time())
             . " by " . IDG_PROGRAM_NAME . "$wget, time: $render_time ms  -->\n"
@@ -286,7 +285,7 @@ class idg_view extends idg_view_element {
                 . "type=\"image/x-icon\">\n");
 
         if ($this->streams['html-head'] != '')
-            $this->_print($this->streams['html-head'] . "\n");
+            $this->_print($this->streams['html-head']);
 
         if ($this->streams['js'] != '') {
             $this->_print("<script>\n");
@@ -311,7 +310,7 @@ class idg_view extends idg_view_element {
         $this->_print($this->streams['html-body']);
         $this->_print("</body>\n</html>");
     }
-    
+
     /**
      * Returns the idg_core object the view was initialized with or a default one.
      * @return idg_core The core
@@ -319,10 +318,10 @@ class idg_view extends idg_view_element {
     function core(): idg_core {
         if (!$this->core)
             $this->core = new idg_core;
-        
+
         return $this->core;
     }
-    
+
     private static function uuid_v4(): string {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"
@@ -342,7 +341,7 @@ class idg_view extends idg_view_element {
     }
 
     private static function milliseconds(): int {
-        return (int)(hrtime(true) / 1e+6);
+        return (int) (hrtime(true) / 1e+6);
     }
 }
 
@@ -350,7 +349,7 @@ class idg_view extends idg_view_element {
  * An object instance of a view.
  * Actual classes need to derive from this one since they do not get type information.
  */
-class idg_view_implementation extends idg_object_implementation {
+abstract class idg_view_implementation extends idg_object_implementation {
 
     /**
      * Convenience function: calls the view's get_children() method.
@@ -366,5 +365,9 @@ class idg_view_implementation extends idg_object_implementation {
      */
     protected function stream_append(string $stream_name, string $content): void {
         $this->get_declaration()->stream_append($stream_name, $content);
+    }
+
+    protected function _render(idg_document $document, idg_view $view): void {
+        $view->_render($document, $view);
     }
 }

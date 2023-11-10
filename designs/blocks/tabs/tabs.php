@@ -5,6 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @package Blocks */
+
 namespace Indigo\Design\Blocks;
 
 class tabs extends \idg_fragment_implementation {

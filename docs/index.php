@@ -40,12 +40,12 @@ if ($design == 'mobile')
 
 $core = new idg_core($design, "../designs/$design");
 
-if (!($document = $site->get_document($core->get_request_document())))
+if (!($doc_1 = $site->get_document($core->get_request_document())))
     die('oknodoc');
 
 $view = new idg_view($core);
 
 $view->read_xml("views/$design/$design.xml");
 $view->check();
-$view->render($document);
+$view->render($doc_1);
 $view->print();

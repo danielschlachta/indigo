@@ -17,14 +17,8 @@ if (!file_exists($pagemap_main)) {
 
 function get_css($position_vert, $position_horz,
     $width, $height) {
-    return "	#map {\n"
-        . "		position: fixed;\n"
-        . "		$position_vert;\n"
-        . "		$position_horz;\n"
-        . "		width: $width;\n"
-        . "		height: $height;\n"
-        . "		z-index: 200;\n"
-        . "	}\n\n";
+    return "#map { position: fixed; $position_vert; $position_horz;" 
+        . " width: $width; height: $height; z-index: 200; }\n";
 }
 
 /**

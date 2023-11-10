@@ -28,6 +28,7 @@ ENDLIPSUM;
 
 $form = <<<ENDSTART
     
+    <div style="padding-top: 1.5em;">
     <div style="font-size: 200%; font-family: sans-serif;
         padding-right: 0.5em; float: left;">
         Choose a design:</div>
@@ -35,18 +36,18 @@ $form = <<<ENDSTART
 		
 		<select name="design" onchange="this.form.submit();" 
             style="font-size: 200%; display:  background: #e0e0e0;">
-
 ENDSTART;
 
 $design = @$_GET['design'];
 $design = $design ? $design : 'blocks';
 
+$view = new idg_view(new idg_core($design));
+
 $directory = scandir('.');
 
 for ($i = 0; $i < count($directory); $i++) {
-
     $name = $directory[$i];
-
+    
     if (in_array($name, array('.', '..')) || !is_dir($name))
         continue;
 
@@ -55,10 +56,14 @@ for ($i = 0; $i < count($directory); $i++) {
     $form .= "              <option value=\"$name\"$select>$name</option>\n";
 }
 
+$anchor_url = $view->core()->get_full_uri('folder-2/doc-5');
+
 $form .= <<<ENDEND
 		</select>
 	</form>
+    </div>
         
+    <p><a href="$anchor_url&design=$design">Anchors are here</a></p>
 ENDEND;
 
 $text = new idg_fragment;
@@ -68,20 +73,17 @@ $text->set_properties(array(
 ));
 $text->set_text($form . $lipsum . $lipsum . $lipsum . $lipsum);
 
-// -----------------------------------------------------------------------
-
-$site = new idg_site;
-
-$document = new idg_document;
-$document->set_properties([
+$doc_1 = new idg_document;
+$doc_1->set_properties([
     'id' => 'doc-1',
     'name' => "Document 1",
+    'description' => 'Description for Document 1',
     'title' => "indigo test card for design '$design'"
 ]);
 
 $folder1 = new idg_folder;
 $folder1->set_properties(['id' => 'folder-1', 'name' => 'Folder 1']);
-$folder1->add_child($document);
+$folder1->add_child($doc_1);
 
 $pg = 2;
 
@@ -92,11 +94,15 @@ for ($i = 1; $i < 3; $i++) {
     $$name->set_properties([
         'id' => "doc-$cur_pg",
         'name' => $name,
-        'title' => "Document $cur_pg"
+        'title' => "Document $cur_pg",
+        'navigation-comment' => "Document is in Folder 1"
     ]);
 
     $folder1->add_child($$name);
 }
+
+$site = new idg_site;
+$site->set_property('index-document', 'folder-1/doc-1');
 
 $site->add_child($folder1);
 
@@ -143,6 +149,10 @@ $site->add_child($folder3);
 
 $doc = 'doc-5';
 
+/**
+ * @todo anchor needs source *and* slot?
+ */
+
 for ($i = 1; $i < 6; $i++) {
     $name = "Anchor $i";
     $$name = new idg_renderer;
@@ -157,13 +167,12 @@ for ($i = 1; $i < 6; $i++) {
 }
 
 $site->check();
+$display_doc = $site->get_document($view->core()->get_request_document());
 
-$view = new idg_view(new idg_core($design));
-    
 $func = $view->core()->qualify('testcard');
-$func($document, $view, $text);
+$func($display_doc, $view, $text);
 
 $view->check();
-$view->render($document);
+$view->render($display_doc);
 $view->print();
 

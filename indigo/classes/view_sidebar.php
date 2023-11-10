@@ -16,69 +16,48 @@ namespace Indigo\View;
  */
 class sidebar extends \idg_view_implementation {
 
-    function _render(\idg_document $document): void {
-        $view->render_css($this->get_declaration());
-        
+    function _render(\idg_document $document, \idg_view $view): void {
         if (!($children =  $this->get_children()) || count($children) < 2)
             idg_diag($this, 'must have two or three children');
 
+        $fixed = $children[0];
+
+        $idg_id = $this->get_idg_id();
+        $fixed_id = $idg_id . '-fixed';
+
         $style_body = $this->get_property('style');
-        
+       
         $style = \idg_view::CSS_PROPERTIES;
         unset($style['style']);
         $view->render_css($this->get_declaration(), '', $style);
         
-        $fixed = $children[0];
-        $fixed_id = $fixed->get_idg_id() . '-part';
-        $style_fixed = $fixed->get_property('style');
-
-        $main = $children[1];
-        $main_id = $main->get_idg_id() . '-part';
-        $style_main = $main->get_property('style');
-
-        if ($bg = $children[2]) {
-            $bg_id = $bg->get_idg_id() . '-part';
-            $style_bg = $bg->get_property('style');
-        }
-
-        $fixed_width = $this->parameters['fixed-width'];
-        $fixed_position = $this->parameters['fixed-position'];
-        $attach_right = ($fixed_position == 'right');
-
-        /**
-         * @todo We need a mechanism for this.
-         */
-        $style_body = $this->get_property('style');
-
-        $css = "	body { padding: 0; margin: 0; width: 100%; "
-            . "overflow-x: hidden; $style_body; }\n"
-            . "div#$fixed_id { overflow: hidden; "
-            . "position: fixed; top: 0; $fixed_position: 0; "
-            . "height: 100%; width: $fixed_width; "
-            . "overflow: hidden; $style_fixed }\n"
-            . "div#$main_id { overflow-y: hidden;"
-            . " margin-$fixed_position: $fixed_width; $style_main }\n";
-
-        if (@$style_bg)
-            $css .= "div#$bg_id { $style_bg }\n";
-
-        $this->stream_append('css', $css);
-
-        $body = '';
+        $this->stream_append('css', "body { padding: 0; margin: 0; width: 100%;"
+            . " overflow-x: hidden; $style_body }\n"
+            . "div#$fixed_id { overflow: hidden;"
+            . " position: fixed; top: 0; left: 0;"
+            . " height: 100%; width: 100px;"
+            . "overflow: hidden; }\n"
+            . "div#$idg_id { overflow-y: hidden;"
+            . " margin-left: 100px; }\n");
         
-        if ($bg) {
-            $this->stream_append('html-body', "<div id=\"$bg_id\">\n");
-            $bg->_render($document, $view);
-            $body = "</div>\n";
-        } else
-
-        $body .= "<div id=\"$fixed_id\">\n";
-        $this->stream_append('html-body', $body);
+        $view->render_css($fixed, "div#$fixed_id");
+        
+        $this->stream_append('html-body', "<div id=\"$fixed_id\">\n");
         $fixed->_render($document, $view);
+        $this->stream_append('html-body', "</div>\n");
 
-        $body = "</div>\n<div id=\"$main_id\">\n";
-        $this->stream_append('html-body', $body);
-        $main->_render($document, $view);
+        $this->stream_append('html-body', "<div id=\"$idg_id\">\n");
+        
+        for ($i = 1; $i < count($children); $i++) {
+            $main = $children[$i];
+            
+            //$view->render_css($main, "div#$idg_id-$i");
+            
+            $this->stream_append('html-body', "<div id=\"$idg_id-$i\">\n");
+            $main->_render($document, $view);
+            $this->stream_append('html-body', "</div>\n");
+        }
+        
         $this->stream_append('html-body', "</div>\n");
     }
 }

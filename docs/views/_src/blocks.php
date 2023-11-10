@@ -25,7 +25,7 @@ function configure_view(idg_view $view): void {
         . "margin-left: 130px; margin-right: 330px;",
         'style-a' => "text-decoration: none; color: black; " 
         . "background: url($elements/underline.png) bottom left repeat-x; " 
-        . "padding-bottom: 1px; padding-right: 1px; margin-right: -1px; " 
+        . "padding-bottom: 1px;" 
         . "white-space: nowrap;",
         'style-a-hover' => "background: #729e8d " 
         . "url($elements/underline.png) bottom left repeat-x;",
@@ -49,16 +49,14 @@ function configure_view(idg_view $view): void {
         . "padding: 0 30px 30px 23px; " 
         . "background: #b4d2b0 url($elements/line_red.png) repeat-y; " 
         . "text-align: justify;",
-        'style-h1' => "padding: 0.35em 0.5em 0.35em 0; " 
-        . "border: solid #729e8d; border-width: 2px 0 2px 0; " 
+        'style-h1' =>  "border: solid #729e8d; border-width: 2px 0 2px 0; " 
         . "background: url($elements/randomsymbols_bg.jpg); " 
         . "margin: 0; padding: 0.5em 15px 0.4em 0; text-align: right; "
         . "font-family: 'DejaVu Serif', 'Noto Serif', serif; " 
         . "font-style: italic; font-weight: bold; font-size: 130%;",
-        'style-h2' => "padding: 0 1em 0.1em 0; " 
-        . "border: solid #729e8d; border-width: 1px 0 1px 0; " 
+        'style-h2' => "border: solid #729e8d; border-width: 1px 0 1px 0; " 
         . "background: url($elements/randomsymbols_bg.jpg); " 
-        . "margin: 0; text-align: right; " 
+        . "margin: 0; text-align: right; padding: 0 1em 0.1em 0; " 
         . "font-family: 'Noto Serif', serif; " 
         . "font-style: italic; font-weight: bold; font-size: 110%;",
         'style-print' => "border: 0; padding: 1em; margin: 100px 0 0 0;"
@@ -219,9 +217,9 @@ function configure_view(idg_view $view): void {
 }
 
 if (!@$_SERVER['HTTP_USER_AGENT']) {
-    require '../../indigo/startup.php';
+    require '../../../indigo/startup.php';
     $view = new idg_view;
-    $view->set_namespace('Indigo\Design\Blocks');
+    $view->core()->set_namespace('Indigo\Design\Blocks');
     configure_view($view);
-    $view->write_xml('blocks/blocks.xml');
+    $view->write_xml('blocks.xml');
 }

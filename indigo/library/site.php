@@ -7,6 +7,10 @@
 
 /**
  * Type information for idg_site.
+ * Adds <code>title</code>, <code>content-language</code>, <code>title-separator</code>,
+ * <code>title-reverse-order</code> properties.
+ * @see idg_document\get_default_title()
+ * @todo Scrap this comment or make it a table ...
  */
 class idg_site_type extends idg_site_element_type {
 
@@ -16,6 +20,11 @@ class idg_site_type extends idg_site_element_type {
         $this->child_types[] = 'idg_datasource';
 
         $this->set_property_mandatory('id', false);
+        
+        $this->register_property('title');
+        $this->register_property('content-language');
+        $this->register_property('title-separator');
+        $this->register_property('title-reverse-order');
     }
 }
 
@@ -143,10 +152,6 @@ abstract class idg_site_element_type extends idg_treenode_type {
         $this->register_property('id');
         $this->set_property_mandatory('id');
 
-        $this->register_property('title');
-        $this->register_property('content-language');
-        $this->register_property('title-separator');
-        $this->register_property('title-reverse-order');
         $this->register_property('description');
         $this->register_property('navigation-comment');
         $this->register_property('index-document');

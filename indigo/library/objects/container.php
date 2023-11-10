@@ -44,14 +44,15 @@ class idg_container extends idg_view_element {
 
         if (($children = $this->get_children())) {
             foreach ($children as $child)
-                if ($child->get_element_name() == 'filter')
+                if ($child instanceof idg_filter)
                     $child->_apply_filter($view);
 
             foreach ($children as $child)
-                $child->_render($document, $view);
+                if (!($child instanceof idg_filter))
+                    $child->_render($document, $view);
 
             foreach ($children as $child)
-                if ($child->get_element_name() == 'filter')
+                if ($child instanceof idg_filter)
                     $view->remove_filter($child->get_property('name'));
         }
 

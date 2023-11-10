@@ -5,32 +5,27 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @package Fancy */
+
 namespace Indigo\Design\Fancy;
 
-class fancy_nav extends \idg_fragment_implementation {
+class nav extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        if (!$datasource = $this->get_datasource())
-            return;
+        $datasource = $this->get_datasource();
+        
+        $view->stream_append('css', 
+            "body { margin-top: 2em; }\n"
+            . "nav { padding: 1em 1em 0.5em 1em; margin: 0; top: -0.5em; left: 1em; }"
+            . ".navlink, .navlink-selected { color: black; text-decoration: none; " 
+            . "padding: 0.5em; }\n"
+            . ".navlink:hover { text-decoration: underline; }\n"
+            . ".navlink-selected { font-weight: bold; }\n");
 
-        $css = "	body {\n"
-            . "	}\n\n"
-            . "	.navlink, .navlink-selected {\n"
-            . "		color: black;\n"
-            . "		padding: 0 1em 0 1em;\n"
-            . "		text-decoration: none;\n"
-            . "	}\n\n"
-            . "	.navlink:hover {\n"
-            . " 		text-decoration: underline;\n"
-            . "	}\n\n"
-            . "	.navlink-selected {\n"
-            . "		font-weight: bold;\n"
-            . "	}\n\n";
-
-        $view->stream_append('css', $css);
-
+        $view->render_css($this->get_declaration(), "nav");
+        
         $document_path = $document->get_path();
-
+        
         foreach ($datasource as $number => $node) {
             $name = $node['name'];
             if (!($path = @$node['path']))
@@ -39,11 +34,13 @@ class fancy_nav extends \idg_fragment_implementation {
             $class = $path == $document_path ? 
                 'navlink-selected' : 'navlink';
             
+            /**
+             * @todo This ugly hack must go!
+             */
+            
             $view->stream_append('html-body', 
-            "<a class=\"$class\" href=\"?design=fancy&display=$path\">" 
+            "<a class=\"$class\" href=\"?view=fancy&display=$path\">" 
             . " <span>$name</span></a>\n");
         }
     }
 }
-
-?>

@@ -5,6 +5,8 @@
  *  License: MIT License, see https://opensource.org/license/mit/
  */
 
+/** @package Blocks */
+
 namespace Indigo\Design\Blocks;
 
 /**
@@ -24,8 +26,8 @@ class dropdown extends \idg_fragment_implementation {
         $idg_id = $this->get_idg_id();
         $tag = $this->get_property('tag');
 
-        $attr = $this->fetch_attribute('blocks::dropdown', $document);
-        $bg_url = $attr->get_parameter('bg-url');
+        $attribute = $this->fetch_attribute('blocks::dropdown', $document);
+        $bg_url = $attribute->get_parameter('bg-url');
 
         $doc_path = $document->get_path();
 
