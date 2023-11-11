@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- generated on Fri, 10 Nov 2023 08:42:34 +0000 by indigo v1.4 -->
+<!-- generated on Sat, 11 Nov 2023 21:48:22 +0000 by indigo v1.4 -->
 <view
     class="Indigo\Design\Blocks\view"
     icon="favicon.png"
@@ -112,8 +112,7 @@
             <option name="bg-url">views/blocks/elements/compass.png</option>
         </attribute>
     </fragment>
-    <container
-        name="image-bg">
+    <container>
         <container
             name="image-sky"
             style="position: fixed; top: 49px; right: 212px; width: 629px; height: 80px; background: url(views/blocks/elements/bg_sky.png) no-repeat; z-index: -1;" />

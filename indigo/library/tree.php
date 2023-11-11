@@ -203,7 +203,8 @@ abstract class idg_leafnode extends idg_object {
                 foreach ($parameters as $key => $value)
                     $xml .= IDG_XML_INDENT . "$indent<parameter name=\"$key\">"
                         . "$value</parameter>\n";
-        }
+        } else
+            $xml .= ">\n";
 
         return $xml;
     }

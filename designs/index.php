@@ -174,5 +174,5 @@ $func($display_doc, $view, $text);
 
 $view->check();
 $view->render($display_doc);
-$view->print();
+$view->emit();
 

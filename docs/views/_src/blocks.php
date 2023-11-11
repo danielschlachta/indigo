@@ -183,9 +183,6 @@ function configure_view(idg_view $view): void {
     $view->add_child($toolbox);
 */
     $background_img = new idg_container;
-    $background_img->set_properties([
-        'name' => 'image-bg'
-    ]);
     $view->add_child($background_img);
 
     $bg_sky_container = new idg_container;

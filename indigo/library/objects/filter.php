@@ -22,7 +22,7 @@ class idg_filter_type extends idg_treenode_type {
 }
 
 /**
- * A filter filters.
+ * A filter.
  * <p>If either the <code>load</code> property is specified or the object
  * has character data, it is considered a declaration. 
  * The text is then considered a function with the following signature:

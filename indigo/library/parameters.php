@@ -6,8 +6,9 @@
  */
 
 /**
- * Interface for parameterized objects, i.e. entities that have a declaration
- * and an implementation part.
+ * Interface for entities that accept parameters.
+ * Object implementations do not automatically inherit parameters.
+ * @see idg_datasource_implementation, idg_fragment_implementation
  */
 interface idg_parameterized {
 

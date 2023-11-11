@@ -20,7 +20,7 @@ class idg_datasource_type extends idg_type {
 }
 
 /**
- * The source of all data.
+ * A data source.
  */
 class idg_datasource extends idg_leafnode implements idg_parameterized {
 
@@ -31,8 +31,8 @@ class idg_datasource extends idg_leafnode implements idg_parameterized {
     }
 
     /**
-     * Produces a token meant for the site's built-in datasource (that is, none).
-     * @param idg_datasource $datasource The datasource
+     * Needs to be implemented for idg_site\get_datasource() but does nothing.
+     * @param idg_datasource $datasource The datasource being created
      * @return <code>true</code>
      */
     protected function _add_token(idg_datasource_implementation $datasource): bool {
@@ -42,7 +42,7 @@ class idg_datasource extends idg_leafnode implements idg_parameterized {
 
 /**
  * An object instance of a data source.
- * Actual classes need to derive from this one since they do not get type information.
+ * Retrieves parameters from the declaration, hence the constructor.
  */
 class idg_datasource_implementation extends idg_object_implementation implements
 Iterator, idg_parameterized {
@@ -51,6 +51,11 @@ Iterator, idg_parameterized {
     private int $position = 0;
     private array $tokens = [];
 
+    /**
+     * A constructor. 
+     * Copies parameters from the parent.
+     * @param idg_leafnode $parent The declaration
+     */
     function __construct(idg_leafnode $parent) {
         parent::__construct($parent);
         if (method_exists($parent, 'get_parameters')) 

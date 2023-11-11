@@ -44,8 +44,8 @@ if (!($doc_1 = $site->get_document($core->get_request_document())))
     die('oknodoc');
 
 $view = new idg_view($core);
-
+$view->set_reload_policy(idg_reload_policy::RELOAD_ALWAYS);
 $view->read_xml("views/$design/$design.xml");
 $view->check();
 $view->render($doc_1);
-$view->print();
+$view->emit();

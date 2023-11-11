@@ -49,10 +49,37 @@ class idg_view_type extends idg_view_element_type {
 }
 
 /**
+ * Specifies how the view should handle the reloading of the emitted page.
+ * @see idg_view\set_reload_policy()
+ */
+class idg_reload_policy {
+
+    /**
+     * Don't do anything regarding last change and caching, default.
+     */
+    const RELOAD_NOHEADER = 0;
+
+    /**
+     * Always reload the page, aggressively sets headers and pragmas.
+     */
+    const RELOAD_ALWAYS = 1;
+
+    /**
+     * Emit Last-Change header according to the view's property which can be set after
+     * rendering.
+     */
+    const RELOAD_LASTCHANGE = 2;
+}
+
+/**
  * A view.
  */
 class idg_view extends idg_view_element {
 
+    /**
+     * Style-related properties recognized by idg_view, idg_container, idg_slot 
+     * and some idg_fragment descendants based on their implementation.
+     */
     const CSS_PROPERTIES = [
         'style' => '',
         'style-h1' => 'h1',
@@ -64,6 +91,8 @@ class idg_view extends idg_view_element {
         'style-img' => 'img'
     ];
 
+    private int $reload_policy = idg_reload_policy::RELOAD_NOHEADER;
+    private int $last_change = 0;
     private array $streams = [
         'html-head' => '',
         'css' => '',
@@ -83,13 +112,12 @@ class idg_view extends idg_view_element {
     }
 
     /**
-     * @todo Maybe we don't need this?
-     * @param idg_view_element $element
-     * @param string $property
-     * @param string $value
+     * Sets the reload policy governing how related headers are handled.
+     * @see idg_reload_policy
+     * @param int $reload_policy The policy as defined in idg_reload_policy
      */
-    function inject_css(idg_view_element $element, string $property, string $value) {
-        
+    function set_reload_policy(int $reload_policy): void {
+        $this->reload_policy = $reload_policy;
     }
 
     /**
@@ -203,12 +231,40 @@ class idg_view extends idg_view_element {
     }
 
     /**
-     * Print everyting.
+     * Returns the idg_core object the view was initialized with or a default one.
+     * @return idg_core The core
      */
-    function print(): void {
+    function core(): idg_core {
+        if (!$this->core)
+            $this->core = new idg_core;
+
+        return $this->core;
+    }
+    
+    /**
+     * Outputs everything, emits headers if requested.
+     */
+    function emit(): void {
         if ($this->output == '')
-            idg_diag($this, "nothing to print, you probably didn't call render()");
+            idg_diag($this, "nothing to do, you probably didn't call render()");
+        if ($this->output == '@done@')
+            idg_diag($this, "output already emitted");
+
+        switch ($this->reload_policy) {
+            case idg_reload_policy::RELOAD_LASTCHANGE:
+                header("Last-Modified: "
+                    . gmdate("D, d M Y H:i:s", $this->last_change) . " GMT");
+                break;
+            case idg_reload_policy::RELOAD_ALWAYS:
+                header("Cache-Control: max-age=3000, no-cache, no-store,"
+                    . " must-revalidate");
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                break;
+        }
+
         echo $this->output;
+        $this->output = '@done@';
     }
 
     private function _print(string $string): void {
@@ -262,7 +318,9 @@ class idg_view extends idg_view_element {
                     if (strtolower($property) == 'font-family') {
                         $match = [];
                         if (preg_match_all("|@([a-z]+)\('([^'\)]*)'\)|", $value, $match))
-                            for ($i = 0; $i < count($match[0]); $i++) {
+                            for ($i = 0;
+                                $i < count($match[0]);
+                                $i++) {
                                 $full = $match[0][$i];
                                 $selector = $match[1][$i];
                                 $font = $match[2][$i];
@@ -316,9 +374,7 @@ class idg_view extends idg_view_element {
         $render_time = idg_view::milliseconds() - $render_start;
 
         $date = new \DateTimeImmutable($document->get_property('last-change'));
-        $last_mod = $date->getTimestamp();
-
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s", $last_mod) . " GMT");
+        $this->last_change = $date->getTimestamp();
 
         $wget = IDG_WGET_VERSION ? " for wget v" . IDG_WGET_VERSION : '';
 
@@ -327,9 +383,10 @@ class idg_view extends idg_view_element {
             . " by " . IDG_PROGRAM_NAME . "$wget, time: $render_time ms  -->\n"
             . "<!DOCTYPE html>\n");
 
-        $this->_print('<html lang="'
-            . $document->get_site()->get_property('content-language')
-            . "\">\n"
+        if (($lang = $document->get_site()->get_property('content-language')))
+            $lang = " lang=\"$lang\"";
+
+        $this->_print("<html$lang>\n"
             . "<head>\n"
             . "<title>" . $document->get_property('title') . "</title>\n"
             . "<meta http-equiv=\"Content-Type\" content=\"text/html;"
@@ -377,31 +434,12 @@ class idg_view extends idg_view_element {
         $this->_print("</body>\n</html>");
     }
 
-    /**
-     * Returns the idg_core object the view was initialized with or a default one.
-     * @return idg_core The core
-     */
-    function core(): idg_core {
-        if (!$this->core)
-            $this->core = new idg_core;
-
-        return $this->core;
-    }
-
     private static function uuid_v4(): string {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            // 32 bits for "time_low"
             mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-            // 16 bits for "time_mid"
             mt_rand(0, 0xffff),
-            // 16 bits for "time_hi_and_version",
-// four most significant bits holds version number 4
             mt_rand(0, 0x0fff) | 0x4000,
-            // 16 bits, 8 bits for "clk_seq_hi_res",
-// 8 bits for "clk_seq_low",
-// two most significant bits holds zero and one for variant DCE1.1
             mt_rand(0, 0x3fff) | 0x8000,
-            // 48 bits for "node"
             mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
         );
     }
@@ -415,7 +453,8 @@ class idg_view extends idg_view_element {
  * An object instance of a view.
  * Actual classes need to derive from this one since they do not get type information.
  */
-abstract class idg_view_implementation extends idg_object_implementation {
+abstract
+    class idg_view_implementation extends idg_object_implementation {
 
     /**
      * Convenience function: calls the view's get_children() method.
