@@ -15,17 +15,10 @@ if (!file_exists($pagemap_main)) {
     exit;
 }
 
-function get_css($position_vert, $position_horz,
-    $width, $height) {
+function get_css($position_vert, $position_horz, $width, $height) {
     return "#map { position: fixed; $position_vert; $position_horz;" 
         . " width: $width; height: $height; z-index: 200; }\n";
 }
-
-/**
- * @todo: The path isn't always right!
- * @param type $view
- * @return type
- */
 
 function get_html_body($view) {
     global $idg_path;
@@ -40,7 +33,7 @@ function add_to_view($view,
     $position_vert = 'top: 0', $position_horz = 'left: 0',
     $width = '160px', $height = '100%') {
 
-    $view->stream_append('css', get_css(
-            $position_vert, $position_horz, $width, $height));
+    $view->stream_append('css', get_css($position_vert, $position_horz, 
+        $width, $height));
     $view->stream_append('html-body', get_html_body($view));
 }

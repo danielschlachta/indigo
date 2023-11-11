@@ -45,7 +45,7 @@ class idg_container extends idg_view_element {
         if (($children = $this->get_children())) {
             foreach ($children as $child)
                 if ($child instanceof idg_filter)
-                    $child->_apply_filter($view);
+                    $child->apply_filter($view);
 
             foreach ($children as $child)
                 if (!($child instanceof idg_filter))

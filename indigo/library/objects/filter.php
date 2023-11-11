@@ -70,7 +70,7 @@ class idg_filter extends idg_treenode {
      * Gets executed in various places to do the actual work.
      * @param idg_view $view The view with which to register
      */
-    function _apply_filter(idg_view $view): void {
+    function apply_filter(idg_view $view): void {
         if (($load = $this->get_property('load')))
             $this->load($load);
 

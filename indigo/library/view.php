@@ -72,6 +72,7 @@ class idg_view extends idg_view_element {
         'html-body-start' => '',
         'html-body' => ''
     ];
+    private array $fonts = [];
     private string $output = '';
     private array $filters = [];
     private ?idg_core $core;
@@ -227,10 +228,60 @@ class idg_view extends idg_view_element {
                 $child->_render($document, $this);
     }
 
+    private function _css_scan_fonts() {
+        if (!($css_out = $this->streams['css']))
+            return;
+
+        $delim = " \t\n";
+        $property = '';
+        $value = '';
+        $token = strtok($this->streams['css'], $delim);
+        $state = 100;
+
+        while ($token !== false) {
+            if (($pos = strpos($token, ';')) !== false) {
+                $token = substr($token, 0, $pos);
+                $state = 300;
+            } else if (($pos = strpos($token, '}')) !== false) { // malformed but works
+                $token = substr($token, 0, $pos);
+                $state = 300;
+            }
+            switch ($state) {
+                case 100:
+                    if (($pos = strpos($token, ':')) > 0) {
+                        $property = substr($token, 0, $pos);
+                        $value = '';
+                        $state = 200;
+                    }
+                    break;
+                case 200:
+                    $value .= "$token ";
+                    break;
+                case 300:
+                    $value .= $token;
+                    if (strtolower($property) == 'font-family') {
+                        $match = [];
+                        if (preg_match_all("|@([a-z]+)\('([^'\)]*)'\)|", $value, $match))
+                            for ($i = 0; $i < count($match[0]); $i++) {
+                                $full = $match[0][$i];
+                                $selector = $match[1][$i];
+                                $font = $match[2][$i];
+                                $this->fonts[$selector][] = $font;
+                                $css_out = str_replace($full, "'$font'", $css_out);
+                            }
+                    }
+                    $property = '';
+                    $state = 100;
+                    break;
+            }
+            $token = strtok($delim);
+        }
+        $this->streams['css'] = $css_out;
+    }
+
     /**
-     * 
-     * @param idg_document $document
-     * @return void
+     * Renders a document and stores the result.
+     * @param idg_document $document The document
      */
     function render(idg_document $document): void {
         if ($this->output != '')
@@ -247,7 +298,7 @@ class idg_view extends idg_view_element {
 
         foreach ($children as $child)
             if ($child instanceof idg_filter)
-                $child->_apply_filter($this);
+                $child->apply_filter($this);
 
         if ($this->get_property('class'))
             $this->create_instance()->_render($document, $this);
@@ -257,6 +308,8 @@ class idg_view extends idg_view_element {
         foreach ($children as $child)
             if ($child instanceof idg_filter)
                 $this->remove_filter($child->get_property('name'));
+
+        $this->_css_scan_fonts();
 
         $render_time = idg_view::milliseconds() - $render_start;
 
@@ -283,6 +336,17 @@ class idg_view extends idg_view_element {
         if (($icon = $this->get_property('icon')))
             $this->_print("<link rel=\"shortcut icon\" href=\"$icon\" "
                 . "type=\"image/x-icon\">\n");
+
+        if (@$this->fonts['google']) {
+            $this->_print(
+                "<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">\n");
+
+            foreach ($this->fonts['google'] as $font) {
+                $family = str_replace(' ', '+', $font);
+                $this->_print("<link href=\"https://fonts.googleapis.com/css2?"
+                    . "family=$family&display=swap\" rel=\"stylesheet\">\n");
+            }
+        }
 
         if ($this->streams['html-head'] != '')
             $this->_print($this->streams['html-head']);

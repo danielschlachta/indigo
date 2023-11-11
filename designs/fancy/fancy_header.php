@@ -12,13 +12,13 @@ namespace Indigo\Design\Fancy;
 class header extends \idg_fragment_implementation {
 
     function _render(&$document, &$view) {
-        $image = '../docs/views/fancy/caption.png';
+        $image = '../docs/views/fancy/elements/caption.png';
         $idg_id = $this->get_idg_id();
 
-        $css = "#caption { margin: 0; padding: 0.1em; }\n";
+        $css = "#caption { margin: 0; padding: 0.1em 0 0.1em 0.3em; }\n";
 
         if (@$image)
-            $css .= "div#$idg_id { margin: 0.5em;"
+            $css .= "div#$idg_id { margin: 0.2em 0.5em 0.2em 0;"
                 . " background-image: url($image);"
                 . " background-repeat: no-repeat;"
                 . " background-position: right center; }\n";

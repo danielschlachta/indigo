@@ -12,17 +12,14 @@ class grid extends \idg_view_implementation {
     function _render(\idg_document $document, \idg_view $view): void {
 
         $idg_id = $this->get_idg_id();
-        //$stylesheet = 'views/fancy/style.css';
-        //$head = " <link rel=\"stylesheet\" href=\"$stylesheet\">\n";
-        //$view->stream_append('html-head', $head);
-
+   
         $nav = $view->get_child_by_key('name', 'nav');
         $header = $view->get_child_by_key('name', 'header');
         $aside = $view->get_child_by_key('name', 'aside');
         $article = $view->get_child_by_key('name', 'article');
         $footer = $view->get_child_by_key('name', 'footer');
 
-        $css = "body { font-size: 100%; margin: 0; padding: 1em; }\n"
+        $css = "body { font-size: 100%; margin: 0; padding: 1em 0 1em 20px; }\n"
             . "*, *:before, *:after { box-sizing: border-box; }\n"
             . "div#$idg_id { max-width: 940px; width: 66%;"
             . " float: left;" 
@@ -55,7 +52,7 @@ class grid extends \idg_view_implementation {
             $view->stream_append('css',
                 "aside { float: left; width: 19.1489%; min-width: 1.5em; }\n");
         
-            $view->stream_append('html-body', "<aside>&middot;<br>\n");
+            $view->stream_append('html-body', "<aside>\n");
             $aside->_render($document, $view);
             $view->stream_append('html-body', "</aside>\n");
         }
@@ -91,13 +88,9 @@ class grid extends \idg_view_implementation {
             $view->stream_append('css-print',
                 "nav { display: none; }\n");
 
-            $view->stream_append('html-body', "<nav>");
+            $view->stream_append('html-body', "<nav>\n");
             $nav->_render($document, $view);
             $view->stream_append('html-body', "</nav>\n");
         }
-
-        // page map
-        \Indigo\Module\Pagemap\add_to_view($view,
-            'bottom: 20px', 'right: 20px', '25%', '93%');
     }
 }

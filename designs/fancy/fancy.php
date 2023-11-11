@@ -10,7 +10,16 @@
 namespace Indigo\Design\Fancy;
 
 class view extends \Indigo\View\grid {
-    
+    function _render(\idg_document $document, \idg_view $view): void {
+        parent::_render($document, $view);
+       
+        $view->stream_append('css', "li { padding-bottom: 0.7em }\n" 
+            . "li > p { margin: 0.3em 0 0 0; }\n"
+            . "pre, code { font-family: 'Liberation Mono'; }\n");
+        
+        \Indigo\Module\Pagemap\add_to_view($view,
+            'bottom: 20px', 'right: 20px', '25%', '93%');
+    }
 }
 
 /**

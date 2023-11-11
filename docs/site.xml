@@ -30,7 +30,7 @@
                 <option name="caption">Procrastination</option>
             </attribute>
             
-            <datasource name="text1_src"
+           <datasource name="text1_src"
                         class="Indigo\Datasource\textfile">
                 <parameter name="filename">pages/main/home/home.html</parameter>
             </datasource>

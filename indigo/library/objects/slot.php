@@ -33,7 +33,7 @@ class idg_slot extends idg_view_element {
         if (($children = $this->get_children()))
             foreach ($children as $child)
                 if ($child->get_element_name() == 'filter')
-                    $child->_apply_filter($view);
+                    $child->apply_filter($view);
 
         $idg_id = $this->get_idg_id();
         $name = $this->get_property('name');

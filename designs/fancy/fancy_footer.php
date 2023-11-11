@@ -10,32 +10,25 @@
 namespace Indigo\Design\Fancy;
 
 class footer extends \idg_fragment_implementation {
-	
-	function _render(&$document, &$view)
-	{
-        /** 
-         * @todo Make this settable 
-         */
-		$image = '../docs/views/fancy/postmark.png';
 
-		$css = "footer { height: 4em; padding: 1.5em; ";
-		
+    function _render(&$document, &$view) {
+        $image = '../docs/views/fancy/elements/postmark.png';
+
+        $css = "footer { height: 4em; padding: 1.6em 15px 1.6em 8em; ";
+
         if ($image) {
-			$css .= "background-image: url($image); "
-                . "background-position: left center; "
-				. "background-repeat: no-repeat; "
-				. "text-align: right; ";
-		} 
-        
-		$css .= "}\n";
+            $css .= "background-image: url($image);"
+                . " background-position: left center;"
+                . " background-repeat: no-repeat;"
+                . " text-align: right; ";
+        }
 
-		$view->stream_append('css', $css);
-        
+        $css .= "}\n";
+
+        $view->stream_append('css', $css);
         $view->render_css($this->get_declaration(), "footer");
 
-		$text = $this->get_declaration()->get_text();
-
-		if ($text)
-			$view->stream_append('html-body', $text);
-	}
+        if (($text = $this->get_declaration()->get_text()))
+            $view->stream_append('html-body', $text);
+    }
 }

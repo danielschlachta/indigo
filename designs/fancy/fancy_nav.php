@@ -16,9 +16,10 @@ class nav extends \idg_fragment_implementation {
         
         $view->stream_append('css', 
             "body { margin-top: 2em; }\n"
-            . "nav { padding: 1em 1em 0.5em 1em; margin: 0; top: -0.5em; left: 1em; }"
-            . ".navlink, .navlink-selected { color: black; text-decoration: none; " 
-            . "padding: 0.5em; }\n"
+            . "nav { padding: 1em 1em 0.5em 1em; margin: 0; top: -0.5em; left: 20px;" 
+            . " font-family: 'Noto Serif'; }\n"
+            . ".navlink, .navlink-selected { color: black; text-decoration: none;" 
+            . " padding: 0.5em; }\n"
             . ".navlink:hover { text-decoration: underline; }\n"
             . ".navlink-selected { font-weight: bold; }\n");
 
