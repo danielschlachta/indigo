@@ -266,7 +266,9 @@ class idg_view extends idg_view_element {
                                 $full = $match[0][$i];
                                 $selector = $match[1][$i];
                                 $font = $match[2][$i];
-                                $this->fonts[$selector][] = $font;
+                                if (!array_key_exists($selector, $this->fonts) ||
+                                    !in_array($font, $this->fonts[$selector]))
+                                    $this->fonts[$selector][] = $font;
                                 $css_out = str_replace($full, "'$font'", $css_out);
                             }
                     }
@@ -337,7 +339,7 @@ class idg_view extends idg_view_element {
             $this->_print("<link rel=\"shortcut icon\" href=\"$icon\" "
                 . "type=\"image/x-icon\">\n");
 
-        if (@$this->fonts['google']) {
+        if (array_key_exists('google', $this->fonts)) {
             $this->_print(
                 "<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">\n");
 

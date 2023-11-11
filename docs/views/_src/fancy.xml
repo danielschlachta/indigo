@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- generated on Sat, 11 Nov 2023 19:02:20 +0000 by indigo v1.4 -->
+<!-- generated on Sat, 11 Nov 2023 19:22:05 +0000 by indigo v1.4 -->
 <view
     class="Indigo\Design\Fancy\view"
     icon="favicon.png"
-    style="background-color: #fff6e8; font-family: &#039;Liberation Serif&#039;; font-size: 120%;"
+    style="background-color: #fff6e8; font-family: @google(&#039;Liberation Serif&#039;); font-size: 120%;"
     style-h1="font-size: 180%;"
     style-h2="font-size: 140%;">
     <filter

@@ -7,7 +7,7 @@ function configure_view(idg_view $view): void {
         'class' => $view->core()->qualify('view'),
         'icon' => 'favicon.png',
         'style' => "background-color: #fff6e8;" 
-        . " font-family: 'Liberation Serif'; font-size: 120%;",
+        . " font-family: @google('Liberation Serif'); font-size: 120%;",
         'style-h1' => "font-size: 180%;",
         'style-h2' => "font-size: 140%;"
     ]);
