@@ -63,7 +63,8 @@ class idg_filter extends idg_treenode {
         if (!$filter)
             idg_diag($this, "filter '$filename' could not be loaded");
 
-        $this->set_text(preg_replace('/^\<\?php[ \t\n]*/', '', $filter));
+        $this->set_text(str_replace('&', '&amp;',
+            preg_replace('/^\<\?php[ \t\n]*/', '', $filter)));
     }
 
     /**
@@ -78,10 +79,9 @@ class idg_filter extends idg_treenode {
         $apply = $this->get_property('apply');
 
         if ($text = $this->get_text()) {
-            eval("function $name(idg_view \$view, string \$text): ?string { $text }"); 
+            eval("function $name(idg_view \$view, string \$text): ?string { $text }");
             if ($apply == "yes")
                 $view->add_filter($name);
-            
         } else if ($apply != "no")
             $view->add_filter($name);
     }

@@ -15,10 +15,10 @@ class header extends \idg_fragment_implementation {
         $image = '../docs/views/fancy/elements/caption.png';
         $idg_id = $this->get_idg_id();
 
-        $css = "#caption { margin: 0; padding: 0.1em 0 0.1em 0.3em; }\n";
+        $css = "#caption { margin: 0; padding: 0.1em 0 0.1em 0.5em; }\n";
 
         if (@$image)
-            $css .= "div#$idg_id { margin: 0.2em 0.5em 0.2em 0;"
+            $css .= "div#$idg_id { margin: 0.2em 15px 0.2em 0;"
                 . " background-image: url($image);"
                 . " background-repeat: no-repeat;"
                 . " background-position: right center; }\n";
@@ -29,6 +29,6 @@ class header extends \idg_fragment_implementation {
 
         $caption = $document->get_property('description');
         $view->stream_append('html-body', "<div id=\"$idg_id\">"
-            . "<h1 id=\"caption\">$caption</h1></div>");
+            . "<h1 id=\"caption\">$caption</h1></div>\n");
     }
 }

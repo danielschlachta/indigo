@@ -69,6 +69,11 @@ class idg_reload_policy {
      * rendering.
      */
     const RELOAD_LASTCHANGE = 2;
+    
+    /**
+     * Like RELOAD_LASTCHANGE but defaults to time() if nothing else is set.
+     */
+    const RELOAD_LASTCHANGE_DEFAULT_NOW = 3;
 }
 
 /**
@@ -240,7 +245,7 @@ class idg_view extends idg_view_element {
 
         return $this->core;
     }
-    
+
     /**
      * Outputs everything, emits headers if requested.
      */
@@ -248,12 +253,17 @@ class idg_view extends idg_view_element {
         if ($this->output == '')
             idg_diag($this, "nothing to do, you probably didn't call render()");
         if ($this->output == '@done@')
-            idg_diag($this, "output already emitted");
+            idg_diag($this, "can't emit output more than once");
 
         switch ($this->reload_policy) {
+            case idg_reload_policy::RELOAD_LASTCHANGE_DEFAULT_NOW:
+                if (!($this->last_change > 0))
+                    $this->last_change = time();
+                // fall through
             case idg_reload_policy::RELOAD_LASTCHANGE:
-                header("Last-Modified: "
-                    . gmdate("D, d M Y H:i:s", $this->last_change) . " GMT");
+                if ($this->last_change > 0)
+                    header("Last-Modified: "
+                        . gmdate("D, d M Y H:i:s", $this->last_change) . " GMT");
                 break;
             case idg_reload_policy::RELOAD_ALWAYS:
                 header("Cache-Control: max-age=3000, no-cache, no-store,"
@@ -373,8 +383,10 @@ class idg_view extends idg_view_element {
 
         $render_time = idg_view::milliseconds() - $render_start;
 
-        $date = new \DateTimeImmutable($document->get_property('last-change'));
-        $this->last_change = $date->getTimestamp();
+        if (($lastchg = $document->get_property('last-change'))) {
+            $date = new \DateTimeImmutable($lastchg);
+            $this->last_change = $date->getTimestamp();
+        }
 
         $wget = IDG_WGET_VERSION ? " for wget v" . IDG_WGET_VERSION : '';
 
@@ -389,8 +401,8 @@ class idg_view extends idg_view_element {
         $this->_print("<html$lang>\n"
             . "<head>\n"
             . "<title>" . $document->get_property('title') . "</title>\n"
-            . "<meta http-equiv=\"Content-Type\" content=\"text/html;"
-            . " charset=\"utf-8\">\n");
+            . "<meta http-equiv=\"Content-Type\" content=\"text/html\">\n"
+            . "<meta charset=\"utf-8\">\n");
 
         if (($icon = $this->get_property('icon')))
             $this->_print("<link rel=\"shortcut icon\" href=\"$icon\" "

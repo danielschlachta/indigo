@@ -30,6 +30,8 @@ class idg_slot extends idg_view_element {
     }
 
     function _render(idg_document $document, idg_view $view): void {
+        $has_div = false;
+
         if (($children = $this->get_children()))
             foreach ($children as $child)
                 if ($child->get_element_name() == 'filter')
@@ -38,18 +40,21 @@ class idg_slot extends idg_view_element {
         $idg_id = $this->get_idg_id();
         $name = $this->get_property('name');
 
-        $view->render_css($this, "div#$idg_id");
-        $view->stream_append('html-body', "<div id=\"$idg_id\">\n");
-
-        if (($renderers = $document->get_renderers($name)))
-        foreach ($renderers as $renderer) {
-            if (($anchor = $renderer->get_anchor())) 
-                $view->stream_append('html-body', "<span id=\"$anchor\"></span>");
-                
-            $renderer->_render($document, $view);
+        if (($view->render_css($this, "div#$idg_id"))) {
+            $view->stream_append('html-body', "<div id=\"$idg_id\">\n");
+            $has_div = true;
         }
 
-        $view->stream_append('html-body', "</div>\n");
+        if (($renderers = $document->get_renderers($name)))
+            foreach ($renderers as $renderer) {
+                if (($anchor = $renderer->get_anchor()))
+                    $view->stream_append('html-body', "<span id=\"$anchor\"></span>");
+
+                $renderer->_render($document, $view);
+            }
+
+        if ($has_div)
+            $view->stream_append('html-body', "</div>\n");
 
         if ($children)
             foreach ($children as $child)

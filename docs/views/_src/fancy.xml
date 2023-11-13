@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- generated on Sat, 11 Nov 2023 19:22:05 +0000 by indigo v1.4 -->
+<!-- generated on Mon, 13 Nov 2023 10:29:39 +0000 by indigo v1.4 -->
 <view
     class="Indigo\Design\Fancy\view"
     icon="favicon.png"
@@ -7,8 +7,20 @@
     style-h1="font-size: 180%;"
     style-h2="font-size: 140%;">
     <filter
-        name="filter_typo"
-        load="views/fancy/fancy_filter_typo.php" />
+        name="filter_typo">
+        $output = str_replace(&#039; - &#039;, &#039;&amp;amp;mdash;&#039;, $text);
+        $output = str_replace(&#039;&amp;amp;ldquo;&#039;, &#039;&amp;amp;laquo;&#039;, $output);
+        $output = str_replace(&#039;&amp;amp;rdquo;&#039;, &#039;&amp;amp;raquo;&#039;, $output);
+        $output = str_replace(&#039;...&#039;, &#039;&amp;amp;hellip;&#039;, $output);
+        $output = str_replace(&#039;\&#039;&#039;, &#039;&amp;amp;rsquo;&#039;, $output);
+        
+        $output = str_replace(&#039;&lt;blockquote&gt;&#039;,
+            &#039;&lt;blockquote&gt;&lt;img src=&quot;views/fancy/elements/blockquote.png&quot; style=&quot;height: 65px;&#039;
+            . &#039; padding-right: 10px; margin: 10px 5px 10px -30px; float: left;&quot; alt=&quot;&quot;&gt;&#039;, $output);
+        
+        return $output;
+        
+    </filter>
     <filter
         name="filter_date"
         apply="yes">
@@ -22,33 +34,33 @@
         name="nav"
         class="Indigo\Design\Fancy\nav"
         source="_site"
-        style="background-color: #ffe7d6;" />
+        style="background-color: #ffe7d6; border-radius: 5px;" />
     <fragment
         name="header"
         class="Indigo\Design\Fancy\header"
-        style="background-color: #b1b390; font-family: @google(&#039;Quintessential&#039;);"
+        style="background-color: #b1b390; border-radius: 5px; font-family: @google(&#039;Quintessential&#039;);"
         style-h1="font-style: italic;" />
     <fragment
         name="aside"
         class="Indigo\Design\Fancy\aside"
         source="_site"
-        style="background-color: #bdd5c4;" />
+        style="background-color: #bdd5c4; border-radius: 5px;" />
     <container
         name="article"
-        style="background-color: #ebd8b9; padding: 0.1em 1em 1em 1em;">
+        style="background-color: #ebd8b9; border-radius: 5px; padding: 0.2em 1em 1em 1em;"
+        style-h1="margin: 0.2em 0 0.2em 0"
+        style-a="text-decoration: underline; color: inherit; transition:.2s;"
+        style-a-hover="background-color: #e1c0bc;"
+        style-list-image="views/fancy/elements/list-image.png">
         <filter
             name="filter_typo" />
         <slot
-            name="main-text"
-            style-h1="margin: 0.2em 0 0.2em 0"
-            style-a="text-decoration: underline; color: inherit; transition:.2s;"
-            style-a-hover="background-color: #e1c0bc;"
-            style-list-image="views/fancy/elements/list-image.png" />
+            name="main-text" />
     </container>
     <fragment
         name="footer"
         class="Indigo\Design\Fancy\footer"
-        style="background-color: #a2acbd; font-family: @google(&#039;Special Elite&#039;); font-size: 83%;"
+        style="background-color: #a2acbd; border-radius: 5px; font-family: @google(&#039;Special Elite&#039;); font-size: 83%;"
         style-a="font-family: inherit;	color: inherit;	text-decoration: none; border-bottom: 1px dotted black;"
         style-a-hover="border-bottom: 1px solid black;">
         This page was last updated on [date]. Copyright (c) 2023 &lt;a href=&quot;mailto:Daniel Schlachta &lt;daniel@schlachta.info&gt;&quot;&gt;Daniel Schlachta&lt;/a&gt;

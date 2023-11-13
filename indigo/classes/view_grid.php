@@ -7,6 +7,11 @@
 
 namespace Indigo\View;
 
+/**
+ * A view using grid.
+ * @todo docu
+ */
+
 class grid extends \idg_view_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
@@ -25,7 +30,6 @@ class grid extends \idg_view_implementation {
             . " float: left;" 
             . " display: grid; grid-template-columns: min-content 1fr; grid-gap: 10px;"
             . " margin-bottom: 1em; }\n"
-            . "div#$idg_id > * { border-radius: 5px; }\n"
             . "@supports (display: grid) {\n"
             . " #$idg_id > * { width: auto; }\n"
             . "}\n";

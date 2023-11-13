@@ -10,7 +10,7 @@ blocks.xml: blocks.php blocks_filter_blockquote.php blocks_filter_links.php
 
 gradient.xml: gradient.php gradient_filter_blockquote.php
 
-fancy.xml: fancy.php fancy_filter_date.php 
+fancy.xml: fancy.php fancy_filter_date.php  fancy_filter_typo.php
 
 force::
 	touch *.php; make all

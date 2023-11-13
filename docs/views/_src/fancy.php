@@ -14,9 +14,9 @@ function configure_view(idg_view $view): void {
 
     $filter_typo = new idg_filter;
     $filter_typo->set_properties([
-        'name' => 'filter_typo',
-        'load' => 'views/fancy/fancy_filter_typo.php',
+        'name' => 'filter_typo'
     ]);
+    $filter_typo->load('fancy_filter_typo.php');
     $view->add_child($filter_typo);
 
     $filter_date = new idg_filter;
@@ -37,7 +37,7 @@ function configure_view(idg_view $view): void {
         'name' => 'nav',
         'class' => $view->core()->qualify('nav'),
         'source' => '_site',
-        'style' => "background-color: #ffe7d6;"
+        'style' => "background-color: #ffe7d6; border-radius: 5px;"
     ]);
     $view->add_child($nav);
 
@@ -45,7 +45,7 @@ function configure_view(idg_view $view): void {
     $header->set_properties([
         'name' => 'header',
         'class' => $view->core()->qualify('header'),
-        'style' => "background-color: #b1b390;" 
+        'style' => "background-color: #b1b390; border-radius: 5px;"  
         . " font-family: @google('Quintessential');",
         'style-h1' => 'font-style: italic;'
     ]);
@@ -57,14 +57,19 @@ function configure_view(idg_view $view): void {
         'name' => 'aside',
         'class' => $view->core()->qualify('aside'),
         'source' => '_site',
-        'style' => "background-color: #bdd5c4;"
+        'style' => "background-color: #bdd5c4; border-radius: 5px;"
     ]);
     $view->add_child($aside);
 
     $article = new idg_container;
     $article->set_properties([
         'name' => 'article',
-        'style' => "background-color: #ebd8b9; padding: 0.1em 1em 1em 1em;"
+        'style' => "background-color: #ebd8b9; border-radius: 5px;" 
+        . " padding: 0.2em 1em 1em 1em;",
+        'style-h1' => "margin: 0.2em 0 0.2em 0",
+        'style-a' => "text-decoration: underline; color: inherit; transition:.2s;",
+        'style-a-hover' => "background-color: #e1c0bc;",
+        'style-list-image' => "$elements/list-image.png"
     ]);
     $view->add_child($article);
 
@@ -77,10 +82,6 @@ function configure_view(idg_view $view): void {
     $main_text = new idg_slot;
     $main_text->set_properties([
         'name' => 'main-text',
-        'style-h1' => "margin: 0.2em 0 0.2em 0",
-        'style-a' => "text-decoration: underline; color: inherit; transition:.2s;",
-        'style-a-hover' => "background-color: #e1c0bc;",
-        'style-list-image' => "$elements/list-image.png"
     ]);
     $article->add_child($main_text);
 
@@ -88,7 +89,7 @@ function configure_view(idg_view $view): void {
     $footer->set_properties([
         'name' => 'footer',
         'class' => $view->core()->qualify('footer'),
-        'style' => "background-color: #a2acbd;" 
+        'style' => "background-color: #a2acbd; border-radius: 5px;" 
         . " font-family: @google('Special Elite'); font-size: 83%;",
         'style-a' => "font-family: inherit;	color: inherit;	text-decoration: none; "
         . "border-bottom: 1px dotted black;",

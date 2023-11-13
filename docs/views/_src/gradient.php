@@ -46,7 +46,7 @@ function configure_view(idg_view $view): void {
     $text_box = new idg_container;
     $text_box->set_properties([
         'name' => 'background',
-        'style' => 'text-align: center; height: 100%;'
+        'style' => 'text-align: center; height: 100%; padding-bottom: 3em;'
     ]);
     $main->add_child($text_box);
 
@@ -54,8 +54,8 @@ function configure_view(idg_view $view): void {
     $fill_box->set_properties([
         'name' => 'fillbox',
         'style' => "width: 56%; height: 100%;"
-        . " margin-left: 60px; padding: 0 20px 0 20px;"
-        . " margin-top: 40px; text-align: justify; font-size: 118%;"
+        . " margin: 40px 0 0 60px; padding: 0 20px 0 20px;"
+        . " text-align: justify; font-size: 118%;"
         . " border-top: 1px solid #25253d; border-left: 1px solid #25253d;"
         . " border-right: 1px solid #25253d; background: #ffffff"
         . " url($elements/bg_grad_2.png) bottom left fixed repeat-x;",
