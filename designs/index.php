@@ -73,8 +73,8 @@ $text->set_properties(array(
 ));
 $text->set_text($form . $lipsum . $lipsum . $lipsum . $lipsum);
 
-$doc_1 = new idg_document;
-$doc_1->set_properties([
+$document = new idg_document;
+$document->set_properties([
     'id' => 'doc-1',
     'name' => "Document 1",
     'description' => 'Description for Document 1',
@@ -83,7 +83,7 @@ $doc_1->set_properties([
 
 $folder1 = new idg_folder;
 $folder1->set_properties(['id' => 'folder-1', 'name' => 'Folder 1']);
-$folder1->add_child($doc_1);
+$folder1->add_child($document);
 
 $pg = 2;
 
