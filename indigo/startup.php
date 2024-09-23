@@ -54,19 +54,6 @@ function idg_init(): void {
     
     $idg_path .= $dir[count($dir) - 1];
     
-    $path = explode('/', $_SERVER['DOCUMENT_ROOT']);
-    $dir = array_pop($path);
-
-    if (count($path) > 0 && array_pop($path) == 'indigo') {
-        $dir = "'indigo/$dir'";
-        if (PHP_SERVER_VERSION)
-            die("<html><body><h1>Please do not run php -S"
-                . " from a subdirectory ($dir).");
-        else
-            die("<html><body><h1>Please do not use a subdirectory ($dir) "
-                . "as document root.</h1>");
-    }
-
     define('IDG_SHORT_NAME', 'indigo');
     define('IDG_VERSION', '1.4');
     define('IDG_PROGRAM_NAME', IDG_SHORT_NAME . ' v' . IDG_VERSION);
@@ -76,7 +63,7 @@ function idg_init(): void {
     if (version_compare(PHP_VERSION, IDG_MIN_PHP_VERSION, '<'))
         idg_complain_version();
     
-    if (preg_match('/^PHP ([0-9.]+) Development Server/', @$_SERVER['SERVER_SOFTWARE'],
+    if (preg_match('/^PHP.([0-9.]+).*Development Server.*/', @$_SERVER['SERVER_SOFTWARE'],
         $match)) {
         define('IDG_PHP_SERVER_VERSION', $match[1]);
         define('IDG_DEFAULT_USE_PATH_INFO', true); 
@@ -98,6 +85,20 @@ function idg_init(): void {
     }
     
     define('IDG_XML_INDENT', '    ');
+    
+    $path = explode('/', $_SERVER['DOCUMENT_ROOT']);
+    $dir = array_pop($path);
+
+    if (count($path) > 0 && array_pop($path) == 'indigo') {
+        $dir = "'indigo/$dir'";
+        if (IDG_PHP_SERVER_VERSION)
+            die("<html><body><h1>Please do not run php -S"
+                . " from a subdirectory ($dir).");
+        else
+            die("<html><body><h1>Please do not use a subdirectory ($dir) "
+                . "as document root.</h1>");
+    }
+
 }
 
 require_once 'library/diagnostics.php';

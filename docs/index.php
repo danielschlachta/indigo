@@ -1,9 +1,9 @@
 <?php
 
-/* ========================================================================
- * indigo documentation
- * (c) 2023 Daniel Schlachta
- * ======================================================================== */
+/*
+ *  Copyright (c) 2023 Daniel Schlachta <daniel.schlachta@gmail.com>
+ *  License: MIT License, see https://opensource.org/license/mit/
+ */
 
 ini_set('display_errors', '1');
 error_reporting(E_ALL);

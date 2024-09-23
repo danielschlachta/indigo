@@ -41,7 +41,7 @@ ENDSTART;
 $design = @$_GET['design'];
 $design = $design ? $design : 'blocks';
 
-$view = new idg_view(new idg_core($design));
+$view = new idg_view(new idg_core($design, $design, "/designs/$design"));
 
 $directory = scandir('.');
 
