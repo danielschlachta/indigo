@@ -54,6 +54,11 @@ class infobox extends \idg_fragment_implementation {
         return "<ul><li>\n" . $datasource->current() . "</li></ul>\n";
     }
 
+    private function _render_textfile(\idg_datasource_implementation $datasource): 
+        string {
+        return '<div style="margin-left: 10px;">' . $datasource->current() . '</div>';
+    }
+    
     private function _render_rss(\idg_datasource_implementation $datasource): string {
         $retval = "<ul>\n";
 
@@ -107,6 +112,9 @@ class infobox extends \idg_fragment_implementation {
         switch (($class_name = get_class($datasource))) {
             case 'Indigo\Datasource\text':
                 $content = $this->_render_text($datasource);
+                break;
+            case 'Indigo\Datasource\textfile':
+                $content = $this->_render_textfile($datasource);
                 break;
             case 'Indigo\Datasource\rss':
                 $content = $this->_render_rss($datasource);

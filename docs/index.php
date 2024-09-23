@@ -40,12 +40,14 @@ if ($design == 'mobile')
 
 $template = new idg_template($design, "../designs/$design");
 
-if (!($doc_1 = $site->get_document($template->get_request_document())))
-    die('oknodoc');
+if (!($document = $site->get_document($template->get_request_document()))) {
+    require 'error/error.php';
+    $document = get_error_document();
+}
 
 $view = new idg_view($template);
 $view->set_reload_policy(idg_reload_policy::RELOAD_ALWAYS);
 $view->read_xml("views/$design/$design.xml");
 $view->check();
-$view->render($doc_1);
+$view->render($document);
 $view->emit();

@@ -10,22 +10,21 @@ function get_error_document()
     $page->set_properties(array(
         'id' => 'error',
         'name' => 'Document not found',
-        'description' => 'Document not found',
-        'content-language' => 'en'
+        'description' => 'Document not found'
     ));
 
     $text1_src = new idg_datasource;
     $text1_src->set_properties(array(
         'name' => 'text1_src',
-        'class' => 'idg_datasource_textfile'
+        'class' => '\Indigo\Datasource\textfile'
     ));
-    $text1_src->set_text('filename: error/error.html');
+    $text1_src->set_parameter('filename', 'error/error.html');
     $page->add_child($text1_src);
 
     $text1_rend = new idg_renderer;
     $text1_rend->set_properties(array(
         'slot' => 'main-text',
-        'class' => 'idg_view_html_renderer_textfile',
+        'class' => '\Indigo\Renderer\textfile',
         'source' => 'text1_src'
     ));
     $page->add_child($text1_rend);
@@ -41,10 +40,14 @@ function get_error_document()
 
     $infobox1_src = new idg_datasource;
     $infobox1_src->set_properties(array(
-        'name' => 'infobox',
-        'class' => 'idg_datasource_infobox'
+        'name' => 'blocks::infobox',
+        'class' => '\Indigo\Datasource\textfile'
     ));
-    $infobox1_src->set_text("caption: What's going on?; file: infobox.html");
+    $infobox1_src->set_parameter('filename', 'error/infobox.html');
+    
+    $attr = $page->create_attribute('blocks::infobox');
+    $attr->set_parameter('caption', 'What\'s going on?');
+    
 
     $page->add_child($infobox1_src);
 

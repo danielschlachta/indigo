@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- generated on Sat, 11 Nov 2023 21:48:22 +0000 by indigo v1.4 -->
+<!-- generated on Mon, 23 Sep 2024 20:38:18 +0000 by indigo v1.4 -->
 <view
     class="Indigo\Design\Blocks\view"
     icon="favicon.png"
@@ -118,9 +118,9 @@
             style="position: fixed; top: 49px; right: 212px; width: 629px; height: 80px; background: url(views/blocks/elements/bg_sky.png) no-repeat; z-index: -1;" />
         <container
             name="image-graph-l"
-            style="position: fixed; top: 352px; left: 0px; width: 130px; height: 75px; background: url(views/blocks/elements/bg_graph_l.png) no-repeat;" />
+            style="position: fixed; top: 352px; left: 0px; width: 130px; height: 75px; z-index: -1000;background: url(views/blocks/elements/bg_graph_l.png) no-repeat;" />
         <container
             name="image-graph-r"
-            style="position: fixed; top: 352px; right: 0px; width: 330px; height: 130px; background: url(views/blocks/elements/bg_graph_r.png) no-repeat;" />
+            style="position: fixed; top: 352px; right: 0px; width: 330px; height: 130px; z-index: -1000;background: url(views/blocks/elements/bg_graph_r.png) no-repeat;" />
     </container>
 </view>

@@ -198,7 +198,7 @@ function configure_view(idg_view $view): void {
     $bg_left->set_properties([
         'name' => 'image-graph-l',
         'style' => "position: fixed; " 
-        . "top: 352px; left: 0px; width: 130px; height: 75px; " 
+        . "top: 352px; left: 0px; width: 130px; height: 75px; z-index: -1000;" 
         . "background: url($elements/bg_graph_l.png) no-repeat;"
     ]);
     $background_img->add_child($bg_left);
@@ -207,7 +207,7 @@ function configure_view(idg_view $view): void {
     $bg_right->set_properties([
         'name' => 'image-graph-r',
         'style' => "position: fixed; " 
-        . "top: 352px; right: 0px; width: 330px; height: 130px; " 
+        . "top: 352px; right: 0px; width: 330px; height: 130px; z-index: -1000;" 
         . "background: url($elements/bg_graph_r.png) no-repeat;"
     ]);
     $background_img->add_child($bg_right);
