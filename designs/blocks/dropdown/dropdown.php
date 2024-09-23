@@ -16,7 +16,7 @@ namespace Indigo\Design\Blocks;
 class dropdown extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        $elements = $view->core()->get_template_uri('dropdown/elements');
+        $elements = $view->template()->get_uri('dropdown/elements');
 
         if (!$source = $this->get_property('source'))
             idg_diag($this, "property 'source' not set");
@@ -63,7 +63,7 @@ class dropdown extends \idg_fragment_implementation {
                         $close_doc = true;
                         $name = $token['name'];
                         $path = $token['path'];
-                        $uri = $view->core()->get_full_uri($path);
+                        $uri = $view->template()->get_full_uri($path);
                         
                         if ($path == $doc_path)
                             $body .= "  <li id=\"current\">"

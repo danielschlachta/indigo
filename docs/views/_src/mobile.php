@@ -4,14 +4,14 @@ function configure_view(idg_view $view): void {
     $font = 'font-family: verdana,sans-serif; font-size: 48px; line-height: 1.2;';
 
     $view->set_properties([
-        'class' => $view->core()->qualify('view'),
+        'class' => $view->template()->qualify('view'),
         'icon' => 'favicon.png',
         'style' => $font . ' background: #b4d2b0;'
     ]);
 
     $navig = new idg_fragment;
     $navig->set_properties([
-        'class' => $view->core()->qualify('navigation'),
+        'class' => $view->template()->qualify('navigation'),
         'source' => '_site'
     ]);
     $view->add_child($navig);
@@ -39,7 +39,7 @@ function configure_view(idg_view $view): void {
 if (!@$_SERVER['HTTP_USER_AGENT']) {
     require '../../../indigo/startup.php';
     $view = new idg_view;
-    $view->core()->set_namespace('Indigo\Design\Mobile');
+    $view->template()->set_namespace('Indigo\Design\Mobile');
     configure_view($view);
     $view->write_xml('mobile.xml');
 }

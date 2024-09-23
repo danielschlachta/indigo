@@ -5,7 +5,7 @@ function configure_view(idg_view $view): void {
     $elements = "views/gradient/elements";
 
     $view->set_properties([
-        'class' => $view->core()->qualify('view'),
+        'class' => $view->template()->qualify('view'),
         'icon' => 'favicon.png',
         'style' => "$font; background-color: #46467d"
     ]);
@@ -19,7 +19,7 @@ function configure_view(idg_view $view): void {
     
     $navigation = new idg_fragment;
     $navigation->set_properties([
-        'class' => $view->core()->qualify('navigation'),
+        'class' => $view->template()->qualify('navigation'),
         'source' => '_site'
     ]);
     $fixed->add_child($navigation);
@@ -124,7 +124,7 @@ function configure_view(idg_view $view): void {
 if (!@$_SERVER['HTTP_USER_AGENT']) {
     require '../../../indigo/startup.php';
     $view = new idg_view;
-    $view->core()->set_namespace('Indigo\Design\Gradient');
+    $view->template()->set_namespace('Indigo\Design\Gradient');
     configure_view($view);
     $view->write_xml('gradient.xml');
 }

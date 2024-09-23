@@ -17,7 +17,7 @@ class idg_document_type extends idg_site_element_type {
 
         $this->set_property_mandatory('name');
 
-        /** @todo Create an id (use core for UUID?) if none is set * */
+        /** @todo Create an id (use template for UUID?) if none is set * */
         $this->set_property_mandatory('id');
 
         $this->register_property('title');

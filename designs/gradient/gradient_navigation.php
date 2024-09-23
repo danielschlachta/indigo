@@ -12,7 +12,7 @@ namespace Indigo\Design\Gradient;
 class navigation extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view) {
-        $elements = $view->core()->get_template_uri('elements');
+        $elements = $view->template()->get_uri('elements');
 
         $style = $this->get_property('style');
         $idg_id = $this->get_idg_id();
@@ -41,7 +41,7 @@ class navigation extends \idg_fragment_implementation {
 
             if ($path) {
                 $name = $node['name'];
-                $uri = $view->core()->get_full_uri($path);
+                $uri = $view->template()->get_full_uri($path);
 
                 if (!($comment = @$node['navigation-comment']))
                     $comment = @$node['description'];

@@ -41,7 +41,7 @@ ENDSTART;
 $design = @$_GET['design'];
 $design = $design ? $design : 'blocks';
 
-$view = new idg_view(new idg_core($design, $design, "/designs/$design"));
+$view = new idg_view(new idg_template($design, $design, "/designs/$design"));
 
 $directory = scandir('.');
 
@@ -56,7 +56,7 @@ for ($i = 0; $i < count($directory); $i++) {
     $form .= "              <option value=\"$name\"$select>$name</option>\n";
 }
 
-$anchor_url = $view->core()->get_full_uri('folder-2/doc-5');
+$anchor_url = $view->template()->get_full_uri('folder-2/doc-5');
 
 $form .= <<<ENDEND
 		</select>
@@ -167,9 +167,10 @@ for ($i = 1; $i < 6; $i++) {
 }
 
 $site->check();
-$display_doc = $site->get_document($view->core()->get_request_document());
+/* TODO: move this to core */
+$display_doc = $site->get_document($view->template()->get_request_document());
 
-$func = $view->core()->qualify('testcard');
+$func = $view->template()->qualify('testcard');
 $func($display_doc, $view, $text);
 
 $view->check();

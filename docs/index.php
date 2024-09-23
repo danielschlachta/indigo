@@ -38,12 +38,12 @@ if (!$design)
 if ($design == 'mobile')
     $site->set_property('title-reverse-order', 'no');
 
-$core = new idg_core($design, "../designs/$design");
+$template = new idg_template($design, "../designs/$design");
 
-if (!($doc_1 = $site->get_document($core->get_request_document())))
+if (!($doc_1 = $site->get_document($template->get_request_document())))
     die('oknodoc');
 
-$view = new idg_view($core);
+$view = new idg_view($template);
 $view->set_reload_policy(idg_reload_policy::RELOAD_ALWAYS);
 $view->read_xml("views/$design/$design.xml");
 $view->check();

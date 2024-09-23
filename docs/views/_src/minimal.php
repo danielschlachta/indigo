@@ -2,7 +2,7 @@
 
 function configure_view(idg_view $view): void {
     $view->set_properties([
-        'class' => $view->core()->qualify('view'),
+        'class' => $view->template()->qualify('view'),
         'icon' => 'favicon.png',
         'tag' => "views/minimal/elements/style.css"
     ]);
@@ -15,7 +15,7 @@ function configure_view(idg_view $view): void {
 
     $navigation = new idg_fragment;
     $navigation->set_properties([
-        'class' => $view->core()->qualify('navigation'),
+        'class' => $view->template()->qualify('navigation'),
         'source' => '_site'
     ]);
     $attribute = $navigation->create_attribute('minimal::navigation');
@@ -41,7 +41,7 @@ function configure_view(idg_view $view): void {
     
     $footer = new idg_fragment;
     $footer->set_properties([
-        'class' => $view->core()->qualify('footer'),
+        'class' => $view->template()->qualify('footer'),
     ]);
     $body->add_child($footer);
 }
@@ -49,7 +49,7 @@ function configure_view(idg_view $view): void {
 if (!@$_SERVER['HTTP_USER_AGENT']) {
     require '../../../indigo/startup.php';
     $view = new idg_view;
-    $view->core()->set_namespace('Indigo\Design\Minimal');
+    $view->template()->set_namespace('Indigo\Design\Minimal');
     configure_view($view);
     $view->write_xml('minimal.xml');
 }

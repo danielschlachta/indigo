@@ -32,13 +32,13 @@ require_once 'fancy_footer.php';
 
 function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text): void {
     $view->set_properties([
-        'class' => $view->core()->qualify('view')
+        'class' => $view->template()->qualify('view')
     ]);
 
     $navigation = new \idg_fragment;
     $navigation->set_properties([
         'name' => 'nav',
-        'class' => $view->core()->qualify('nav'),
+        'class' => $view->template()->qualify('nav'),
         'style' => 'background-color: #e0e0e0;',
         'source' => '_site'
     ]);
@@ -47,7 +47,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     $header = new \idg_fragment;
     $header->set_properties([
         'name' => 'header',
-        'class' => $view->core()->qualify('header'),
+        'class' => $view->template()->qualify('header'),
         'style' => 'background-color: #e0e0e0;'
     ]);
     $view->add_child($header);
@@ -55,7 +55,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     $aside = new \idg_fragment;
     $aside->set_properties([
         'name' => 'aside',
-        'class' => $view->core()->qualify('aside'),
+        'class' => $view->template()->qualify('aside'),
         'style' => 'background-color: #e0e0e0;',
         'source' => '_site'
     ]);
@@ -73,7 +73,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
     $footer = new \idg_fragment;
     $footer->set_properties([
         'name' => 'footer',
-        'class' => $view->core()->qualify('footer'),
+        'class' => $view->template()->qualify('footer'),
         'style' => 'background-color: #e0e0e0;'
     ]);
     $footer->set_text('set this with set_text()');

@@ -12,7 +12,7 @@ namespace Indigo\Design\Blocks;
 class tabs extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view): void {
-        $elements = $view->core()->get_template_uri('tabs/elements');
+        $elements = $view->template()->get_uri('tabs/elements');
         
         if (!$source_name = $this->get_property('source'))
             return;
@@ -32,7 +32,7 @@ class tabs extends \idg_fragment_implementation {
             $path = @$token['path'];
             
             if ($path && (!$tag || $tag == @$token['parent-folder-id'])) {              
-                $uri = $view->core()->get_full_uri($path);
+                $uri = $view->template()->get_full_uri($path);
                 
                 if ($path == $document_path) {
                     $list .= "<li id=\"current\">"

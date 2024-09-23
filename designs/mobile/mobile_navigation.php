@@ -12,7 +12,7 @@ namespace Indigo\Design\Mobile;
 class navigation extends \idg_fragment_implementation {
 
     function _render(\idg_document $document, \idg_view $view) {
-        $elements = $view->core()->get_template_uri('elements');
+        $elements = $view->template()->get_uri('elements');
         $idg_id = $this->get_idg_id();
 
         $view->stream_append('css', "body { padding-top: 130px; }\n"
@@ -44,7 +44,7 @@ class navigation extends \idg_fragment_implementation {
 
         foreach ($this->get_datasource() as $count => $node) {
             if ($path = @$node['path'])
-                $uri = $view->core()->get_full_uri($path);
+                $uri = $view->template()->get_full_uri($path);
             else
                 continue;
 

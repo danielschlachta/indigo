@@ -18,7 +18,7 @@ class view extends \idg_view_implementation {
         
         parent::_render($document, $view);
 
-        $default = $view->core()->get_template_uri('elements') . '/default.css';
+        $default = $view->template()->get_uri('elements') . '/default.css';
         $view->stream_append('html-head', 
             "<link rel=\"stylesheet\" href=\"$default\">\n");
         
@@ -30,12 +30,12 @@ class view extends \idg_view_implementation {
 
 function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text): void {
     $view->set_properties([
-        'class' => $view->core()->qualify('view'),
+        'class' => $view->template()->qualify('view'),
     ]);
 
     $navigation = new \idg_fragment;
     $navigation->set_properties([
-        'class' => $view->core()->qualify('navigation'),
+        'class' => $view->template()->qualify('navigation'),
         'source' => '_site'
     ]);
     $view->add_child($navigation);
@@ -44,7 +44,7 @@ function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text)
 
     $footer = new \idg_fragment;
     $footer->set_properties([
-        'class' => $view->core()->qualify('footer')
+        'class' => $view->template()->qualify('footer')
     ]);
     $view->add_child($footer);
 }

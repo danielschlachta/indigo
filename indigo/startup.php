@@ -105,7 +105,7 @@ require_once 'library/diagnostics.php';
 require_once 'library/parameters.php';
 require_once 'library/object.php';
 require_once 'library/tree.php';
-require_once 'library/core.php';
+require_once 'library/template.php';
 require_once 'library/site.php';
 require_once 'library/view.php';
 

@@ -14,7 +14,7 @@ namespace Indigo\Design\Blocks;
  */
 function infobox_filter_links(\idg_view $view, string $text): string {
     $output = $text;
-    $elements = $view->core()->get_template_uri('infobox/elements');
+    $elements = $view->template()->get_uri('infobox/elements');
 
     $ext_image = "<img src=\"$elements/link_ext.png\" width=\"11\""
         . ' height="10" style="margin-left: -11px;" alt="">';
@@ -89,7 +89,7 @@ class infobox extends \idg_fragment_implementation {
     }
 
     function _render(\idg_document $document, \idg_view $view): void {
-        $elements = $view->core()->get_template_uri('infobox/elements');
+        $elements = $view->template()->get_uri('infobox/elements');
 
         if (!$source = $this->get_property('source'))
             idg_diag($this, "property 'source' not set");
@@ -102,7 +102,7 @@ class infobox extends \idg_fragment_implementation {
         $bg_url = $attr->get_parameter('bg-url');
         $caption = $attr->get_parameter('caption');
 
-        $view->add_filter($view->core()->qualify('infobox_filter_links'));
+        $view->add_filter($view->template()->qualify('infobox_filter_links'));
 
         switch (($class_name = get_class($datasource))) {
             case 'Indigo\Datasource\text':
@@ -183,6 +183,6 @@ class infobox extends \idg_fragment_implementation {
 
         $view->render_css($this->get_declaration(), "div#$idg_id-content");
 
-        $view->remove_filter($view->core()->qualify('infobox_filter_links'));
+        $view->remove_filter($view->template()->qualify('infobox_filter_links'));
     }
 }

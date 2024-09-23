@@ -35,7 +35,7 @@ class navigation extends \idg_fragment_implementation {
         foreach ($datasource as $count => $node)
             if ($node['type'] == 'document') {
                 $name = $node['name'];
-                $url = $view->core()->get_full_uri($node['path']);
+                $url = $view->template()->get_full_uri($node['path']);
                 $body .= "<a href=\"$url\">&middot; $name</a>\n";
             }
 

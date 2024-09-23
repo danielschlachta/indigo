@@ -5,7 +5,7 @@ function configure_view(idg_view $view): void {
     $elements = 'views/blocks/elements';
 
     $view->set_properties([
-        'class' => $view->core()->qualify('view'),
+        'class' => $view->template()->qualify('view'),
         'icon' => "favicon.png",
         'style' => "font-family: 'DejaVu Serif', georgia, serif; font-size: 120%; " 
         . "line-height: 1.2; " 
@@ -35,7 +35,7 @@ function configure_view(idg_view $view): void {
     
     $tabs = new idg_fragment;
     $tabs->set_properties([
-        'class' => $view->core()->qualify('tabs'),
+        'class' => $view->template()->qualify('tabs'),
         'source' => '_site',
         'tag' => 'main',
         'style' => "$font_sans; font-size: 120%;"
@@ -103,7 +103,7 @@ function configure_view(idg_view $view): void {
     
     $footer = new idg_fragment;
     $footer->set_properties([
-        'class' => $view->core()->qualify('footer'),
+        'class' => $view->template()->qualify('footer'),
         'name' => 'footer',
         'tag' => 'Copyright &copy;2023 Daniel Schlachta',
         'style' => "background-image: url($elements/metal.png); "
@@ -140,7 +140,7 @@ function configure_view(idg_view $view): void {
 
     $imageframe = new idg_fragment;
     $imageframe->set_properties([
-        'class' => $view->core()->qualify('imageframe')
+        'class' => $view->template()->qualify('imageframe')
     ]);
     $attr = $imageframe->create_attribute('blocks::image'); // could be just 'image'
     $attr->set_parameter('top', 30);
@@ -149,7 +149,7 @@ function configure_view(idg_view $view): void {
 
     $infobox = new idg_fragment;
     $infobox->set_properties([
-        'class' => $view->core()->qualify('infobox'),
+        'class' => $view->template()->qualify('infobox'),
         'source' => 'blocks::infobox',
         'style' => "$font_sans; font-size: 110%;"
     ]);
@@ -159,7 +159,7 @@ function configure_view(idg_view $view): void {
 
     $dropdown = new idg_fragment;
     $dropdown->set_properties([
-        'class' => $view->core()->qualify('dropdown'),
+        'class' => $view->template()->qualify('dropdown'),
         'tag' => 'resources',
         'source' => '_site',
         'style' => "position: fixed; top: 160px; right: 30px; z-index: 1;" 
@@ -216,7 +216,7 @@ function configure_view(idg_view $view): void {
 if (!@$_SERVER['HTTP_USER_AGENT']) {
     require '../../../indigo/startup.php';
     $view = new idg_view;
-    $view->core()->set_namespace('Indigo\Design\Blocks');
+    $view->template()->set_namespace('Indigo\Design\Blocks');
     configure_view($view);
     $view->write_xml('blocks.xml');
 }

@@ -109,11 +109,11 @@ class idg_view extends idg_view_element {
     private array $fonts = [];
     private string $output = '';
     private array $filters = [];
-    private ?idg_core $core;
+    private ?idg_template $template;
 
-    function __construct(idg_core $core = null) {
+    function __construct(idg_template $template = null) {
         parent::__construct('view');
-        $this->core = $core;
+        $this->template = $template;
     }
 
     /**
@@ -236,14 +236,14 @@ class idg_view extends idg_view_element {
     }
 
     /**
-     * Returns the idg_core object the view was initialized with or a default one.
-     * @return idg_core The core
+     * Returns the idg_template object the view was initialized with or a default one.
+     * @return idg_template The template
      */
-    function core(): idg_core {
-        if (!$this->core)
-            $this->core = new idg_core;
+    function template(): idg_template {
+        if (!$this->template)
+            $this->template = new idg_template;
 
-        return $this->core;
+        return $this->template;
     }
 
     /**

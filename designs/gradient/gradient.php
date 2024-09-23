@@ -17,13 +17,13 @@ class view extends \Indigo\View\sidebar {
 
 function testcard(\idg_document $document, \idg_view $view, \idg_fragment $text): void {
     $view->set_properties([
-        'class' => $view->core()->qualify('view'),
+        'class' => $view->template()->qualify('view'),
         'style' => "background: #d8d8e9;"
     ]);
     
     $navigation = new \idg_fragment;
     $navigation->set_properties([
-        'class' => $view->core()->qualify('navigation'),
+        'class' => $view->template()->qualify('navigation'),
         'source' => '_site'
     ]);
     $view->add_child($navigation);
