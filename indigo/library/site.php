@@ -20,7 +20,7 @@ class idg_site_type extends idg_site_element_type {
         $this->child_types[] = 'idg_datasource';
 
         $this->set_property_mandatory('id', false);
-        
+
         $this->register_property('title');
         $this->register_property('content-language');
         $this->register_property('title-separator');
@@ -35,6 +35,7 @@ class idg_site extends idg_site_element {
 
     private $document;
     private $view;
+    private $_sitemap;
 
     function __construct() {
         parent::__construct('site');
@@ -97,46 +98,46 @@ class idg_site extends idg_site_element {
     /**
      * Returns an <code>xml</code> representation of the sitemap.
      * @see https://www.sitemaps.org/protocol.html
-     * @return string The sitemap
+     * @return string The sitemap 
+     */
+    function get_sitemap(): string {
+        $this->_sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
+            . "\n"
+            . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+            . "\n";
+        $this->_scan_object($this);
 
-      function get_sitemap(): string {
-      $this->_sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
-      . "\n"
-      . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-      . "\n";
-      $this->_scan_object($this);
+        return $this->_sitemap . "</urlset>\n";
+    }
 
-      return $this->_sitemap . "</urlset>\n";
-      }
+    private function _scan_object(idg_site_element $object, string $prefix = '') {
+        if ($object->get_type_name() == 'idg_site_type')
+            foreach ($object->get_children() as $child)
+                $this->_scan_object($child, '');
 
-      private function _scan_object(&$object, $prefix = '') {
-      if ($object->get_type_name() == 'site')
-      foreach ($object->get_children() as $child)
-      $this->_scan_object($child, '');
+        if ($object->get_type_name() == 'idg_folder_type')
+            foreach ($object->get_children() as $child)
+                $this->_scan_object($child,
+                    $prefix . IDG_URL_FOLDER_SEPARATOR . $object->get_property('id'));
 
-      if ($object->get_type_name() == 'folder')
-      foreach ($object->get_children() as $child)
-      $this->_scan_object($child,
-      $prefix . IDG_URL_FOLDER_SEPARATOR . $object->get_property('id'));
+        if ($object->get_type_name() == 'idg_document_type') {
+            $prefix[0] = '=';
+            $lastchg = $object->get_property('last-change');
+            $lastmod = substr($lastchg, 6, 4) . '-' . substr($lastchg, 3, 2)
+                . '-' . substr($lastchg, 0, 2);
 
-      if ($object->get_type_name() == 'document') {
-      $prefix[0] = '=';
-      $lastchg = $object->get_property('last-change');
-      $lastmod = substr($lastchg, 6, 4) . '-' . substr($lastchg, 3, 2)
-      . '-' . substr($lastchg, 0, 2);
+            if (!(@$changefreq = $object->get_property('changefreq')))
+                $changefreq = 'daily';
 
-      if (!(@$changefreq = $object->get_property('changefreq')))
-      $changefreq = 'daily';
-
-      $this->_sitemap .= "  <url>\n     <loc>" .
-      $this->get_absolute_url()
-      . urlencode('?display' . $prefix . IDG_URL_FOLDER_SEPARATOR
-      . $object->get_property('id'))
-      . "</loc>\n     <lastmod>$lastmod</lastmod>\n"
-      . "     <changefreq>$changefreq</changefreq>\n"
-      . "  </url>\n";
-      }
-      } */
+            $this->_sitemap .= "  <url>\n     <loc>" .
+                $this->get_document()->get_path() /* TODO: RRRRRR .... */
+                . urlencode('?display' . $prefix . IDG_URL_FOLDER_SEPARATOR
+                    . $object->get_property('id'))
+                . "</loc>\n     <lastmod>$lastmod</lastmod>\n"
+                . "     <changefreq>$changefreq</changefreq>\n"
+                . "  </url>\n";
+        }
+    }
 }
 
 /**

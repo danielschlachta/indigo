@@ -119,7 +119,7 @@ class idg_template {
 
     /**
      * Returns the given string prepended with the current namespace if applicable.
-     * @param string $string
+     * @param string $string The qualified string
      */
     function qualify(string $string): string {
         if ($this->namespace)

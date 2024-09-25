@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<view name="blocks"
+      icon="favicon.png"
+      style="font-family: verdana, sans-serif; background: #fefefe;">
+    
+    <container name="content"
+               style="margin-top: -5em; padding: 1em;">
+        <fragment
+            class="Indigo\Design\Mobile\navigation"
+            source="_site"
+            tag="folder-1"
+            style="background: black; font-size: 200%;">
+        </fragment>
+        <container name="centercol"
+                   style="padding-top: 1em; font-size: 120%;">
+            <slot name="main-text" style="font-size: 120%;" />
+        </container>
+    </container>
+</view>

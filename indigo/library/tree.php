@@ -64,7 +64,7 @@ abstract class idg_leafnode extends idg_object {
     function set_text(string $text): void {
         $this->text = $text;
     }
-    
+
     /**
      * Gets the text previously set with <code>set_text()</code>.
      * <blockquote>
@@ -330,13 +330,15 @@ abstract class idg_treenode extends idg_leafnode {
     : ?array {
 
         $retval = [];
-        foreach ($this->children as $child) {
-            if ($class_name && get_class($child) != $class_name)
-                continue;
 
-            if ($child->get_property($property) == $value)
-                $retval[] = $child;
-        }
+        if ($this->children)
+            foreach ($this->children as $child) {
+                if ($class_name && get_class($child) != $class_name)
+                    continue;
+
+                if ($child->get_property($property) == $value)
+                    $retval[] = $child;
+            }
 
         if (count($retval) == 0)
             return null;
@@ -525,10 +527,10 @@ abstract class idg_treenode extends idg_leafnode {
 
                 if (!$this->current_object)
                     idg_diag($this, "orphaned parameter", $parser);
-                
+
                 if (!($param_name = @$properties['name']))
                     idg_diag($this, "anonymous paramenter", $parser);
-                
+
                 if (!is_subclass_of($class_name, 'idg_parameterized'))
                     idg_diag($this, 'parameters are not accepted here', $parser);
 
@@ -549,13 +551,13 @@ abstract class idg_treenode extends idg_leafnode {
             case 'option':
                 if (!$this->current_object)
                     idg_diag($this, "orphaned option", $parser);
-                
+
                 if (!($opt_name = @$properties['name']))
                     idg_diag($this, "anonymous option", $parser);
 
-                if (!$this->current_attribute) 
+                if (!$this->current_attribute)
                     idg_diag($this, "options are not accepted here", $parser);
-                
+
                 $this->current_option = $opt_name;
                 break;
 
@@ -580,9 +582,9 @@ abstract class idg_treenode extends idg_leafnode {
     private function _xml_read_end($parser, $name): void {
         if (!$this->current_object)
             return;
-        
-         $this->current_object->set_text(html_entity_decode(
-             $this->current_object->get_text()));
+
+        $this->current_object->set_text(html_entity_decode(
+                $this->current_object->get_text()));
 
         switch ($name) {
             case 'parameter':
@@ -618,7 +620,7 @@ abstract class idg_treenode extends idg_leafnode {
 
         if (!$this->current_object)
             idg_diag($this, "spurious character data: ('$character_data')", $parser);
-        
+
         $text = $this->current_object->get_text() . $character_data;
         $this->current_object->set_text($text);
     }
