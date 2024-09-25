@@ -10,9 +10,11 @@ error_reporting(E_ALL);
 
 require_once '../../indigo/startup.php';
 
-//define('MRTG_DIR', '/var/www/html/mrtg/');
-define('MRTG_DIR', 'mrtg/');
+define('MRTG_DIR', '/var/www/html/mrtg/');
+define('MRTG_URL', '/mrtg');
+
 function is_mobile() {
+    return true;
     return preg_match('/\b(?:a(?:ndroid|vantgo)|b(?:lackberry|olt|o?ost)'
         . '|cricket|docomo|hiptop|i(?:emobile|p[ao]d)|kitkat|m(?:ini|obi)'
         . '|palm|(?:i|smart|windows )phone|symbian|up\.(?:browser|link)|tablet'
@@ -21,7 +23,7 @@ function is_mobile() {
 }
 
 function get_imgname($ifname, $part) {
-    return MRTG_DIR . "$ifname-$part.png";
+    return MRTG_URL . "/$ifname-$part.png";
 }
 
 function add_if($parent, $count, $ifname) {
@@ -46,23 +48,26 @@ function add_if($parent, $count, $ifname) {
     
     $src = file_get_contents($ifsrc);
     
+    $style = '';
+    if (is_mobile())
+        $style = ' style="width: 100%;"';
+        
     $match = [];
     
     if (preg_match('/.*last updated (.* at [^\.]*)/', $src, $match))
-        $text .= "<p>Last updated $match[1].</p>";
+        $text .= "<p>Last updated $match[1].</p>\n";
     
     $text .= "<p><b>Daily graph (5 min. average)</b><br><img src=\"" 
-        . get_imgname($ifname, 'day') . '"></p>';
+        . get_imgname($ifname, 'day') . "\"$style ></p>\n";
     
     $text .= "<p><b>Weekly graph (30 min. average)</b><br><img src=\"" 
-        . get_imgname($ifname, 'week') . '"></p>';
+        . get_imgname($ifname, 'week') . "\"$style ></p>\n";
     
     $text .= "<p><b>Monthly graph (2 hr. average)</b><br><img src=\"" 
-        . get_imgname($ifname, 'month') . '"></p>';
+        . get_imgname($ifname, 'month') . "\"$style ></p>\n";
     
     $text .= "<p><b>Yearly graph (1 day average)</b><br><img src=\"" 
-        . get_imgname($ifname, 'year') . '"></p>';
-    
+        . get_imgname($ifname, 'year') . "\"$style ></p>\n";
     
     $datasource->set_text($text);
     
