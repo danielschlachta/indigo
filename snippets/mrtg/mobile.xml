@@ -9,11 +9,11 @@
             class="Indigo\Design\Mobile\navigation"
             source="_site"
             tag="folder-1"
-            style="background: black; font-size: 200%;">
+            style="background: black;">
         </fragment>
         <container name="centercol"
                    style="padding-top: 1em; font-size: 120%;">
-            <slot name="main-text" style="font-size: 120%;" />
+            <slot name="main-text" />
         </container>
     </container>
 </view>
