@@ -14,7 +14,6 @@ define('MRTG_DIR', '/var/www/html/mrtg/');
 define('MRTG_URL', '/mrtg');
 
 function is_mobile() {
-    return true;
     return preg_match('/\b(?:a(?:ndroid|vantgo)|b(?:lackberry|olt|o?ost)'
         . '|cricket|docomo|hiptop|i(?:emobile|p[ao]d)|kitkat|m(?:ini|obi)'
         . '|palm|(?:i|smart|windows )phone|symbian|up\.(?:browser|link)|tablet'
