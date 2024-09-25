@@ -53,7 +53,12 @@ function add_if($parent, $count, $ifname) {
         
     $match = [];
     
-    if (preg_match('/.*last updated (.* at [^\.]*)/', $src, $match))
+    $regex = '/.*last updated (.* at [^\.]*)/';
+    
+    if (!str_contains($src, ', at which'))
+        $regex = '/.*last updated (.* at [^\.]*)\<\/strong/';
+    
+    if (preg_match($regex, $src, $match))
         $text .= "<p>Last updated $match[1].</p>\n";
     
     $text .= "<p><b>Daily graph (5 min. average)</b><br><img src=\"" 
